@@ -1,5 +1,5 @@
 terraform {
-  required_version = "= 1.1.3"
+  required_version = ">= 1.1.3"
 
   cloud {
     hostname     = "app.terraform.io"
