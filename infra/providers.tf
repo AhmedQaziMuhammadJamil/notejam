@@ -10,10 +10,13 @@ terraform {
     }
   }
     required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 3.73.0"
+         aws = {
+         source = "hashicorp/aws"
+         version = "= 3.74.2"
+        }
     }
-  }
+}
 
+provider "aws" {
+  region = eu-west-1
 }
