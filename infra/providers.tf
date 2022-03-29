@@ -9,10 +9,11 @@ terraform {
       name = "notejam"
     }
   }
-}
-  required_providers {
+    required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = ">= 3.73.0"
     }
   }
+
+}
