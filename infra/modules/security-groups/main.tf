@@ -23,9 +23,13 @@ resource "aws_security_group" "alb" {
     protocol    = -1
     cidr_blocks = ["0.0.0.0/0"]
   }
-  tags = {
-    Name = each.key
-  }
+   tags = {
+        Name=each.key
+        Owner       = "DevOps"
+        Environment = "${var.env}"
+        ManagedBy   = "Terraform"
+        Project = "NoteJam"
+    }
 
 }
 
@@ -57,6 +61,10 @@ resource "aws_security_group" "worker-node"{
         }
       tags = {
         Name=each.key
+        Owner       = "DevOps"
+        Environment = "${var.env}"
+        ManagedBy   = "Terraform"
+        Project = "NoteJam"
     }
 
 }
@@ -88,13 +96,14 @@ resource "aws_security_group" "rds"{
         }
       tags = {
         Name=each.key
+        Owner       = "DevOps"
+        Environment = "${var.env}"
+        ManagedBy   = "Terraform"
+        Project = "NoteJam"
     }
 
+    
+
 }
 
-    tags = {
-    Owner       = "DevOps"
-    Environment = "${var.env}"
-    ManagedBy   = "Terraform"
-    Project = "NoteJam"
-}
+  
