@@ -1,12 +1,5 @@
 #AZ
 
-locals {
-    tags = {
-    Owner       = "DevOps"
-    Environment = "${var.env}"
-    ManagedBy   = "Terraform"
-}
-}
 
 data "aws_availability_zones" "available" {
   state = "available"
@@ -62,27 +55,32 @@ module "notejam_vpc" {
   enable_dns_hostnames = true
   enable_dns_support = true
   create_flow_log_cloudwatch_log_group = true
+  
 
   public_subnet_tags = {
     Name = "Public Subnets-${var.env}"
-    tags = local.tags
   }
   private_subnet_tags = {
     Name = "Private Subnets-${var.env}"
-     tags = local.tags
   }
 
   intra_subnet_tags = {
     Name = "RDS Subnets-${var.env}"
-    tags = local.tags
+  
   }
 
   igw_tags = {
       Name = "${var.env}-IGW"
-      tags = local.tags
+   
   }
   nat_gateway_tags = {
       Name = "${var.env}-NAT-GW"
-       tags = local.tags
+    
   }
+    tags = {
+    Owner       = "DevOps"
+    Environment = "${var.env}"
+    ManagedBy   = "Terraform"
+    Project = "NoteJam"
+}
 }
