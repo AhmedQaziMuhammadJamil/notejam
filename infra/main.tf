@@ -7,5 +7,5 @@ module "mod_vpc" {
 module "mod_sg" {
   source = "./modules/security-groups"
   env = var.env
-  var_vpcid = module.mod_vpc.out_nl_vpcid
+  vpc_id = module.mod_vpc.out_nl_vpcid
 }
