@@ -47,7 +47,7 @@ resource "aws_security_group" "worker-node"{
             to_port = ingress.value.to_port
             from_port =ingress.value.from_port
             description = ingress.value.description
-            security_groups = ["${aws_security_group.alb-sg["NoteJam-Alb-SG"].id}"]
+            security_groups = ["${aws_security_group.alb["NoteJam-Alb-SG"].id}"]
             protocol = ingress.value.protocol
 
         }
@@ -83,7 +83,7 @@ resource "aws_security_group" "rds"{
             to_port = ingress.value.to_port
             from_port =ingress.value.from_port
             description = ingress.value.description
-            security_groups = ["${aws_security_group.worker-node-sg["NoteJam-Worker-SG"].id}"]
+            security_groups = ["${aws_security_group.worker-node["NoteJam-Worker-SG"].id}"]
             protocol = ingress.value.protocol
         }
   
@@ -101,8 +101,6 @@ resource "aws_security_group" "rds"{
         ManagedBy   = "Terraform"
         Project = "NoteJam"
     }
-
-    
 
 }
 
