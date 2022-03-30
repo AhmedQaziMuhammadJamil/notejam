@@ -1,4 +1,13 @@
-#AZ 
+#AZ
+
+locals {
+    tags = {
+    Owner       = "DevOps"
+    Environment = "${var.env}"
+    ManagedBy   = "Terraform"
+}
+}
+
 data "aws_availability_zones" "available" {
   state = "available"
 }
@@ -48,33 +57,32 @@ module "notejam_vpc" {
   public_subnets = [module.mod_subnet_addr.network_cidr_blocks["Public Subnet 1"],module.mod_subnet_addr.network_cidr_blocks["Public Subnet 2"]]
   private_subnets = [module.mod_subnet_addr.network_cidr_blocks["Private Subnet 1"],module.mod_subnet_addr.network_cidr_blocks["Private Subnet 2"]]
   intra_subnets = [module.mod_subnet_addr.network_cidr_blocks["RDS Subnet 1"],module.mod_subnet_addr.network_cidr_blocks["RDS Subnet 2"]]
-
   enable_nat_gateway = true
   one_nat_gateway_per_az = true
-
   enable_dns_hostnames = true
   enable_dns_support = true
+  create_flow_log_cloudwatch_log_group = true
 
   public_subnet_tags = {
     Name = "Public Subnets-${var.env}"
-    Environment = "${var.env}"
+    tags = local.tags
   }
   private_subnet_tags = {
     Name = "Private Subnets-${var.env}"
-    Environment = "${var.env}"
+     tags = local.tags
   }
 
   intra_subnet_tags = {
     Name = "RDS Subnets-${var.env}"
-    Environment = "${var.env}"
+    tags = local.tags
   }
 
   igw_tags = {
       Name = "${var.env}-IGW"
-      Environment = "${var.env}"
+      tags = local.tags
   }
   nat_gateway_tags = {
       Name = "${var.env}-NAT-GW"
-      Environment = "${var.env}"
+       tags = local.tags
   }
 }
