@@ -84,7 +84,7 @@ module "rds-aurora" {
 
   vpc_id  = var.vpc_id
   subnets = var.rds-subnets
-  kms_key_id = var.kms_key_id
+  kms_key_id = var.kms_key_arn
   allowed_security_groups = [var.rds-sg]
 
   storage_encrypted   = true

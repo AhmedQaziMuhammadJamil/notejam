@@ -9,6 +9,10 @@ module "iam" {
   custom_role_policy_arns = [
     "arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilderECRContainerBuilds"
   ]
+
+  trusted_role_arns = [
+    "arn:aws:iam::003767002475:role/eksServiceRole"
+  ]
   tags=var.custom_tags
   # insert the 1 required variable here
 }

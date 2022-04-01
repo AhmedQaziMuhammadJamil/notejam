@@ -22,6 +22,6 @@ variable "pgfamily" {
 variable "custom_tags" {
 }
 
-variable "kms_key_id" {
+variable "kms_key_arn" {
   
 }
