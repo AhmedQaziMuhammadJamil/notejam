@@ -16,7 +16,7 @@ variable "db_username" {
 
 variable "pgfamily" {
   type    = string
-  default = "aurora5.6"
+  default = "aurora-postgresql11"
 }
 
 variable "custom_tags" {
