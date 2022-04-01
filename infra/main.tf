@@ -9,3 +9,12 @@ module "mod_sg" {
   env = var.env
   vpc_id = module.mod_vpc.out_nl_vpcid
 }
+
+
+module "rds" {
+  source = "./modules/rds"
+  env=var.env
+  vpc_id = module.mod_vpc.out_nl_vpcid
+  rds-subnets =module.mod_vpc.out_nl_rdssubnet
+  rds-sg= module.mod_sg.rds-sg
+}
