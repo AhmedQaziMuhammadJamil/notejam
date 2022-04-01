@@ -64,7 +64,7 @@ resource "aws_ssm_parameter" "password" {
 module "rds-aurora" {
   source                 = "terraform-aws-modules/rds-aurora/aws"
   version                = "6.2.0"
-  create_db_subnet_group = false
+  create_db_subnet_group = true
   create_security_group  = false
   create_random_password = false
   name                   = "notejam-db"
@@ -83,7 +83,7 @@ module "rds-aurora" {
   }
 
   vpc_id  = var.vpc_id
-   db_subnet_group_name  = var.rds-subnets
+   subnets = var.rds-subnets
   kms_key_id = var.kms_key_arn
   allowed_security_groups = [var.rds-sg]
 

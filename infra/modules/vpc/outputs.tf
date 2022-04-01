@@ -17,3 +17,4 @@ output "out_nl_rdssubnet" {
   value       = module.notejam_vpc.intra_subnets
   description = "RDS Subnets"
 }
+
