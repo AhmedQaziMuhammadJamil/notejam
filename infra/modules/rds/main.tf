@@ -2,11 +2,11 @@ resource "aws_db_parameter_group" "db-pg" {
   name        = "notejam-pg"
   family      = var.pgfamily
   description = "Parameter group for notejam"
-  parameter {
+ /*  parameter {
     name         = "innodb_large_prefix"
     value        = 1
     apply_method = "pending-reboot"
-  }
+  } */
   tags = var.custom_tags
 }
 
@@ -14,7 +14,7 @@ resource "aws_rds_cluster_parameter_group" "cpg" {
   name        = "notejam-cluster-pg"
   family      = var.pgfamily
   description = "Cluster Parameter group for notejam"
-  parameter {
+ /*  parameter {
     name         = "binlog_format"
     value        = "MIXED"
     apply_method = "pending-reboot"
@@ -29,7 +29,7 @@ resource "aws_rds_cluster_parameter_group" "cpg" {
     name         = "log_bin_trust_function_creators"
     value        = 1
     apply_method = "pending-reboot"
-  }
+  } */
   tags = var.custom_tags
 }
 
