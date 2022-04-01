@@ -1,3 +1,3 @@
-output "key_id" {
-  value = module.kms_key.key_id
+output "key_arn" {
+  value = module.kms_key.key_arn
 }

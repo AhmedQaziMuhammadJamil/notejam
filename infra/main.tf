@@ -25,7 +25,7 @@ module "rds" {
   rds-subnets = module.mod_vpc.out_nl_rdssubnet
   rds-sg      = module.mod_sg.rds-sg
   custom_tags = local.custom_tags
-  kms_key_id = module.mod_kms.key_id
+  kms_key_arn = module.mod_kms.key_arn
 
 }
 
