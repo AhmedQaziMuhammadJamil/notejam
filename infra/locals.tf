@@ -1,7 +1,8 @@
 locals {
-  common_tags = {
-    created_by = "terraform"
-    project = "easygenerator"
-    environment = var.env
+  custom_tags = {
+    Owner       = "DevOps"
+    Environment = "${var.env}"
+    ManagedBy   = "Terraform"
+    Project     = "NoteJam"
   }
 }

@@ -1,11 +1,11 @@
 resource "aws_security_group" "alb" {
-   lifecycle {
+  lifecycle {
     ignore_changes = [ingress]
-    }
+  }
   for_each = var.alb-sg
   name     = var.alb-sg-name
   vpc_id   = var.vpc_id
-  dynamic ingress {
+  dynamic "ingress" {
     for_each = each.value.rules
     content {
       to_port     = ingress.value.to_port
@@ -23,84 +23,68 @@ resource "aws_security_group" "alb" {
     protocol    = -1
     cidr_blocks = ["0.0.0.0/0"]
   }
-   tags = {
-        Name=each.key
-        Owner       = "DevOps"
-        Environment = "${var.env}"
-        ManagedBy   = "Terraform"
-        Project = "NoteJam"
-    }
+  tags = merge(var.custom_tags, { Name = each.key })
 
 }
 
 
-resource "aws_security_group" "worker-node"{
-    lifecycle  {
-    ignore_changes=[ingress]
-    }
-    for_each = var.worker-node-sg
-    name= var.worker-sg-name
-    vpc_id = var.vpc_id
-    dynamic ingress {
-        for_each = each.value.rules
-        content {
-            to_port = ingress.value.to_port
-            from_port =ingress.value.from_port
-            description = ingress.value.description
-            security_groups = ["${aws_security_group.alb["NoteJam-Alb-SG"].id}"]
-            protocol = ingress.value.protocol
-
-        }
-  
-    }
-    egress {
-            from_port = 0
-            to_port = 0
-            protocol = -1
-            cidr_blocks = ["0.0.0.0/0"]
-        }
-      tags = {
-        Name=each.key
-        Owner       = "DevOps"
-        Environment = "${var.env}"
-        ManagedBy   = "Terraform"
-        Project = "NoteJam"
-    }
-
-}
-
-
-resource "aws_security_group" "rds"{
-     lifecycle {
+resource "aws_security_group" "worker-node" {
+  lifecycle {
     ignore_changes = [ingress]
+  }
+  for_each = var.worker-node-sg
+  name     = var.worker-sg-name
+  vpc_id   = var.vpc_id
+  dynamic "ingress" {
+    for_each = each.value.rules
+    content {
+      to_port         = ingress.value.to_port
+      from_port       = ingress.value.from_port
+      description     = ingress.value.description
+      security_groups = ["${aws_security_group.alb["NoteJam-Alb-SG"].id}"]
+      protocol        = ingress.value.protocol
+
+    }
+
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
+  tags = merge(var.custom_tags, { Name = each.key })
+
 }
-    for_each = var.rds-sg
-    name= each.key
-    vpc_id = var.vpc_id
-    dynamic ingress {
-        for_each = each.value.rules
-        content {
-            to_port = ingress.value.to_port
-            from_port =ingress.value.from_port
-            description = ingress.value.description
-            security_groups = ["${aws_security_group.worker-node["NoteJam-Worker-SG"].id}"]
-            protocol = ingress.value.protocol
-        }
-  
+
+
+resource "aws_security_group" "rds" {
+  lifecycle {
+    ignore_changes = [ingress]
+  }
+  for_each = var.rds-sg
+  name     = each.key
+  vpc_id   = var.vpc_id
+  dynamic "ingress" {
+    for_each = each.value.rules
+    content {
+      to_port         = ingress.value.to_port
+      from_port       = ingress.value.from_port
+      description     = ingress.value.description
+      security_groups = ["${aws_security_group.worker-node["NoteJam-Worker-SG"].id}"]
+      protocol        = ingress.value.protocol
     }
-    egress {
-            from_port = 0
-            to_port = 0
-            protocol = -1
-            cidr_blocks = ["0.0.0.0/0"]
-        }
-      tags = {
-        Name=each.key
-        Owner       = "DevOps"
-        Environment = "${var.env}"
-        ManagedBy   = "Terraform"
-        Project = "NoteJam"
-    }
+
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = merge(var.custom_tags, { Name = each.key })
 
 }
 

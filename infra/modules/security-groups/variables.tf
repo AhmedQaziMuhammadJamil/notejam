@@ -5,15 +5,17 @@ variable "vpc_id" {
 variable "env" {
 }
 
+variable "custom_tags" {
 
+}
 variable "alb-sg-name" {
-    type= string
-    default = "NoteJam-Alb-SG"
+  type    = string
+  default = "NoteJam-Alb-SG"
 }
 
 variable "worker-sg-name" {
-    type= string
-    default = "Worker-Node-SG"
+  type    = string
+  default = "Worker-Node-SG"
 }
 
 variable "alb-sg" {
@@ -71,7 +73,7 @@ variable "worker-node-sg" {
 
 variable "rds-sg" {
   default = {
-     NoteJam-RDS-SG = {
+    NoteJam-RDS-SG = {
       rules = [{
         from_port   = 3306
         to_port     = 3306

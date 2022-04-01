@@ -40,22 +40,22 @@ module "mod_subnet_addr" {
 
 #VPC Creation
 module "notejam_vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source  = "terraform-aws-modules/vpc/aws"
   version = "3.2.0"
 
   name = "${var.env}-vpc"
   cidr = var.vpc_cidr
 
-  azs = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1]]
-  public_subnets = [module.mod_subnet_addr.network_cidr_blocks["Public Subnet 1"],module.mod_subnet_addr.network_cidr_blocks["Public Subnet 2"]]
-  private_subnets = [module.mod_subnet_addr.network_cidr_blocks["Private Subnet 1"],module.mod_subnet_addr.network_cidr_blocks["Private Subnet 2"]]
-  intra_subnets = [module.mod_subnet_addr.network_cidr_blocks["RDS Subnet 1"],module.mod_subnet_addr.network_cidr_blocks["RDS Subnet 2"]]
-  enable_nat_gateway = true
-  one_nat_gateway_per_az = true
-  enable_dns_hostnames = true
-  enable_dns_support = true
+  azs                                  = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1]]
+  public_subnets                       = [module.mod_subnet_addr.network_cidr_blocks["Public Subnet 1"], module.mod_subnet_addr.network_cidr_blocks["Public Subnet 2"]]
+  private_subnets                      = [module.mod_subnet_addr.network_cidr_blocks["Private Subnet 1"], module.mod_subnet_addr.network_cidr_blocks["Private Subnet 2"]]
+  intra_subnets                        = [module.mod_subnet_addr.network_cidr_blocks["RDS Subnet 1"], module.mod_subnet_addr.network_cidr_blocks["RDS Subnet 2"]]
+  enable_nat_gateway                   = true
+  one_nat_gateway_per_az               = true
+  enable_dns_hostnames                 = true
+  enable_dns_support                   = true
   create_flow_log_cloudwatch_log_group = true
-  
+
 
   public_subnet_tags = {
     Name = "Public Subnets-${var.env}"
@@ -66,21 +66,23 @@ module "notejam_vpc" {
 
   intra_subnet_tags = {
     Name = "RDS Subnets-${var.env}"
-  
+
   }
 
   igw_tags = {
-      Name = "${var.env}-IGW"
-   
+    Name = "${var.env}-IGW"
+
   }
   nat_gateway_tags = {
-      Name = "${var.env}-NAT-GW"
-    
+    Name = "${var.env}-NAT-GW"
+
   }
-    tags = {
+  /*     tags = {
     Owner       = "DevOps"
     Environment = "${var.env}"
     ManagedBy   = "Terraform"
     Project = "NoteJam"
-}
+} */
+
+  tags = var.custom_tags
 }
