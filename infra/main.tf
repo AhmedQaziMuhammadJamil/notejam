@@ -25,7 +25,7 @@ module "rds" {
   rds-subnets = module.mod_vpc.out_nl_rdssubnet
   rds-sg      = module.mod_sg.rds-sg
   custom_tags = local.custom_tags
-  kms_key_arn = module.mod_kms.key_arn
+  kms_key_arn = module.mod_kms.rds_key_arn
 
 }
 
@@ -42,4 +42,13 @@ module "mod_ecr"{
 }
 module "mod_waf"{
   source = "./modules/waf"
+}
+
+module "mod_eks" {
+  source = "./modules/eks"
+  cluster_kms = module.mod_kms.eks_key_arn
+  custom_tags = local.custom_tags
+  vpc_id = module.mod_vpc.out_nl_vpcid
+  private_subnets = module.mod_vpc.out_nl_privatesubnet
+  worker-sg      = module.mod_sg.worker-sg
 }
