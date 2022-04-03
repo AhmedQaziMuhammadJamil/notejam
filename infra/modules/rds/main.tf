@@ -74,12 +74,13 @@ module "rds-aurora" {
   master_password        = random_password.password.result
   master_username        = var.db_username
   instances = {
-    reader = {
-      instance_class = "db.t3.medium"
-    }
     writer  = {
       instance_class = "db.t3.medium"
     }
+    reader = {
+      instance_class = "db.t3.medium"
+    }
+  
   }
 
   vpc_id  = var.vpc_id
