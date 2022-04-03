@@ -243,8 +243,8 @@ module "alb_controller" {
   version = "3.4.0"
 
   providers = {
-    kubernetes = "kubernetes.eks",
-    helm       = "helm.eks"
+    kubernetes = kubernetes.eks,
+    helm       = helm.eks
   }
 
   k8s_cluster_type = "eks"
