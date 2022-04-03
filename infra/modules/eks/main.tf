@@ -215,10 +215,20 @@ data "aws_region" "current" {}
 
 data "aws_eks_cluster" "target" {
   name = local.cluster_name
+
+  depends_on = [
+    module.eks
+  ]
+
 }
 
 data "aws_eks_cluster_auth" "aws_iam_authenticator" {
   name = data.aws_eks_cluster.target.name
+
+    depends_on = [
+    module.eks
+  ]
+
 }
 
 provider "kubernetes" {
@@ -242,9 +252,19 @@ module "alb_controller" {
   source  = "iplabs/alb-ingress-controller/kubernetes"
   version = "3.4.0"
 
+    depends_on = [
+    module.eks
+  ]
+
+  providers = {
+    kubernetes = kubernetes.eks,
+    helm       = helm.eks
+
+
   providers = {
     kubernetes = "kubernetes.eks",
     helm       = "helm.eks"
+
   }
 
   k8s_cluster_type = "eks"
@@ -252,4 +272,5 @@ module "alb_controller" {
 
   aws_region_name  = data.aws_region.current.name
   k8s_cluster_name = data.aws_eks_cluster.target.name
+  }
 }
