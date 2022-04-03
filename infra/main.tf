@@ -51,12 +51,4 @@ module "mod_eks" {
   vpc_id = module.mod_vpc.out_nl_vpcid
   private_subnets = module.mod_vpc.out_nl_privatesubnet
   worker-sg      = module.mod_sg.worker-sg
-}
 
-/* module "alb_ingress" {
-  source = "./modules/alb"
-  public_subnets= module.mod_vpc.out_nl_publicsubnet
-  custom_tags = local.custom_tags
-  alb-sg=module.mod_sg.alb-sg
-  vpc_id = module.mod_vpc.out_nl_vpcid
-} */
