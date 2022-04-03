@@ -97,7 +97,9 @@ locals {
   vpc-cni = {
     cluster_name      = module.eks.cluster_id
     addon_name        = "vpc-cni"
-    addon_version     = "v1.10.1-eksbuild.1"
+
+    addon_version     = "v1.10.2-eksbuild.1"
+
     resolve_conflicts = "OVERWRITE"
     service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
 
@@ -145,7 +147,9 @@ module "eks" {
   cluster_name                    = local.cluster_name
   cluster_version                 = local.cluster_version
   cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = false
+
+  cluster_endpoint_public_access  = true //TODO: Make it public
+
   create_cni_ipv6_iam_policy = true
   enable_irsa = true
   cluster_enabled_log_types = [ 
@@ -176,7 +180,6 @@ module "eks" {
 
   eks_managed_node_groups            = local.node_groups
   create_cluster_security_group = true
-  cluster_additional_security_group_ids = [var.worker-sg]
   cluster_security_group_use_name_prefix = true 
   create_iam_role = true
   iam_role_use_name_prefix = false
@@ -202,4 +205,51 @@ module "vpc_cni_irsa" {
   }
 
   tags = var.custom_tags
+
+}
+
+#######################ALB
+
+
+data "aws_region" "current" {}
+
+data "aws_eks_cluster" "target" {
+  name = local.cluster_name
+}
+
+data "aws_eks_cluster_auth" "aws_iam_authenticator" {
+  name = data.aws_eks_cluster.target.name
+}
+
+provider "kubernetes" {
+  alias = "eks"
+  host                   = data.aws_eks_cluster.target.endpoint
+  token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority[0].data)
+  /* /load_config_file       = false */
+}
+
+provider "helm" {
+  alias = "eks"
+  kubernetes {
+    host                   = data.aws_eks_cluster.target.endpoint
+    token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority[0].data)
+  }
+}
+
+module "alb_controller" {
+  source  = "iplabs/alb-ingress-controller/kubernetes"
+  version = "3.4.0"
+
+  providers = {
+    kubernetes = "kubernetes.eks",
+    helm       = "helm.eks"
+  }
+
+  k8s_cluster_type = "eks"
+  k8s_namespace    = "kube-system"
+
+  aws_region_name  = data.aws_region.current.name
+  k8s_cluster_name = data.aws_eks_cluster.target.name
 }
