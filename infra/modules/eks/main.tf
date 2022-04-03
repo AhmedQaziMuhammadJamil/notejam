@@ -254,17 +254,11 @@ module "alb_controller" {
 
     depends_on = [
     module.eks
-  ]
-
-  providers = {
-    kubernetes = kubernetes.eks,
-    helm       = helm.eks
-
+    ]
 
   providers = {
     kubernetes = "kubernetes.eks",
     helm       = "helm.eks"
-
   }
 
   k8s_cluster_type = "eks"
@@ -273,4 +267,3 @@ module "alb_controller" {
   aws_region_name  = data.aws_region.current.name
   k8s_cluster_name = data.aws_eks_cluster.target.name
   }
-}
