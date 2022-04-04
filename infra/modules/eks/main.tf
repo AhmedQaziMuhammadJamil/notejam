@@ -284,6 +284,46 @@ data "tls_certificate" "tls_cluster" {
   #url = aws_eks_cluster.example.identity[0].oidc[0].issuer
 }
 
+
+
+provider "helm" {
+   alias = "eks"
+  kubernetes {
+    host                   = data.aws_eks_cluster.cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+    token                  = data.aws_eks_cluster_auth.cluster.token
+    load_config_file       = false
+  }
+}
+
+provider "kubernetes" {
+  alias = "eks"
+  host                   = data.aws_eks_cluster.target.endpoint
+  token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority[0].data)
+ 
+}
+
+
+data "aws_eks_cluster_auth" "aws_iam_authenticator" {
+  name = data.aws_eks_cluster.target.name
+
+    depends_on = [
+    module.eks
+  ]
+
+}
+
+data "aws_region" "current" {}
+
+data "aws_eks_cluster" "target" {
+  name = local.cluster_name
+
+  depends_on = [
+    module.eks
+  ]
+
+}
 module "eks-lb-controller" {
   source  = "DNXLabs/eks-lb-controller/aws"
   version = "0.5.1"
