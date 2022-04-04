@@ -68,13 +68,13 @@ locals {
       k8s_labels = {
         scope = "operations"
       }
-      taints = [
+      /* taints = [
         {
           key    = "CriticalAddonsOnly"
           value  = "true"
           effect = "NO_SCHEDULE"
         }
-      ]
+      ] */
     })
 
   }
