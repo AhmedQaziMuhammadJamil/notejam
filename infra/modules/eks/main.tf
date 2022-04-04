@@ -207,11 +207,10 @@ module "vpc_cni_irsa" {
   tags = var.custom_tags
 
 }
+##ALB
 
-#######################ALB
 
-
-data "aws_region" "current" {}
+/* data "aws_region" "current" {}
 
 data "aws_eks_cluster" "target" {
   name = local.cluster_name
@@ -236,7 +235,7 @@ provider "kubernetes" {
   host                   = data.aws_eks_cluster.target.endpoint
   token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority[0].data)
-  /* /load_config_file       = false */
+ 
 }
 
 provider "helm" {
@@ -246,9 +245,8 @@ provider "helm" {
     token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority[0].data)
   }
-}
-
-module "alb_controller" {
+} 
+ module "alb_controller" {
   source  = "iplabs/alb-ingress-controller/kubernetes"
   version = "3.4.0"
 
@@ -266,4 +264,35 @@ module "alb_controller" {
 
   aws_region_name  = data.aws_region.current.name
   k8s_cluster_name = data.aws_eks_cluster.target.name
-  }
+  } 
+
+ */
+##################INGRESSS
+
+#Get EKS Cluster ID 
+data "aws_eks_cluster" "cluster" {
+  name = module.eks.cluster_id
+}
+
+#Get EKS Cluister ID for Authentication
+data "aws_eks_cluster_auth" "cluster" {
+  name = module.eks.cluster_id
+}
+
+data "tls_certificate" "tls_cluster" {
+  url = module.eks.cluster_oidc_issuer_url
+  #url = aws_eks_cluster.example.identity[0].oidc[0].issuer
+}
+
+module "eks-lb-controller" {
+  source  = "DNXLabs/eks-lb-controller/aws"
+  version = "0.5.1"
+  # insert the 4 required variables here
+  cluster_identity_oidc_issuer     = module.eks.cluster_oidc_issuer_url
+  cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
+  cluster_name                     = module.eks.cluster_id
+
+  depends_on = [module.eks]
+
+}
+
