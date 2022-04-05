@@ -53,11 +53,11 @@ module "mod_eks" {
   worker-sg       = module.mod_sg.worker-sg
 }
 
- module "mod_flux" {
+/*  module "mod_flux" {
   source = "./modules/flux"
   cluster_id= module.mod_eks.cluster_id
   cluster_auth = module.mod_eks.cluster_auth
   host=module.mod_eks.eks_host
   cluster_ca_certificate = module.mod_eks.cluster_ca_certificate
   token=module.mod_eks.token
-} 
+}  */
