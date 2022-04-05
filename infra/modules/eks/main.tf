@@ -207,10 +207,10 @@ module "vpc_cni_irsa" {
   tags = var.custom_tags
 
 }
-##ALB
+##INGRESS
 
 
-/* data "aws_region" "current" {}
+ data "aws_region" "current" {}
 
 data "aws_eks_cluster" "target" {
   name = local.cluster_name
@@ -266,79 +266,7 @@ provider "helm" {
   k8s_cluster_name = data.aws_eks_cluster.target.name
   } 
 
- */
+ 
 ##################INGRESSS
 
 #Get EKS Cluster ID 
-data "aws_eks_cluster" "cluster" {
-  name       = module.eks.cluster_id
-  depends_on = [module.eks]
-}
-
-#Get EKS Cluister ID for Authentication
-data "aws_eks_cluster_auth" "cluster" {
-  name       = module.eks.cluster_id
-  depends_on = [module.eks]
-}
-
-data "tls_certificate" "tls_cluster" {
-  url        = module.eks.cluster_oidc_issuer_url
-  depends_on = [module.eks]
-  #url = aws_eks_cluster.example.identity[0].oidc[0].issuer
-}
-
-
-
-provider "helm" {
-  alias = "eks"
-  kubernetes {
-    config_path = "/home/aqeasygenerator/nord-cloud/notejam/infra/modules/eks/config"
-
-  }
-  }
-
-provider "kubernetes" {
-  alias                  = "eks"
-  host                   = data.aclusterws_eks_cluster.target.endpoint
-  token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority[0].data)
-    exec {
-      api_version = "client.authentication.k8s.io/user"
-      args        = ["eks", "get-token", "--cluster-name", local.cluster_name]
-      command     = "aws"
-    }
-
-}
-
-
-data "aws_eks_cluster_auth" "aws_iam_authenticator" {
-  name = data.aws_eks_cluster.target.name
-
-  depends_on = [
-    module.eks
-  ]
-
-}
-
-data "aws_region" "current" {}
-
-data "aws_eks_cluster" "target" {
-  name = local.cluster_name
-
-  depends_on = [
-    module.eks
-  ]
-
-}
-module "eks-lb-controller" {
-
-  source  = "DNXLabs/eks-lb-controller/aws"
-  version = "0.5.1"
-  # insert the 4 required variables here
-  cluster_identity_oidc_issuer     = module.eks.cluster_oidc_issuer_url
-  cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
-  cluster_name                     = module.eks.cluster_id
-  depends_on                       = [module.eks]
-
-}
-
