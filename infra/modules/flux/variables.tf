@@ -9,3 +9,22 @@ variable "components_extra" {
   default     =  []
   description = "extra flux components"
 }
+
+variable "cluster_id" {
+  
+}
+
+variable "cluster_auth" {
+  
+}
+
+variable "host" {
+  
+}
+variable "token" {
+  
+}
+
+variable "cluster_ca_certificate" {
+  
+}

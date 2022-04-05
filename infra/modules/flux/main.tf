@@ -1,20 +1,45 @@
-/* provider "flux" {}
+terraform {
+  required_version = ">= 1.1.3"
+
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.9.0"
+    }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.10.0"
+    }
+    flux = {
+      source  = "fluxcd/flux"
+      version = "0.12.2"
+    }
+  }
+}
+
+provider "flux" {}
 
 provider "kubectl" {}
 
+/* provider "kubernetes" {
+  config_path = module.mod_flux.config
+} */
 
-provider "kubernetes" {
-  alias = "eks"
-  host                   = data.aws_eks_cluster.target.endpoint
-  token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority[0].data)
- 
+/* data "aws_eks_cluster" "cluster" {
+  name = module.eks.cluster_id
 }
 
-
-
-
-  data "flux_install" "main" {
+data "aws_eks_cluster_auth" "cluster" {
+  name = module.eks.cluster_id
+} */
+provider "kubernetes" {
+  alias = "eks"
+  host                   =  var.host  //
+  cluster_ca_certificate = var.cluster_ca_certificate //base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+  token                  =   var.token   //data.aws_eks_cluster_auth.cluster.token
+}
+# Flux
+data "flux_install" "main" {
   target_path      = var.target_path
   components_extra = var.components_extra
 }
@@ -37,10 +62,3 @@ locals {
     }
   ]
 }
-
-resource "kubectl_manifest" "install" {
-
-  for_each   = { for v in local.install : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
-  depends_on = [kubernetes_namespace.flux_system]
-  yaml_body  = each.value
-} */
