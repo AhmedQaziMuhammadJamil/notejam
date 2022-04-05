@@ -59,7 +59,10 @@ module "notejam_vpc" {
 
   public_subnet_tags = {
     Name = "Public Subnets-${var.env}"
+    "kubernetes.io/cluster/notejam" = "owned"
+    "kubernetes.io/role/elb"   = "1"
   }
+  
   private_subnet_tags = {
     Name = "Private Subnets-${var.env}"
   }
