@@ -19,8 +19,6 @@ terraform {
 
 provider "flux" {}
 
-provider "kubectl" {}
-
 /* provider "kubernetes" {
   config_path = module.mod_flux.config
 } */
@@ -37,7 +35,15 @@ provider "kubernetes" {
   host                   =  var.host  //
   cluster_ca_certificate = var.cluster_ca_certificate //base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   token                  =   var.token   //data.aws_eks_cluster_auth.cluster.token
+} 
+
+provider "kubectl" {
+  host                   = var.host
+  token                  = var.cluster_ca_certificate
+  cluster_ca_certificate = var.token
+  load_config_file       = false
 }
+
 # Flux
 data "flux_install" "main" {
   target_path      = var.target_path
