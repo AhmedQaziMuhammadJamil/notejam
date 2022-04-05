@@ -4,6 +4,6 @@
   type = map(any)
 } */
 variable "waf_name" {
-  type=string
-  default="NoteJam-Waf"
+  type    = string
+  default = "NoteJam-Waf"
 }

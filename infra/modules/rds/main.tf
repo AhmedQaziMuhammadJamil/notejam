@@ -2,7 +2,7 @@ resource "aws_db_parameter_group" "db-pg" {
   name        = "notejam-pg"
   family      = var.pgfamily
   description = "Parameter group for notejam"
- /*  parameter {
+  /*  parameter {
     name         = "innodb_large_prefix"
     value        = 1
     apply_method = "pending-reboot"
@@ -14,7 +14,7 @@ resource "aws_rds_cluster_parameter_group" "cpg" {
   name        = "notejam-cluster-pg"
   family      = var.pgfamily
   description = "Cluster Parameter group for notejam"
- /*  parameter {
+  /*  parameter {
     name         = "binlog_format"
     value        = "MIXED"
     apply_method = "pending-reboot"
@@ -74,18 +74,18 @@ module "rds-aurora" {
   master_password        = random_password.password.result
   master_username        = var.db_username
   instances = {
-    writer  = {
+    writer = {
       instance_class = "db.t3.medium"
     }
     reader = {
       instance_class = "db.t3.medium"
     }
-  
+
   }
 
-  vpc_id  = var.vpc_id
-   subnets = var.rds-subnets
-  kms_key_id = var.kms_key_arn
+  vpc_id                 = var.vpc_id
+  subnets                = var.rds-subnets
+  kms_key_id             = var.kms_key_arn
   vpc_security_group_ids = [var.rds-sg]
 
   storage_encrypted   = true

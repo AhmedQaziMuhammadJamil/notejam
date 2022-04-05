@@ -8,8 +8,8 @@ resource "aws_lb" "alb_ingress" {
 
   subnets = var.public_subnets
 
-  tags = merge(var.custom_tags,{app="ingress"})
-    
+  tags = merge(var.custom_tags, { app = "ingress" })
+
   security_groups = [var.alb-sg]
 }
 
@@ -30,7 +30,7 @@ resource "aws_lb_listener" "http_ingress" {
   load_balancer_arn = aws_lb.alb_ingress.arn
   port              = "80"
   protocol          = "HTTP"
-default_action {
+  default_action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.nginx-ingress.arn
   }

@@ -23,5 +23,5 @@ variable "custom_tags" {
 }
 
 variable "kms_key_arn" {
-  
+
 }

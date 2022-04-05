@@ -18,7 +18,7 @@ locals {
     disk_encrypted                       = true
     disk_kms_key_id                      = data.aws_kms_alias.ebs.target_key_arn
     create_iam_role                      = true
-     
+
   }
   node_groups = {
     apps = merge(local.eks_managed_node_group_defaults, {
@@ -79,7 +79,7 @@ locals {
 
   }
 
-  cluster_name="notejam"
+  cluster_name    = "notejam"
   cluster_version = "1.21"
   coredns = {
     cluster_name      = module.eks.cluster_id
@@ -95,12 +95,12 @@ locals {
     )
   }
   vpc-cni = {
-    cluster_name      = module.eks.cluster_id
-    addon_name        = "vpc-cni"
+    cluster_name = module.eks.cluster_id
+    addon_name   = "vpc-cni"
 
-    addon_version     = "v1.10.2-eksbuild.1"
+    addon_version = "v1.10.2-eksbuild.1"
 
-    resolve_conflicts = "OVERWRITE"
+    resolve_conflicts        = "OVERWRITE"
     service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
 
     tags = merge(
@@ -142,29 +142,29 @@ locals {
 
 }
 module "eks" {
-  source  = "terraform-aws-modules/eks/aws"
-  version = "18.17.0"
+  source                          = "terraform-aws-modules/eks/aws"
+  version                         = "18.17.0"
   cluster_name                    = local.cluster_name
   cluster_version                 = local.cluster_version
   cluster_endpoint_private_access = true
 
-  cluster_endpoint_public_access  = true //TODO: Make it public
+  cluster_endpoint_public_access = true //TODO: Make it public
 
   create_cni_ipv6_iam_policy = true
-  enable_irsa = true
-  cluster_enabled_log_types = [ 
+  enable_irsa                = true
+  cluster_enabled_log_types = [
     "api",
     "audit",
     "authenticator",
     "controllerManager",
     "scheduler",
-    ]
+  ]
   cluster_addons = {
     kube-proxy = "${local.kube-proxy}"
     vpc-cni    = "${local.vpc-cni}"
     coredns    = "${local.coredns}"
   }
-    cluster_encryption_config = [{
+  cluster_encryption_config = [{
     provider_key_arn = var.cluster_kms
     resources        = ["secrets"]
   }]
@@ -172,26 +172,26 @@ module "eks" {
   subnet_ids = var.private_subnets
   eks_managed_node_group_defaults = {
     create_node_security_group = false
-    vpc_security_group_ids = [var.worker-sg]
-    ami_type               = "AL2_x86_64"
-    create_iam_role = true
-    iam_role_use_name_prefix = true
+    vpc_security_group_ids     = [var.worker-sg]
+    ami_type                   = "AL2_x86_64"
+    create_iam_role            = true
+    iam_role_use_name_prefix   = true
   }
 
-  eks_managed_node_groups            = local.node_groups
-  create_cluster_security_group = true
-  cluster_security_group_use_name_prefix = true 
-  create_iam_role = true
-  iam_role_use_name_prefix = false
+  eks_managed_node_groups                = local.node_groups
+  create_cluster_security_group          = true
+  cluster_security_group_use_name_prefix = true
+  create_iam_role                        = true
+  iam_role_use_name_prefix               = false
   cluster_security_group_additional_rules = {
-   admin_access = "${local.admin_access}"
-   node_egress  = "${local.node_egress}"
-  }  
+    admin_access = "${local.admin_access}"
+    node_egress  = "${local.node_egress}"
+  }
 }
 
 
 module "vpc_cni_irsa" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name             = "vpc_cni"
   attach_vpc_cni_policy = true
@@ -271,48 +271,54 @@ provider "helm" {
 
 #Get EKS Cluster ID 
 data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
-   depends_on = [module.eks]
+  name       = module.eks.cluster_id
+  depends_on = [module.eks]
 }
 
 #Get EKS Cluister ID for Authentication
 data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
-   depends_on = [module.eks]
+  name       = module.eks.cluster_id
+  depends_on = [module.eks]
 }
 
 data "tls_certificate" "tls_cluster" {
-  url = module.eks.cluster_oidc_issuer_url
-   depends_on = [module.eks]
+  url        = module.eks.cluster_oidc_issuer_url
+  depends_on = [module.eks]
   #url = aws_eks_cluster.example.identity[0].oidc[0].issuer
 }
 
 
 
 provider "helm" {
-   alias = "eks"
+  alias = "eks"
   kubernetes {
-   
+
     host                   = data.aws_eks_cluster.cluster.endpoint
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
     token                  = data.aws_eks_cluster_auth.cluster.token
     load_config_file       = false
+  
   }
 }
 
 provider "kubernetes" {
-  alias = "eks"
-  host                   = data.aws_eks_cluster.target.endpoint
+  alias                  = "eks"
+  host                   = data.aclusterws_eks_cluster.target.endpoint
   token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority[0].data)
- 
+    exec {
+      api_version = "client.authentication.k8s.io/user"
+      args        = ["eks", "get-token", "--cluster-name", local.cluster_name]
+      command     = "aws"
+    }
+
 }
 
 
 data "aws_eks_cluster_auth" "aws_iam_authenticator" {
   name = data.aws_eks_cluster.target.name
 
-    depends_on = [
+  depends_on = [
     module.eks
   ]
 
@@ -336,7 +342,7 @@ module "eks-lb-controller" {
   cluster_identity_oidc_issuer     = module.eks.cluster_oidc_issuer_url
   cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
   cluster_name                     = module.eks.cluster_id
-  depends_on = [module.eks]
+  depends_on                       = [module.eks]
 
 }
 

@@ -14,8 +14,8 @@ module "mod_sg" {
 
 
 module "mod_kms" {
- source = "./modules/kms"
- custom_tags = local.custom_tags
+  source      = "./modules/kms"
+  custom_tags = local.custom_tags
 }
 
 
@@ -29,26 +29,26 @@ module "rds" {
 
 }
 
-module "mod_iam"{
-  source = "./modules/iam"
+module "mod_iam" {
+  source      = "./modules/iam"
   custom_tags = local.custom_tags
 }
 
 
-module "mod_ecr"{
-  source = "./modules/ecr"
-   custom_tags = local.custom_tags
-   ecr-role-arn= module.mod_iam.ecr-role-arn
+module "mod_ecr" {
+  source       = "./modules/ecr"
+  custom_tags  = local.custom_tags
+  ecr-role-arn = module.mod_iam.ecr-role-arn
 }
-module "mod_waf"{
+module "mod_waf" {
   source = "./modules/waf"
 }
 
 module "mod_eks" {
-  source = "./modules/eks"
-  cluster_kms = module.mod_kms.eks_key_arn
-  custom_tags = local.custom_tags
-  vpc_id = module.mod_vpc.out_nl_vpcid
+  source          = "./modules/eks"
+  cluster_kms     = module.mod_kms.eks_key_arn
+  custom_tags     = local.custom_tags
+  vpc_id          = module.mod_vpc.out_nl_vpcid
   private_subnets = module.mod_vpc.out_nl_privatesubnet
-  worker-sg      = module.mod_sg.worker-sg
+  worker-sg       = module.mod_sg.worker-sg
 }
