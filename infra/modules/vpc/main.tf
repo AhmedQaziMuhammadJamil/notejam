@@ -65,6 +65,7 @@ module "notejam_vpc" {
   
   private_subnet_tags = {
     Name = "Private Subnets-${var.env}"
+    "kubernetes.io/role/internal-elb" = "1"
   }
 
   intra_subnet_tags = {
