@@ -209,8 +209,7 @@ module "vpc_cni_irsa" {
 }
 ##INGRESS
 
-
- data "aws_region" "current" {}
+data "aws_region" "current" {}
 
 data "aws_eks_cluster" "target" {
   name = local.cluster_name
@@ -230,12 +229,15 @@ data "aws_eks_cluster_auth" "aws_iam_authenticator" {
 
 }
 
+
+
 provider "kubernetes" {
   alias = "eks"
   host                   = data.aws_eks_cluster.target.endpoint
   token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority[0].data)
- 
+  //load_config_file       = false
+   config_path = "/home/aqeasygenerator/nord-cloud/notejam/infra/eks/config"
 }
 
 provider "helm" {
@@ -245,7 +247,7 @@ provider "helm" {
     token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority[0].data)
   }
-} 
+}
  module "alb_controller" {
   source  = "iplabs/alb-ingress-controller/kubernetes"
   version = "3.4.0"
@@ -267,46 +269,3 @@ provider "helm" {
   } 
 
  
-##################INGRESSS
-
-###FLux
-
-# Generate manifests
-data "flux_install" "main" {
-  target_path    = "clusters/notejam"
-  network_policy = false
-}
-
-resource "kubernetes_namespace" "flux_system" {
-  metadata {
-    name = "flux-system"
-  }
-
-  lifecycle {
-    ignore_changes = [
-      metadata[0].labels,
-    ]
-  }
-}
-
-# Split multi-doc YAML with
-# https://registry.terraform.io/providers/gavinbunney/kubectl/latest
-data "kubectl_file_documents" "apply" {
-  content = data.flux_install.main.content
-}
-
-# Convert documents list to include parsed yaml data
-locals {
-  apply = [ for v in data.kubectl_file_documents.apply.documents : {
-      data: yamldecode(v)
-      content: v
-    }
-  ]
-}
-
-# Apply manifests on the cluster
-resource "kubectl_manifest" "apply" {
-  for_each   = { for v in local.apply : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
-  depends_on = [kubernetes_namespace.flux_system]
-  yaml_body = each.value
-}

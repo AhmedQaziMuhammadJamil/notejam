@@ -14,6 +14,12 @@ terraform {
       source  = "hashicorp/aws"
       version = "= 3.74.2"
     }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.10.0"
+    }
+
+
   }
 }
 provider "aws" {

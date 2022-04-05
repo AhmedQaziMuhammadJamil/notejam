@@ -52,3 +52,7 @@ module "mod_eks" {
   private_subnets = module.mod_vpc.out_nl_privatesubnet
   worker-sg       = module.mod_sg.worker-sg
 }
+
+/* module "mod_flux" {
+  source = "./modules/flux"
+} */
