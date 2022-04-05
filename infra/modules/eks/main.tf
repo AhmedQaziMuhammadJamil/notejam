@@ -272,15 +272,18 @@ provider "helm" {
 #Get EKS Cluster ID 
 data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_id
+   depends_on = [module.eks]
 }
 
 #Get EKS Cluister ID for Authentication
 data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
+   depends_on = [module.eks]
 }
 
 data "tls_certificate" "tls_cluster" {
   url = module.eks.cluster_oidc_issuer_url
+   depends_on = [module.eks]
   #url = aws_eks_cluster.example.identity[0].oidc[0].issuer
 }
 
@@ -289,6 +292,7 @@ data "tls_certificate" "tls_cluster" {
 provider "helm" {
    alias = "eks"
   kubernetes {
+     depends_on = [module.eks]
     host                   = data.aws_eks_cluster.cluster.endpoint
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
     token                  = data.aws_eks_cluster_auth.cluster.token
@@ -297,6 +301,7 @@ provider "helm" {
 }
 
 provider "kubernetes" {
+   depends_on = [module.eks]
   alias = "eks"
   host                   = data.aws_eks_cluster.target.endpoint
   token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
@@ -325,13 +330,13 @@ data "aws_eks_cluster" "target" {
 
 }
 module "eks-lb-controller" {
+
   source  = "DNXLabs/eks-lb-controller/aws"
   version = "0.5.1"
   # insert the 4 required variables here
   cluster_identity_oidc_issuer     = module.eks.cluster_oidc_issuer_url
   cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
   cluster_name                     = module.eks.cluster_id
-
   depends_on = [module.eks]
 
 }
