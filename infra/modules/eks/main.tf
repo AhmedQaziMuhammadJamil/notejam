@@ -254,7 +254,7 @@ provider "helm" {
     
   }
 }
- module "alb_controller" {
+ /*  module "alb_controller" {
   source  = "iplabs/alb-ingress-controller/kubernetes"
   version = "3.4.0"
 
@@ -274,6 +274,11 @@ provider "helm" {
   k8s_cluster_name = data.aws_eks_cluster.target.name
   } 
 
+*/
+
+
+
+
 
 ####Flux
 provider "kubectl" {
@@ -289,12 +294,18 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
 }
 data "flux_install" "main" {
+    depends_on = [
+    module.eks
+  ]
   target_path      = var.target_path
   components_extra = var.components_extra
 }
 
 # Kubernetes
 resource "kubernetes_namespace" "flux_system" {
+  depends_on = [
+    module.eks
+  ]
   metadata {
     name = "flux-system"
   }

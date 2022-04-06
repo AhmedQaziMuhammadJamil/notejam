@@ -17,12 +17,12 @@ variable "worker-sg" {
 
 variable "target_path" {
   type        = string
-  default     = "staging-cluster"
+  default     = "notejam"
   description = "flux install target path"
 }
 
 variable "components_extra" {
   type        = list(string)
-  default     =  []
+  default     =  ["image-reflector-controller","image-automation-controller","helm-controller","kustomize-controller","source-controller"]
   description = "extra flux components"
 }
