@@ -293,12 +293,15 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.cluster.token
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
 }
+
+
+provider "flux" {
+}
 data "flux_install" "main" {
-    depends_on = [
-    module.eks
-  ]
+    depends_on = [module.eks]
   target_path      = var.target_path
   components_extra = var.components_extra
+
 }
 
 # Kubernetes
@@ -321,4 +324,12 @@ locals {
     content : v
     }
   ]
+}
+
+
+resource "kubectl_manifest" "apply" {
+
+  for_each   = { for v in local.install : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
+  depends_on = [kubernetes_namespace.flux_system]
+  yaml_body = each.value
 }

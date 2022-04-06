@@ -23,6 +23,6 @@ variable "target_path" {
 
 variable "components_extra" {
   type        = list(string)
-  default     =  ["image-reflector-controller","image-automation-controller","helm-controller","kustomize-controller","source-controller"]
+  default     =  []
   description = "extra flux components"
 }
