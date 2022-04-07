@@ -36,6 +36,8 @@ jobs:
         platforms: linux/amd64,linux/arm64,linux/386
         push: ${{ github.event_name != 'pull_request' }}
         add_git_labels: true
-        tag_with_ref: true
+        tags: |
+           repo:${{ github.sha }}
+           repo:latest
 
     
