@@ -309,8 +309,9 @@ resource "kubernetes_namespace" "flux_system" {
     module.eks
   ] */
   metadata {
-    name = "flux-system"
+    name = ["flux-system","stage","production"]
   }
+
 }
 
 data "kubectl_file_documents" "install" {
