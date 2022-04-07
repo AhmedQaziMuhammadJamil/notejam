@@ -26,16 +26,23 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Automatic Tagging of Releases
-      id: increment-git-tag
-      run: |
-        bash ./git_update.sh -v patch
+    - name: Docker Meta
+      id: meta
+      uses: docker/metadata-action@v3
+      with: 
+        images: name/app
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          
     - name: Build, Tag, and Push the Image to Amazon ECR
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: notejam-test-ecr 
-        IMAGE_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
+        IMAGE_TAG: ${{ steps.meta.outputs.tags }}
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f notejam-flask/Dockerfile.prod .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
