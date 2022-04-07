@@ -12,7 +12,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@master
       with:
         role-to-assume: arn:aws:iam::003767002475:role/github-oidc
         role-duration-seconds: 900 
