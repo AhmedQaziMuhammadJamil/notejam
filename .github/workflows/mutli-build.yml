@@ -48,20 +48,17 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
       - name: Prepare configs
         id: config
-        shell: pwsh
         run: |
-          $image = "${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}:${{ needs.tags.outputs.version }}"
+          image = "${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}:${{ needs.tags.outputs.version }}"
           echo "Setting image parameter to ${image}"
           echo "::set-output name=image::${image}"
       - name: Build container image
-        shell: pwsh
         run: |
-          Write-Warning "Building image ${{ steps.config.outputs.image }}..."
-          Get-Content ./notejam-flask/Dockerfile.prod | buildah bud -f - --squash --format=docker --pull -t ${{ steps.config.outputs.image }}
+          echo "Building image ${{ steps.config.outputs.image }}..."
+          tca ./notejam-flask/Dockerfile.prod | buildah bud -f - --squash --format=docker --pull -t ${{ steps.config.outputs.image }}
       - name: Push container image
-        shell: pwsh
         run: |
-          Write-Warning "Pushing image ${{ steps.config.outputs.image }}..."
+          echo "Pushing image ${{ steps.config.outputs.image }}..."
           buildah push ${{ steps.config.outputs.image }}
 
 
