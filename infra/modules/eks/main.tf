@@ -309,11 +309,43 @@ resource "kubernetes_namespace" "flux_system" {
     module.eks
   ] */
   metadata {
-    name = ["flux-system","stage","production"]
+    name = "flux-system"
   }
-
+  lifecycle {
+    ignore_changes = [
+      metadata[0].labels
+    ]
+  }
 }
 
+
+resource "kubernetes_namespace" "staging" {
+/*   depends_on = [
+    module.eks
+  ] */
+  metadata {
+    name = "staging"
+  }
+  lifecycle {
+    ignore_changes = [
+      metadata[0].labels
+    ]
+  }
+}
+
+resource "kubernetes_namespace" "production" {
+/*   depends_on = [
+    module.eks
+  ] */
+  metadata {
+    name = "production"
+  }
+  lifecycle {
+    ignore_changes = [
+      metadata[0].labels
+    ]
+  }
+}
 data "kubectl_file_documents" "install" {
   content = data.flux_install.main.content
 }
