@@ -1,4 +1,4 @@
-name: Build Container Images
+name: NEW Build Container Images
 
 on:
   push:
@@ -7,13 +7,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  changes:
+  tags:
     name: Detect changes
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
       - name: Prepare configs
@@ -31,14 +30,16 @@ jobs:
   build:
     name: Build container images
     runs-on: ubuntu-latest
-   
+    needs: tags
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@master
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-         role-to-assume: arn:aws:iam::003767002475:role/github-oidc
-         role-duration-seconds: 900 
-         aws-region: eu-west-1
+          role-to-assume: arn:aws:iam::003767002475:role/github-oidc
+          role-duration-seconds: 900 
+          aws-region: eu-wes-1
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -46,16 +47,18 @@ jobs:
         id: config
         shell: pwsh
         run: |
-          $image = "${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}:${{ step.config.outputs.version }}"
+          $image = "${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}:${{ needs.tags.outputs.version }}"
           echo "Setting image parameter to ${image}"
           echo "::set-output name=image::${image}"
       - name: Build container image
         shell: pwsh
         run: |
           Write-Warning "Building image ${{ steps.config.outputs.image }}..."
-          Get-Content ./notejam-flask/Dockerfile.prod| buildah bud -f - --squash --format=docker --pull -t ${{ steps.config.outputs.image }}
+          Get-Content ./notejam-flask/Dockerfile.prod | buildah bud -f - --squash --format=docker --pull -t ${{ steps.config.outputs.image }}
       - name: Push container image
         shell: pwsh
         run: |
           Write-Warning "Pushing image ${{ steps.config.outputs.image }}..."
           buildah push ${{ steps.config.outputs.image }}
+
+
