@@ -29,25 +29,30 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    - name: Set Tag Number
-      id: tag-number
-      run: echo ::set-output name=tag::$(date +'%Y.%m.%d').${GITHUB_REF}-${GITHUB_SHA::8}-${{ github.run_id }}
-    - name: Check Tag Release
-      env:
-          RELEASE_VERSION: ${{ steps.tag-number.outputs.tag }}
-      run: |
-          echo $RELEASE_VERSION
-          echo ${{ steps.vars.outputs.tag }}
+
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.REGISTRY }}
-          IMAGE_TAG: ${{ steps.tag-number.outputs.tag }}
+          IMAGE_TAG: ${{ steps.config.outputs.version }}
       run: |
           docker build --file notejam-flask/Dockerfile.prod  -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+    - name: Prepare configs
+      id: config
+      shell: bash
+      run: |
+        GITHUB_SHA='${{ github.sha }}'
+        GITHUB_REF='${{ env.GITHUB_REF_SLUG_URL }}'
+        VERSION="$(date +'%Y.%m.%d').${GITHUB_REF}-${GITHUB_SHA::8}-${{ github.run_id }}"
+        echo "Setting version parameter to ${VERSION}"
+        echo "::set-output name=version::${VERSION}"
+    outputs:
+        version: ${{ steps.config.outputs.version }}
+
 
 
     
