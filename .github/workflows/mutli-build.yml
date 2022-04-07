@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+    paths:
+    - notejam-flask/**
+  pull_request:
+    paths:
+    - notejam-flask/**
   workflow_dispatch:
 
 jobs:
