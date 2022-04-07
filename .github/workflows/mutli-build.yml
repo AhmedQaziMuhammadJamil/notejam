@@ -96,7 +96,7 @@ jobs:
         shell: pwsh
         run: |
           Write-Warning "Building image ${{ steps.config.outputs.image }}..."
-          Get-Content ./notejam-flask/${{ matrix.project }}/Dockerfile.prod| buildah bud -f - --squash --format=docker --pull -t ${{ steps.config.outputs.image }}
+          Get-Content ./notejam-flask/Dockerfile.prod| buildah bud -f - --squash --format=docker --pull -t ${{ steps.config.outputs.image }}
       - name: Push container image
         shell: pwsh
         run: |
