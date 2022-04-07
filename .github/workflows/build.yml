@@ -25,19 +25,24 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-          
-    - name: Build, Tag, and Push the Image to Amazon ECR
+    - name: Set Tag Number
+      id: tag-number
+      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+    - name: Check Tag Release
+      env:
+          RELEASE_VERSION: ${{ steps.tag-number.outputs.tag }}
+      run: |
+          echo $RELEASE_VERSION
+          echo ${{ steps.vars.outputs.tag }}
+    - name: Build, tag, and push image to Amazon ECR
       id: build-image
-      uses: docker/build-push-action@v2
-      with: 
-        registry: ${{steps.login-ecr.outputs.registry}}
-        repository: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}
-        file: notejam-flask/Dockerfile.prod
-        platforms: linux/amd64
-        push: ${{ github.event_name != 'pull_request' }}
-        add_git_labels: true
-        tags: |
-           repo:${{ github.sha }}
-          
+      env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.tag-number.outputs.tag }}
+      run: |
+          docker build --file notejam-flask/Dockerfile.prod  -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
 
     
