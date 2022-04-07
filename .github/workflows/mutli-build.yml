@@ -54,8 +54,8 @@ jobs:
           echo "::set-output name=image::${image}"
       - name: Build container image
         run: |
-          
-          cat ./notejam-flask/Dockerfile.prod | buildah bud -f - --squash --format=docker --pull -t ${{ steps.config.outputs.image }}
+          echo "image-tag ${{ steps.config.outputs.image }}"
+          cat ./notejam-flask/Dockerfile.prod && buildah bud -f - --squash --format=docker --pull -t ${{ steps.config.outputs.image }}
       - name: Push container image
         run: |
 
