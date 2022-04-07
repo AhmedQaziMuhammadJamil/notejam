@@ -42,7 +42,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::003767002475:role/github-oidc
           role-duration-seconds: 900 
-          aws-region: eu-wes-1
+          aws-region: eu-west-1
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
