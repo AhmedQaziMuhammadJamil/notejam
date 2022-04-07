@@ -38,7 +38,7 @@ jobs:
       id: build-image
       env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}
+          ECR_REPOSITORY: ${{ secrets.REGISTRY }}
           IMAGE_TAG: ${{ steps.tag-number.outputs.tag }}
       run: |
           docker build --file notejam-flask/Dockerfile.prod  -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
