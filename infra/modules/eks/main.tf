@@ -24,7 +24,7 @@ locals {
     apps = merge(local.eks_managed_node_group_defaults, {
       name_prefix = "apps"
 
-      instance_types   = ["m5a.large"]
+      instance_types   = ["t3a.medium"]
       max_capacity     = 3
       min_capacity     = 3
       desired_capacity = 3
@@ -295,9 +295,9 @@ provider "kubernetes" {
 }
 
 
-##FLUX 
+##FLUX
 data "flux_install" "main" {
-    depends_on = [module.eks]
+   /*  depends_on = [module.eks] */
   target_path      = var.target_path
   components_extra = var.components_extra
 
@@ -305,9 +305,9 @@ data "flux_install" "main" {
 
 # Kubernetes
 resource "kubernetes_namespace" "flux_system" {
-  depends_on = [
+/*   depends_on = [
     module.eks
-  ]
+  ] */
   metadata {
     name = "flux-system"
   }
