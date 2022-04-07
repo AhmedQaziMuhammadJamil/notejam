@@ -89,7 +89,7 @@ jobs:
         id: config
         shell: pwsh
         run: |
-          $image = "${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}/${{ matrix.project }}:${{ needs.changes.outputs.version }}"
+          $image = "${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}:${{ needs.changes.outputs.version }}"
           echo "Setting image parameter to ${image}"
           echo "::set-output name=image::${image}"
       - name: Build container image
