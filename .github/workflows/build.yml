@@ -35,7 +35,7 @@ jobs:
       env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.REGISTRY }}
-          IMAGE_TAG: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}:${{ steps.config.outputs.version }}
+          IMAGE_TAG: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}${{ steps.config.outputs.version }}
       run: |
           buildah bud -f - --squash --format=docker --pull -t $IMAGE_TAG . 
           buildah push $IMAGE_TAG
