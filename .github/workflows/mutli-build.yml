@@ -49,11 +49,11 @@ jobs:
       - name: Prepare configs
         id: config
         run: |
-          image = ${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}:${{ needs.tags.outputs.version }}
+          image = "${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}:${{ needs.tags.outputs.version }}""
           echo "Setting image parameter to ${image}"
           echo "::set-output name=image::${image}"
-          buildah bud -f ./notejam-flask/Dockerfile.prod --squash --format=docker --pull -t '${{ steps.config.outputs.image }}''
-          buildah push '${{ steps.config.outputs.image }}'
+          buildah bud -f ./notejam-flask/Dockerfile.prod --squash --format=docker --pull -t "${{ steps.config.outputs.image }}"
+          buildah push "${{ steps.config.outputs.image }}"
        
 
 
