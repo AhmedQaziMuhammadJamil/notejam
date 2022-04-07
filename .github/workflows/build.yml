@@ -15,7 +15,6 @@ jobs:
     permissions:
      id-token: write
      contents: read
-
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -39,11 +38,11 @@ jobs:
         echo "Setting version parameter to ${VERSION}"
         echo "::set-output name=version::${VERSION}"
     outputs:
-        version: ${{ steps.config.outputs.version }}
+      version: ${{ steps.config.outputs.version }}
         
-    - name: Build, tag, and push image to Amazon ECR
-      id: build-image
-      env:
+     - name: Build, tag, and push image to Amazon ECR
+       id: build-image
+         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.REGISTRY }}
           IMAGE_TAG: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}${{ steps.config.outputs.version }}
