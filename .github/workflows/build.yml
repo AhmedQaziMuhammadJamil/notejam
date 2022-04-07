@@ -37,7 +37,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.REGISTRY }}
           IMAGE_TAG: ${{ steps.config.outputs.version }}
       run: |
-          buildah bud -f - --squash --format=docker --pull -t {$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . } 
+          buildah bud -f - --squash --format=docker --pull -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . 
           buildah push ${{$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG}} 
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
