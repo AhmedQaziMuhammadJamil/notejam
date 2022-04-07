@@ -29,18 +29,6 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Build, tag, and push image to Amazon ECR
-      id: build-image
-      env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.REGISTRY }}
-          IMAGE_TAG: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}${{ steps.config.outputs.version }}
-      run: |
-          buildah bud -f - --squash --format=docker --pull -t $IMAGE_TAG . 
-          buildah push $IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
     - name: Prepare configs
       id: config
       shell: bash
@@ -52,6 +40,17 @@ jobs:
         echo "::set-output name=version::${VERSION}"
     outputs:
         version: ${{ steps.config.outputs.version }}
+        
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.REGISTRY }}
+          IMAGE_TAG: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.REGISTRY }}${{ steps.config.outputs.version }}
+      run: |
+          buildah bud -f - --squash --format=docker --pull -t $IMAGE_TAG . 
+          buildah push $IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
 
 
