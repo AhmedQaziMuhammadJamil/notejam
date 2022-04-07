@@ -61,3 +61,9 @@ module "mod_eks" {
   cluster_ca_certificate = module.mod_eks.cluster_ca_certificate
   token=module.mod_eks.token
 }  */
+
+
+module "mod_github" {
+  source = "./modules/github"
+  
+}
