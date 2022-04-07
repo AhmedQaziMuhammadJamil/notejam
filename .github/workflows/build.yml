@@ -38,6 +38,6 @@ jobs:
         add_git_labels: true
         tags: |
            repo:${{ github.sha }}
-           repo:latest
+          
 
     
