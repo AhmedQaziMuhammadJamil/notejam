@@ -7,9 +7,9 @@ jobs:
   build-and-push:
     name: Build and Push to ECR
     runs-on: ubuntu-latest
-  permissions:
-    id-token: write
-    contents: read
+    permissions:
+     id-token: write
+     contents: read
 
     steps:
     - name: Checkout
