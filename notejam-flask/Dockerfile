@@ -13,3 +13,6 @@ COPY . /app
 RUN pip install --upgrade pip
 # install dependencies
 RUN pip install -r requirements.txt
+
+
+##Test
