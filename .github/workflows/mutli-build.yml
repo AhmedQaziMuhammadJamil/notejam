@@ -48,14 +48,24 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
       - name: Prepare configs
         id: config
+        shell: bash
         run: |
           ECR_Repo='{steps.login-ecr.outputs.registry}'
           ECR_Reg='{secrets.REGISTRY}'
           image='${ECR_Repo}/${ECR_Reg}:${needs.tags.outputs.version}'
           echo "Setting image parameter to ${image}"
           echo "::set-output name=image::${image}"
+      - name: Build container image
+        shell: bash
+        run: |
+          echo "Building image $steps.config.outputs.image ..."
           buildah bud -f ./notejam-flask/Dockerfile.prod --squash --format=docker --pull -t "${{steps.config.outputs.image}}"
-          buildah push "${{ steps.config.outputs.image }}"
+  
+      - name: Push Container Image 
+        shell: bash
+        run: |
+         echo "Pushing image $steps.config.outputs.image"
+         buildah push $steps.config.outputs.image
        
 
 
