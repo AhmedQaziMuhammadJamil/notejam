@@ -31,7 +31,7 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
     - name: Set Tag Number
       id: tag-number
-      run: echo ::set-output name=tag::{"$(date +'%Y.%m.%d').${GITHUB_REF}-${GITHUB_SHA::8}-${{ github.run_id }}"}
+      run: echo ::set-output name=tag::$(date +'%Y.%m.%d').${GITHUB_REF}-${GITHUB_SHA::8}-${{ github.run_id }}
     - name: Check Tag Release
       env:
           RELEASE_VERSION: ${{ steps.tag-number.outputs.tag }}
