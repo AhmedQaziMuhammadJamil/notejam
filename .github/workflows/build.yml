@@ -32,7 +32,10 @@ jobs:
       run: |
         GITHUB_SHA='${{ github.sha }}'
         GITHUB_REF='${{ env.GITHUB_REF_SLUG_URL }}'
-        
+        VERSION="$(date +'%Y.%m.%d').${GITHUB_REF}-${GITHUB_SHA::8}-${{ github.run_id }}"
+        echo "Setting version parameter to ${VERSION}"
+        echo "::set-output name=version::${VERSION}"
+   
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
@@ -50,7 +53,7 @@ jobs:
       env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.REGISTRY }}
-          IMAGE_TAG: ${{ steps.tag-number.outputs.tag }}
+          IMAGE_TAG: $(date +'%Y.%m.%d').${GITHUB_REF}-${GITHUB_SHA::8}-${{ github.run_id }}
       run: |
           docker build --file notejam-flask/Dockerfile.prod  -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
