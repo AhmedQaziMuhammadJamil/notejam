@@ -63,7 +63,7 @@ jobs:
         shell: bash
         run: |
          echo Pushing image '$steps.config.outputs.image'
-         buildah push $steps.config.outputs.image
+         buildah push "${{steps.config.outputs.image}}"
        
 
 
