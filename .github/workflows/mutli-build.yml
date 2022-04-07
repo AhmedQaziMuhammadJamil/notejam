@@ -35,8 +35,8 @@ jobs:
             echo "[${list_joined}]" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
           }
-          generate_filter "src" "CHANGES_FILTER"
-          generate_list "src" "CHANGES_LIST"
+          generate_filter "notejam-flask" "CHANGES_FILTER"
+          generate_list "notejam-flask" "CHANGES_LIST"
       - name: Find changed paths
         uses: dorny/paths-filter@v2.10.2
         id: filter
