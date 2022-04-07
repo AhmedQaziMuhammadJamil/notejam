@@ -17,3 +17,36 @@ module "iam" {
   # insert the 1 required variable here
 }
 //TODO create oidc for github for ECR
+
+
+
+
+data "aws_iam_policy_document" "source_policy_document_github" {
+  statement {
+    actions = [
+      "ecr:BatchGetImage",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:CompleteLayerUpload",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:InitiateLayerUpload",
+      "ecr:PutImage",
+      "ecr:UploadLayerPart",
+    ]
+    resources = [var.ecr_repo_arn]
+  }
+
+  statement {
+    actions = [
+      "ecr:GetAuthorizationToken",
+    ]
+    resources = ["*"]
+  }
+}
+
+
+
+resource "aws_iam_policy" "github_actions" {
+  name        = "github-actions-${var.ecr_repository_name}"
+  description = "Grant Github Actions the ability to push to ${var.ecr_repository_name}"
+  policy      = data.aws_iam_policy_document.source_policy_document_github.json
+}

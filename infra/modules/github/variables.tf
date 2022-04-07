@@ -101,3 +101,9 @@ variable "tags" {
   description = "Map of tags to be applied to all resources."
   type        = map(string)
 }
+
+variable "github_actions_ecr" {
+  description= "arn of policy created in  IAM role module"
+}
+
+

@@ -32,6 +32,8 @@ module "rds" {
 module "mod_iam" {
   source      = "./modules/iam"
   custom_tags = local.custom_tags
+  ecr_repo_arn = module.mod_ecr.ecr_arn
+  ecr_repository_name = module.mod_ecr.ecr_name
 }
 
 
@@ -65,5 +67,6 @@ module "mod_eks" {
 
 module "mod_github" {
   source = "./modules/github"
-  
+  github_actions_ecr = module.mod_iam.github_actions_ecr
+
 }
