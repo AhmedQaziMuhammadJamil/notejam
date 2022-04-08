@@ -381,3 +381,45 @@ resource "kubectl_manifest" "apply" {
   depends_on = [kubernetes_namespace.flux_system]
   yaml_body = each.value
 }
+
+####Flux+GitHub 8-04-2022
+
+/* resource "kubernetes_secret" "main" {
+  depends_on = [kubectl_manifest.install]
+
+  metadata {
+    name      = data.flux_sync.main.secret
+    namespace = data.flux_sync.main.namespace
+  }
+ */
+ /*  data = {
+    identity       = tls_private_key.main.private_key_pem
+    "identity.pub" = tls_private_key.main.public_key_pem
+    known_hosts    = local.known_hosts
+  }
+} */
+
+resource "github_repository" "main" {
+  name       = var.repository_name
+  visibility = var.repository_visibility
+  auto_init  = true
+}
+
+resource "github_branch_default" "main" {
+  repository = github_repository.main.name
+  branch     = var.branch
+}
+
+resource "github_repository_deploy_key" "main" {
+  title      = "staging-cluster"
+  repository = github_repository.main.name
+  key        = tls_private_key.main.public_key_openssh
+  read_only  = true
+}
+
+resource "github_repository_file" "install" {
+  repository = github_repository.main.name
+  file       = data.flux_install.main.path
+  content    = data.flux_install.main.content
+  branch     = var.branch
+}
