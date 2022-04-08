@@ -6,6 +6,16 @@
       source  = "gavinbunney/kubectl"
       version = ">= 1.10.0"
     }
+     github = {
+      source  = "integrations/github"
+      version = ">= 4.5.2"
+    }
+
+    tls = {
+      source  = "hashicorp/tls"
+      version = "3.1.0"
+    }
+    
     flux = {
       source  = "fluxcd/flux"
       version = "0.12.2"

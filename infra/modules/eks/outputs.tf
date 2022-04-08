@@ -17,6 +17,5 @@ output "cluster_ca_certificate" {
 }
 
 output "token" {
-  value = "${data.aws_eks_cluster_auth.cluster.token}"
-  
+  value = "${data.aws_eks_cluster_auth.cluster.token}" 
 }

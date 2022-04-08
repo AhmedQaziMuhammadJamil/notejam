@@ -9,3 +9,11 @@ variable "env" {
   description = "Env for the application"
   default     = "dev"
 }
+
+
+variable "github_owner" {
+  type = string
+}
+variable "github_token" {
+  type = string
+}

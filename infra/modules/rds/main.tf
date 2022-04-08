@@ -77,9 +77,10 @@ module "rds-aurora" {
     writer = {
       instance_class = "db.t3.medium"
     }
-    reader = {
+    //TODO cost savings-revert later
+   /*  reader = {
       instance_class = "db.t3.medium"
-    }
+    } */
 
   }
 
