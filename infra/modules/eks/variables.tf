@@ -34,7 +34,7 @@ variable "github_token" {
 }
 variable "repository_name" {
   type        = string
-  default     = "test-provider"
+  default     = "flux-system"
   description = "github repository name"
 }
 
