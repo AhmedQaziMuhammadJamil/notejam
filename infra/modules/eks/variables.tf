@@ -34,7 +34,7 @@ variable "github_token" {
 }
 variable "repository_name" {
   type        = string
-  default     = "flux-system"
+  default     = " flux-mainfest"
   description = "github repository name"
 }
 
