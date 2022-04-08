@@ -372,6 +372,11 @@ locals {
     content : v
     }
   ]
+   sync = [for v in data.kubectl_file_documents.sync.documents : {
+    data : yamldecode(v)
+    content : v
+    }
+  ]
 }
 
 
@@ -384,20 +389,7 @@ resource "kubectl_manifest" "apply" {
 
 ####Flux+GitHub 8-04-2022
 
-/* resource "kubernetes_secret" "main" {
-  depends_on = [kubectl_manifest.install]
-
-  metadata {
-    name      = data.flux_sync.main.secret
-    namespace = data.flux_sync.main.namespace
-  }
- */
- /*  data = {
-    identity       = tls_private_key.main.private_key_pem
-    "identity.pub" = tls_private_key.main.public_key_pem
-    known_hosts    = local.known_hosts
-  }
-} */
+ 
 
 resource "github_repository" "main" {
   name       = var.repository_name
@@ -423,3 +415,47 @@ resource "github_repository_file" "install" {
   content    = data.flux_install.main.content
   branch     = var.branch
 }
+
+
+### Sync
+
+data "flux_sync" "main" {
+  target_path = var.target_path
+  url         = "ssh://git@github.com/${var.github_owner}/${var.repository_name}.git"
+  branch      = var.branch
+}
+
+
+data "kubectl_file_documents" "sync" {
+  content = data.flux_sync.main.content
+}
+
+resource "kubernetes_secret" "main" {
+  depends_on = [kubectl_manifest.apply]
+
+  metadata {
+    name      = data.flux_sync.main.secret
+    namespace = data.flux_sync.main.namespace
+  }
+ 
+   data = {
+    identity       = tls_private_key.main.private_key_pem
+    "identity.pub" = tls_private_key.main.public_key_pem
+    known_hosts    = local.known_hosts
+  }
+} 
+
+resource "github_repository_file" "sync" {
+  repository = github_repository.main.name
+  file       = data.flux_sync.main.path
+  content    = data.flux_sync.main.content
+  branch     = var.branch
+}
+
+resource "github_repository_file" "kustomize" {
+  repository = github_repository.main.name
+  file       = data.flux_sync.main.kustomize_path
+  content    = data.flux_sync.main.kustomize_content
+  branch     = var.branch
+}
+
