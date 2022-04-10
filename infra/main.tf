@@ -57,15 +57,16 @@ module "mod_eks" {
   github_token = var.github_token
 }
 
-/*  module "mod_flux" {
+  module "mod_flux" {
   source = "./modules/flux"
   cluster_id= module.mod_eks.cluster_id
   cluster_auth = module.mod_eks.cluster_auth
   host=module.mod_eks.eks_host
   cluster_ca_certificate = module.mod_eks.cluster_ca_certificate
   token=module.mod_eks.token
-}  */
-
+   github_owner = var.github_owner
+  github_token = var.github_token
+}  
 
 module "mod_github" {
   source = "./modules/github"

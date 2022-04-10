@@ -1,15 +1,15 @@
 ####Flux
 provider "kubectl" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  token                  = data.aws_eks_cluster_auth.cluster.token
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+  host                   = var.host
+  token                  = var.token
+  cluster_ca_certificate = var.cluster_ca_certificate
   load_config_file       = false
 }
 
 provider "kubernetes" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  token                  = data.aws_eks_cluster_auth.cluster.token
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+ host                   = var.host
+  token                  = var.token
+  cluster_ca_certificate = var.cluster_ca_certificate
 }
 
 
@@ -39,11 +39,7 @@ data "flux_install" "main" {
 
 
 ###Deleting resouces in k8s as provider doesn't provide any idempotentancy
-provisioner "local-exec" {
-    when       = destroy
-    command    = "kubectl patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
-    on_failure = continue
-  }
+
 # Kubernetes
 resource "kubernetes_namespace" "flux_system" {
 /*   depends_on = [
@@ -56,6 +52,11 @@ resource "kubernetes_namespace" "flux_system" {
     ignore_changes = [
       metadata[0].labels
     ]
+  }
+  provisioner "local-exec" {
+    when       = destroy
+    command    = "kubectl patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
+    on_failure = continue
   }
 }
 
