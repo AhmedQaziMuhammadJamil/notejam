@@ -81,6 +81,8 @@ locals {
 
   cluster_name    = "notejam"
   cluster_version = "1.21"
+  name            = "ex-iam-eks-role"
+  region          = "eu-west-1"
   coredns = {
     cluster_name      = module.eks.cluster_id
     addon_name        = "coredns"
@@ -143,7 +145,7 @@ locals {
 }
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
-  version                         = "18.17.0"
+  version                         = "18.20.2"
   cluster_name                    = local.cluster_name
   cluster_version                 = local.cluster_version
   cluster_endpoint_private_access = true
@@ -207,6 +209,40 @@ module "vpc_cni_irsa" {
   tags = var.custom_tags
 
 }
+
+### Auth-config
+
+ # aws-auth configmap
+  /* manage_aws_auth_configmap = true
+
+  aws_auth_roles = [
+    {
+      rolearn  = "arn:aws:iam::66666666666:role/role1"
+      username = "role1"
+      groups   = ["system:masters"]
+    },
+  ]
+
+  aws_auth_users = [
+    {
+      userarn  = "arn:aws:iam::003767002475:user/aqazi"
+      username = "aqazi"
+      groups   = ["system:masters"]
+    },
+  ]
+
+  aws_auth_accounts = ["003767002475"]
+
+
+  tags = {
+    Environment = "dev"
+    Terraform   = "true"
+  }
+
+ */
+
+
+
 ##INGRESS
 
 data "aws_region" "current" {}
@@ -254,6 +290,9 @@ provider "helm" {
     
   }
 }
+
+
+
  /*  module "alb_controller" {
   source  = "iplabs/alb-ingress-controller/kubernetes"
   version = "3.4.0"
