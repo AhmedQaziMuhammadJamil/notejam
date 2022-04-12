@@ -151,7 +151,7 @@ resource "github_repository" "sync" {
 }
 
 ### Sync
-
+/* 
 data "flux_sync" "main" {
   target_path = var.sync_target_path
   url         = "ssh://git@github.com/${var.github_owner}/${var.sync_repo}.git"
@@ -191,4 +191,46 @@ resource "github_repository_file" "kustomize" {
   content    = data.flux_sync.main.kustomize_content
   branch     = var.branch
 }
+  */
+
+
+  
+data "flux_sync" "main" {
+  target_path = var.target_path
+  url         = "ssh://git@github.com/${var.github_owner}/${var.repository_name}.git"
+  branch      = var.branch
+}
+
+
+data "kubectl_file_documents" "sync" {
+  content = data.flux_sync.main.content
+}
+
+resource "kubernetes_secret" "main" {
+  depends_on = [kubectl_manifest.apply]
+
+  metadata {
+    name      = data.flux_sync.main.secret
+    namespace = data.flux_sync.main.namespace
+  }
  
+   data = {
+    identity       = tls_private_key.main.private_key_pem
+    "identity.pub" = tls_private_key.main.public_key_pem
+    known_hosts    = local.known_hosts
+  }
+} 
+
+resource "github_repository_file" "sync" {
+  repository = github_repository.main.name
+  file       = data.flux_sync.main.path
+  content    = data.flux_sync.main.content
+  branch     = var.branch
+}
+
+resource "github_repository_file" "kustomize" {
+  repository = github_repository.main.name
+  file       = data.flux_sync.main.kustomize_path
+  content    = data.flux_sync.main.kustomize_content
+  branch     = var.branch
+}
