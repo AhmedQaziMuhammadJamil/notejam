@@ -20,7 +20,7 @@ variable "cluster_ca_certificate" {
 
 variable "target_path" {
   type        = string
-  default     = "notejam"
+  default     = "notejam/flux-system"
   description = "flux install target path"
 }
 
@@ -37,7 +37,7 @@ variable "github_token" {
 }
 variable "repository_name" {
   type        = string
-  default     = "flux-aq"
+  default     = "flux-install-repo"
   description = "github repository name"
 }
 

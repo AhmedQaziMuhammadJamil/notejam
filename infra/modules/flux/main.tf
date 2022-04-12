@@ -98,11 +98,12 @@ locals {
     content : v
     }
   ]
-   sync = [for v in data.kubectl_file_documents.sync.documents : {
+  #TODO: uncomment for sync
+ /*   sync = [for v in data.kubectl_file_documents.sync.documents : { 
     data : yamldecode(v)
     content : v
     }
-  ]
+  ] */
 }
 
 
@@ -144,7 +145,7 @@ resource "github_repository_file" "install" {
 
 
 ### Sync
-
+/* 
 data "flux_sync" "main" {
   target_path = var.target_path
   url         = "ssh://git@github.com/${var.github_owner}/${var.repository_name}.git"
@@ -184,4 +185,4 @@ resource "github_repository_file" "kustomize" {
   content    = data.flux_sync.main.kustomize_content
   branch     = var.branch
 }
-
+ */
