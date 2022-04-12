@@ -144,11 +144,17 @@ resource "github_repository_file" "install" {
 }
 
 
+resource "github_repository" "sync" {
+  name       = var.sync_repo
+  visibility = var.repository_visibility
+  auto_init  = true
+}
+
 ### Sync
-/* 
+
 data "flux_sync" "main" {
-  target_path = var.target_path
-  url         = "ssh://git@github.com/${var.github_owner}/${var.repository_name}.git"
+  target_path = var.sync_target_path
+  url         = "ssh://git@github.com/${var.github_owner}/${var.sync_repo}.git"
   branch      = var.branch
 }
 
@@ -173,16 +179,16 @@ resource "kubernetes_secret" "main" {
 } 
 
 resource "github_repository_file" "sync" {
-  repository = github_repository.main.name
+  repository = github_repository.sync.name
   file       = data.flux_sync.main.path
   content    = data.flux_sync.main.content
   branch     = var.branch
 }
 
 resource "github_repository_file" "kustomize" {
-  repository = github_repository.main.name
+  repository = github_repository.sync.name
   file       = data.flux_sync.main.kustomize_path
   content    = data.flux_sync.main.kustomize_content
   branch     = var.branch
 }
- */
+ 
