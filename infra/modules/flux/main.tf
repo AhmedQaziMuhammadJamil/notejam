@@ -99,11 +99,11 @@ locals {
     }
   ]
   #TODO: uncomment for sync
- /*   sync = [for v in data.kubectl_file_documents.sync.documents : { 
+    sync = [for v in data.kubectl_file_documents.sync.documents : { 
     data : yamldecode(v)
     content : v
     }
-  ] */
+  ] 
 }
 
 
