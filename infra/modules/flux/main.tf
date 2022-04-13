@@ -34,7 +34,6 @@ data "flux_install" "main" {
    /*  depends_on = [module.eks] */
   target_path      = var.target_path
   components_extra = var.components_extra
-  version        = "latest" 
 
 }
 
@@ -145,11 +144,11 @@ resource "github_repository_file" "install" {
 }
 
 
-resource "github_repository" "sync" {
+/* resource "github_repository" "sync" {
   name       = var.sync_repo
   visibility = var.repository_visibility
   auto_init  = true
-}
+} */
 
 ### Sync
 /* 
@@ -198,7 +197,7 @@ resource "github_repository_file" "kustomize" {
   
 data "flux_sync" "main" {
   target_path = var.target_path
-  url         = "ssh://git@github.com/${var.github_owner}/${var.sync_repo}.git"
+  url         = "ssh://git@github.com/${var.github_owner}/${var.repository_name}.git"
   branch      = var.branch
 }
 
