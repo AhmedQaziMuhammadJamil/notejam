@@ -53,15 +53,3 @@ variable "branch" {
   description = "branch name"
 }
 
-
-variable "sync_repo" {
-  type        = string
-  default     = "flux-sync-repo"
-  description = "github  syncrepository name"
-}
-
-variable "sync_target_path" {
-  type        = string
-  default     = "sync-system"
-  description = "flux sync target path"
-}
