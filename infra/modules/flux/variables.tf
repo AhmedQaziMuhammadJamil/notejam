@@ -62,6 +62,6 @@ variable "sync_repo" {
 
 variable "sync_target_path" {
   type        = string
-  default     = "notejam/sync-system"
+  default     = "sync-system"
   description = "flux sync target path"
 }
