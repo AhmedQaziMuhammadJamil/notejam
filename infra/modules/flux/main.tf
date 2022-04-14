@@ -225,6 +225,7 @@ resource "kubernetes_secret" "main" {
   }
 } 
 
+
 resource "github_repository_file" "sync" {
   repository = github_repository.main.name
   file       = data.flux_sync.main.path
