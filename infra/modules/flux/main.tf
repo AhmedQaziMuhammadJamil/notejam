@@ -105,12 +105,21 @@ locals {
     content : v
     }
   ] 
+  url ="https://git@github.com/${var.github_owner}/${var.repository_name}.git"
 }
 
 
 resource "kubectl_manifest" "apply" {
 
   for_each   = { for v in local.install : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
+  depends_on = [kubernetes_namespace.flux_system]
+  yaml_body = each.value
+}
+
+
+
+resource "kubectl_manifest" "sync" {
+  for_each   = { for v in local.sync : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
   depends_on = [kubernetes_namespace.flux_system]
   yaml_body = each.value
 }
@@ -198,14 +207,18 @@ resource "github_repository_file" "kustomize" {
   
 data "flux_sync" "main" {
   target_path = var.target_path
-  url         = "https://git@github.com/${var.github_owner}/${var.repository_name}.git"
+  url         = local.url
   branch      = var.branch
   git_implementation = "go-git"
   name = "test-source"
   secret = "flux-system"
-
+  namespace = "flux-system"
+  
 }
 
+output "gitrepo" {
+  value= "${data.flux_sync.main}"
+}
 
 data "kubectl_file_documents" "sync" {
   content = data.flux_sync.main.content
@@ -234,6 +247,10 @@ resource "github_repository_file" "sync" {
   file       = data.flux_sync.main.path
   content    = data.flux_sync.main.content
   branch     = var.branch
+   /*  provisioner "local-exec" {
+    command    = "flux create source git test --url ${local.url} --branch ${var.branch} --secret-ref flux-system --silent"
+    on_failure = continue
+  }  */
 }
 
 resource "github_repository_file" "kustomize" {
