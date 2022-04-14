@@ -54,11 +54,11 @@ resource "kubernetes_namespace" "flux_system" {
       metadata[0].labels
     ]
   }
-/*   provisioner "local-exec" {
+   provisioner "local-exec" {
     when       = destroy
     command    = "kubectl patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
     on_failure = continue
-  } */
+  } 
 }
 
 
@@ -217,9 +217,11 @@ resource "kubernetes_secret" "main" {
   }
  
    data = {
-    identity       = tls_private_key.main.private_key_pem
+/*     identity       = tls_private_key.main.private_key_pem
     "identity.pub" = tls_private_key.main.public_key_pem
-    known_hosts    = local.known_hosts
+    known_hosts    = local.known_hosts */
+    username="git"
+    password=var.github_token
   }
 } 
 
