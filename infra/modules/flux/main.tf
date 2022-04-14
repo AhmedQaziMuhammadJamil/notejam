@@ -200,6 +200,9 @@ data "flux_sync" "main" {
   target_path = var.target_path
   url         = "https://git@github.com/${var.github_owner}/${var.repository_name}.git"
   branch      = var.branch
+  git_implementation = "go-git"
+  name = "test-source"
+  secret = "flux-system"
 
 }
 
