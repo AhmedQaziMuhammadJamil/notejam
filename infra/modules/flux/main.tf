@@ -54,11 +54,7 @@ resource "kubernetes_namespace" "flux_system" {
       metadata[0].labels
     ]
   }
-   provisioner "local-exec" {
-    when       = destroy
-    command    = "kubectl patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
-    on_failure = continue
-  } 
+ 
 }
 
 
@@ -252,4 +248,34 @@ resource "github_repository_file" "kustomize" {
   file       = data.flux_sync.main.kustomize_path
   content    = data.flux_sync.main.kustomize_content
   branch     = var.branch
+}
+
+resource "null_resource" "flux_namespace" {
+  triggers = {
+    namespace  = "flux-system"
+     # Variables cannot be accessed by destroy-phase provisioners, only the 'self' object (including triggers)
+  }
+
+  provisioner "local-exec" {
+    command = "kubectl create namespace flux-system"
+  }
+
+  /*
+  Marking the flux-system namespace for deletion, will cause finalizers to be applied for any Flux CRDs in use. The finalize controllers however have been deleted, causing namespace and CRDs to be stuck 'terminating'.
+
+  After marking the namespace for deletion, wait an abitrary amount of time for cascade delete to remove workloads managed by Flux.
+
+  Finally remove any finalizers from Flux CRDs, allowing these and the namespace to transition from 'terminating' and actually be deleted.
+  */
+
+  provisioner "local-exec" {
+    when       = destroy
+    command    = "kubectl  delete namespace flux-system --cascade=true --wait=false && sleep 120"
+  }
+
+  provisioner "local-exec" {
+    when       = destroy
+    command    = "kubectl  patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
+    on_failure = continue
+  }
 }
