@@ -21,7 +21,7 @@ locals {
 
   }
   node_groups = {
-    apps = merge(local.eks_managed_node_group_defaults, {
+/*     apps = merge(local.eks_managed_node_group_defaults, {
       name_prefix = "apps"
 
       instance_types   = ["t3a.medium"]
@@ -39,7 +39,7 @@ locals {
           effect = "NO_SCHEDULE"
         }
       ]
-    })
+    }) */
     monitoring = merge(local.eks_managed_node_group_defaults, {
       name_prefix = "monitoring"
 
@@ -58,7 +58,7 @@ locals {
         }
       ]
     })
-    operations = merge(local.eks_managed_node_group_defaults, {
+  /*   operations = merge(local.eks_managed_node_group_defaults, {
       name_prefix = "operations"
 
       max_capacity     = 2
@@ -68,14 +68,14 @@ locals {
       k8s_labels = {
         scope = "operations"
       }
-      /* taints = [
+       taints = [
         {
           key    = "CriticalAddonsOnly"
           value  = "true"
           effect = "NO_SCHEDULE"
         }
-      ] */
-    })
+      ] 
+    }) */
 
   }
 
