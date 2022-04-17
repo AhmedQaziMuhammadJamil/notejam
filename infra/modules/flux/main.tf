@@ -118,13 +118,13 @@ resource "kubectl_manifest" "apply" {
 
 
 
-resource "kubectl_manifest" "sync" {
+/* resource "kubectl_manifest" "sync" {
 
   
   for_each   = { for v in local.sync : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
   depends_on = [kubernetes_namespace.flux_system]
   yaml_body = each.value
-} 
+}  */
 
 
 ####Flux+GitHub 8-04-2022
@@ -208,7 +208,7 @@ resource "github_repository_file" "kustomize" {
 
 
   
-data "flux_sync" "main" {
+/* data "flux_sync" "main" {
   target_path = var.target_path
   url         = local.url
   branch      = var.branch
@@ -218,14 +218,14 @@ data "flux_sync" "main" {
   namespace = "flux-system"
   
 }
-
+ */
 output "gitrepo" {
   value= "${data.flux_sync.main}"
 }
 
-data "kubectl_file_documents" "sync" {
+/* data "kubectl_file_documents" "sync" {
   content = data.flux_sync.main.content
-}
+} */
 
 resource "kubernetes_secret" "main" {
   depends_on = [kubectl_manifest.apply]
@@ -245,7 +245,7 @@ resource "kubernetes_secret" "main" {
 } 
 
 
-resource "github_repository_file" "sync" {
+/* resource "github_repository_file" "sync" {
   repository = github_repository.main.name
   file       = data.flux_sync.main.path
   content    = data.flux_sync.main.content
@@ -258,3 +258,4 @@ resource "github_repository_file" "kustomize" {
   content    = data.flux_sync.main.kustomize_content
   branch     = var.branch
 }
+ */
