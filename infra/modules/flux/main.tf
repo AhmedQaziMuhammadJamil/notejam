@@ -1,5 +1,6 @@
 ####Flux
 provider "kubectl" {
+
   host                   = var.host
   token                  = var.token
   cluster_ca_certificate = var.cluster_ca_certificate
@@ -31,7 +32,7 @@ provider "github" {
 }
  */
 data "flux_install" "main" {
-    depends_on = [module.eks] 
+   /*  depends_on = [module.eks] */
   target_path      = var.target_path
   components_extra = var.components_extra
   network_policy = false
@@ -43,9 +44,9 @@ data "flux_install" "main" {
 
 # Kubernetes
 resource "kubernetes_namespace" "flux_system" {
-   depends_on = [
+/*   depends_on = [
     module.eks
-  ] 
+  ] */
   metadata {
     name = "flux-system"
   }
