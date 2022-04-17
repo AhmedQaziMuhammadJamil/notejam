@@ -67,7 +67,7 @@ module "mod_eks" {
    github_owner = var.github_owner
   github_token = var.github_token
 }   
-  
+   
 module "mod_github" {
   source = "./modules/github"
   github_actions_ecr = module.mod_iam.github_actions_ecr
