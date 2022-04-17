@@ -203,10 +203,10 @@ data "flux_sync" "main" {
   target_path = var.target_path
   url         = local.url
   branch      = var.branch
- /*  git_implementation = "go-git"
+   git_implementation = "go-git"
   name = "test-source"
   secret = "flux-system"
-  namespace = "flux-system" */
+  namespace = "flux-system" 
   
 }
 
