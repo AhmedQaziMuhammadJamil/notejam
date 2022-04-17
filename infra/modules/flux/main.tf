@@ -63,12 +63,12 @@ resource "kubernetes_namespace" "flux_system" {
 }
 
 
-resource "kubernetes_namespace" "staging" {
+resource "kubernetes_namespace" "monitoring" {
 /*   depends_on = [
     module.eks
   ] */
   metadata {
-    name = "staging"
+    name = "monitoring"
   }
   lifecycle {
     ignore_changes = [
@@ -77,12 +77,12 @@ resource "kubernetes_namespace" "staging" {
   }
 }
 
-resource "kubernetes_namespace" "production" {
+resource "kubernetes_namespace" "operations" {
 /*   depends_on = [
     module.eks
   ] */
   metadata {
-    name = "production"
+    name = "operations"
   }
   lifecycle {
     ignore_changes = [
