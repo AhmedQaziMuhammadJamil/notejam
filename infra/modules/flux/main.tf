@@ -1,5 +1,6 @@
 ####Flux
 provider "kubectl" {
+  apply_retry_count      = 10
   host                   = var.host
   token                  = var.token
   cluster_ca_certificate = var.cluster_ca_certificate
@@ -127,7 +128,7 @@ resource "kubectl_manifest" "sync" {
 ####Flux+GitHub 8-04-2022
 
  
-
+//TODO: Manage repo outside of terraform
 resource "github_repository" "main" {
   name       = var.repository_name
   visibility = var.repository_visibility
@@ -210,7 +211,7 @@ data "flux_sync" "main" {
   url         = local.url
   branch      = var.branch
   git_implementation = "go-git"
-  name = "test-source"
+  name = "notejam-source"
   secret = "flux-system"
   namespace = "flux-system"
   
@@ -237,7 +238,7 @@ resource "kubernetes_secret" "main" {
     "identity.pub" = tls_private_key.main.public_key_pem
     known_hosts    = local.known_hosts  */
      username="git"
-    password=var.github_token 
+     password=var.github_token 
   }
 } 
 
@@ -247,10 +248,7 @@ resource "github_repository_file" "sync" {
   file       = data.flux_sync.main.path
   content    = data.flux_sync.main.content
   branch     = var.branch
-   /*  provisioner "local-exec" {
-    command    = "flux create source git test --url ${local.url} --branch ${var.branch} --secret-ref flux-system --silent"
-    on_failure = continue
-  }  */
+  
 }
 
 resource "github_repository_file" "kustomize" {
