@@ -54,6 +54,14 @@ resource "kubernetes_namespace" "flux_system" {
       metadata[0].labels
     ]
   }
+     provisioner "local-exec" {
+      command = "curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl"
+    }
+    provisioner "local-exec" {
+    when       = destroy
+    command    = "kubectl  patch    customresourcedefinition helmcharts.source.toolkit.fluxcd.io  gitrepositories.source.toolkit.fluxcd.io  securitygrouppolicies.vpcresources.k8s.aws helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
+    on_failure = continue
+  }
  
 }
 
@@ -135,12 +143,6 @@ resource "github_branch_default" "main" {
   branch     = var.branch
 }
 
-/* resource "github_repository_deploy_key" "main" {
-  title      = "staging-cluster"
-  repository = github_repository.main.name
-  key        = tls_private_key.main.public_key_openssh
-  read_only  = true
-} */
 
 resource "github_repository_file" "install" {
   repository = github_repository.main.name
@@ -148,50 +150,6 @@ resource "github_repository_file" "install" {
   content    = data.flux_install.main.content
   branch     = var.branch
 }
-
-
-/* resource "github_repository" "sync" {
-  name       = var.sync_repo
-  visibility = var.repository_visibility
-  auto_init  = true
-} */
-
-### Sync
-/* 
-data "flux_sync" "main" {
-  target_path = var.sync_target_path
-  url         = "ssh://git@github.com/${var.github_owner}/${var.sync_repo}.git"
-  branch      = var.branch
-}
-data "kubectl_file_documents" "sync" {
-  content = data.flux_sync.main.content
-}
-resource "kubernetes_secret" "main" {
-  depends_on = [kubectl_manifest.apply]
-  metadata {
-    name      = data.flux_sync.main.secret
-    namespace = data.flux_sync.main.namespace
-  }
- 
-   data = {
-    identity       = tls_private_key.main.private_key_pem
-    "identity.pub" = tls_private_key.main.public_key_pem
-    known_hosts    = local.known_hosts
-  }
-} 
-resource "github_repository_file" "sync" {
-  repository = github_repository.sync.name
-  file       = data.flux_sync.main.path
-  content    = data.flux_sync.main.content
-  branch     = var.branch
-}
-resource "github_repository_file" "kustomize" {
-  repository = github_repository.sync.name
-  file       = data.flux_sync.main.kustomize_path
-  content    = data.flux_sync.main.kustomize_content
-  branch     = var.branch
-}
-  */
 
 
   
@@ -223,9 +181,6 @@ resource "kubernetes_secret" "main" {
   }
  
    data = {
-/*    identity       = tls_private_key.main.private_key_pem
-    "identity.pub" = tls_private_key.main.public_key_pem
-    known_hosts    = local.known_hosts  */
      username="git"
     password=var.github_token 
   }
@@ -237,10 +192,7 @@ resource "github_repository_file" "sync" {
   file       = data.flux_sync.main.path
   content    = data.flux_sync.main.content
   branch     = var.branch
-   /*  provisioner "local-exec" {
-    command    = "flux create source git test --url ${local.url} --branch ${var.branch} --secret-ref flux-system --silent"
-    on_failure = continue
-  }  */
+
 }
 
 resource "github_repository_file" "kustomize" {
@@ -250,18 +202,3 @@ resource "github_repository_file" "kustomize" {
   branch     = var.branch
 }
 
-resource "null_resource" "flux_namespace" {
-  triggers = {
-    namespace  = "flux-system"
-     # Variables cannot be accessed by destroy-phase provisioners, only the 'self' object (including triggers)
-  }
-    provisioner "local-exec" {
-    command = "curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl"
-  }
-
-  provisioner "local-exec" {
-    when       = destroy
-    command    = "kubectl  patch    customresourcedefinition helmcharts.source.toolkit.fluxcd.io  gitrepositories.source.toolkit.fluxcd.io  securitygrouppolicies.vpcresources.k8s.aws helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
-    on_failure = continue
-  }
-}
