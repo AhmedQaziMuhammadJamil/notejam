@@ -56,11 +56,13 @@ resource "kubernetes_namespace" "flux_system" {
   }
 
    provisioner "local-exec" {
+    when       = destroy
+    on_failure = continue
     command = "curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl"
   }
     provisioner "local-exec" {
     when       = destroy
-    command    = "kubectl patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p {\"metadata\":{\"finalizers\":null}}'"
+    command    = "kubectl patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p {\"metadata\":{\"finalizers\":null}}"
     on_failure = continue
   }
 
