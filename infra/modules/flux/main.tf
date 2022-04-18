@@ -83,7 +83,7 @@ resource "kubernetes_namespace" "monitoring" {
   }
 }
 
-resource "kubernetes_namespace" "production" {
+resource "kubernetes_namespace" "operations" {
 /*   depends_on = [
     module.eks
   ] */
