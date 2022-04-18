@@ -57,8 +57,6 @@ resource "kubernetes_namespace" "flux_system" {
     provisioner "local-exec" {
     when       = destroy
     command    = "kubectl patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{"metadata":{"finalizers":null}}'"
-  
-    interpreter = ["/bin/bash", "-c"]
     on_failure = continue
   }
 
