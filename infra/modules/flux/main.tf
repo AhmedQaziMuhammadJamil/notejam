@@ -203,7 +203,7 @@ resource "github_repository_file" "kustomize" {
 
 
 
-resource "null_resource" "one" {
+/* resource "null_resource" "one" {
   provisioner "local-exec" {
     when       = destroy
     on_failure = continue
@@ -223,4 +223,4 @@ resource "null_resource" "two" {
   depends_on = [
     null_resource.one
   ]
-}
+} */
