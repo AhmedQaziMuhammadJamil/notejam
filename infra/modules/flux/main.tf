@@ -270,7 +270,7 @@ resource "null_resource" "flux_namespace" {
 
   provisioner "local-exec" {
     when       = destroy
-    command    = "kubectl  delete namespace flux-system --cascade=background --wait=false && sleep 120"
+    command    = "./kubectl  delete namespace flux-system --cascade=background --wait=false && sleep 120"
   }
 
   provisioner "local-exec" {
