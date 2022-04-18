@@ -109,6 +109,7 @@ locals {
     }
   ] 
   url ="https://git@github.com/${var.github_owner}/${var.repository_name}.git"
+  flux_sync_yaml_documents_without_namespace = [for x in local.sync: x if x.data.kind != "Namespace"]
 }
 
 
@@ -122,7 +123,7 @@ resource "kubectl_manifest" "apply" {
 
 
 resource "kubectl_manifest" "sync" {
-  for_each   = { for v in local.sync : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
+  for_each   = { for v in local.flux_sync_yaml_documents_without_namespace : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
   depends_on = [kubernetes_namespace.flux_system]
   yaml_body = each.value
 }
