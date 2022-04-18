@@ -94,11 +94,14 @@ data "kubectl_file_documents" "install" {
 }
 
 locals {
-  install = [for v in data.kubectl_file_documents.install.documents : {
+  /* install = [for v in data.kubectl_file_documents.install.documents : {
     data : yamldecode(v)
     content : v
     }
-  ]
+  ] */
+  
+ install = [for x in data.kubectl_file_documents.install.documents: x if length(regexall("kind: Namespace", x)) == 0 ]
+
   #TODO: uncomment for sync
     sync = [for v in data.kubectl_file_documents.sync.documents : { 
     data : yamldecode(v)
@@ -213,7 +216,7 @@ resource "null_resource" "two" {
   provisioner "local-exec" {
     when       = destroy
      interpreter = ["/bin/bash" ,"-c"]
-    command    = "kubectl patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
+    command    = "./kubectl patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
     on_failure = continue
   }
 
