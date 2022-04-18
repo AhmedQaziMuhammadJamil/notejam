@@ -275,7 +275,7 @@ resource "null_resource" "flux_namespace" {
 
   provisioner "local-exec" {
     when       = destroy
-    command    = "kubectl  patch securitygrouppolicies.vpcresources.k8s.aws gitrepositories.source.toolkit.fluxcd.io  customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
+    command    = "kubectl  patch    customresourcedefinition helmcharts.source.toolkit.fluxcd.io  gitrepositories.source.toolkit.fluxcd.io  securitygrouppolicies.vpcresources.k8s.aws helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
     on_failure = continue
   }
 }
