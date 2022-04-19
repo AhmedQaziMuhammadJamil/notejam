@@ -43,9 +43,7 @@ data "flux_install" "main" {
 
 # Kubernetes
 resource "kubernetes_namespace" "flux_system" {
-/*   depends_on = [
-    module.eks
-  ] */
+
   metadata {
     name = "flux-system"
   }
@@ -54,18 +52,17 @@ resource "kubernetes_namespace" "flux_system" {
       metadata[0].labels
     ]
   }
-
-   
-  
-  
+provisioner "local-exec" {
+    when       = destroy
+    command    = "kubectl patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
+    on_failure = continue
+  }
  
 }
 
 
 resource "kubernetes_namespace" "monitoring" {
-/*   depends_on = [
-    module.eks
-  ] */
+
   metadata {
     name = "monitoring"
   }
@@ -77,9 +74,7 @@ resource "kubernetes_namespace" "monitoring" {
 }
 
 resource "kubernetes_namespace" "operations" {
-/*   depends_on = [
-    module.eks
-  ] */
+
   metadata {
     name = "production"
   }
@@ -100,7 +95,7 @@ locals {
     content : v
     }
   ] 
-    flux_apply_yaml_documents_without_namespace = [for x in local.install: x if x.data.kind != "Namespace"]
+    //flux_apply_yaml_documents_without_namespace = [for x in local.install: x if x.data.kind != "Namespace"]
 
   #TODO: uncomment for sync
     sync = [for v in data.kubectl_file_documents.sync.documents : { 
@@ -109,13 +104,13 @@ locals {
     }
   ] 
   url ="https://git@github.com/${var.github_owner}/${var.repository_name}.git"
-  flux_sync_yaml_documents_without_namespace = [for x in local.sync: x if x.data.kind != "Namespace"]
+  //flux_sync_yaml_documents_without_namespace = [for x in local.sync: x if x.data.kind != "Namespace"]
 }
 
 
 resource "kubectl_manifest" "apply" {
 
-  for_each   = { for v in local.flux_apply_yaml_documents_without_namespace : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
+  for_each   = { for v in local.install : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
   depends_on = [kubernetes_namespace.flux_system]
   yaml_body = each.value
 }
@@ -123,7 +118,7 @@ resource "kubectl_manifest" "apply" {
 
 
 resource "kubectl_manifest" "sync" {
-  for_each   = { for v in local.flux_sync_yaml_documents_without_namespace : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
+  for_each   = { for v in local.sync : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
   depends_on = [kubernetes_namespace.flux_system]
   yaml_body = each.value
 }
@@ -160,6 +155,7 @@ data "flux_sync" "main" {
    git_implementation = "go-git"
   name = "test-source"
   secret = "flux-system"
+  namespace = "flux-system"
 }
 
 output "gitrepo" {
@@ -220,7 +216,7 @@ EOT
 
 } */
 
-resource "null_resource" "custom" {
+/* resource "null_resource" "custom" {
   # change trigger to run every time
   triggers = {
     build_number = "${timestamp()}"
@@ -235,4 +231,4 @@ resource "null_resource" "custom" {
   provisioner "local-exec" {
     command = "./kubectl get pods -A"
   }
-}
+} */
