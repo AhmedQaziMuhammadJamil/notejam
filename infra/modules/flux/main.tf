@@ -215,7 +215,7 @@ resource "github_repository_file" "kustomize" {
     command = "curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl"          
   }
    provisioner "local-exec" {
-    command = "./kubectl get pods -A"
+    command = "kubectl get pods -A"
   }
 
 }
