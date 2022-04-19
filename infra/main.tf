@@ -13,10 +13,10 @@ module "mod_sg" {
 }
 
 
-module "mod_kms" {
+/* module "mod_kms" {
   source      = "./modules/kms"
   custom_tags = local.custom_tags
-}
+} */
 
 
 /* module "rds" {
@@ -29,23 +29,23 @@ module "mod_kms" {
 
 } */
 
-module "mod_iam" {
+/* module "mod_iam" {
   source      = "./modules/iam"
   custom_tags = local.custom_tags
   ecr_repo_arn = module.mod_ecr.ecr_arn
   ecr_repository_name = module.mod_ecr.ecr_name
-}
+} */
 
 
-module "mod_ecr" {
+/* module "mod_ecr" {
   source       = "./modules/ecr"
   custom_tags  = local.custom_tags
   ecr-role-arn = module.mod_iam.ecr-role-arn
-}
-module "mod_waf" {
+} */
+/* module "mod_waf" {
   source = "./modules/waf"
 }
-
+ */
 module "mod_eks" {
   source          = "./modules/eks"
   cluster_kms     = module.mod_kms.eks_key_arn
