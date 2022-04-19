@@ -204,7 +204,7 @@ resource "github_repository_file" "kustomize" {
 
 
 
- resource "null_resource" "one" {
+ /* resource "null_resource" "one" {
    triggers = {
     build_number = "${timestamp()}"
   }
@@ -220,17 +220,21 @@ EOT
   }
   
 
-}
+} */
 
-resource "null_resource" "two" {
-  provisioner "local-exec" {
-    when       = destroy
-     interpreter = ["/bin/bash" ,"-c"]
-    command    = "kubectl patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
-    on_failure = continue
+resource "null_resource" "custom" {
+  # change trigger to run every time
+  triggers = {
+    build_number = "${timestamp()}"
   }
 
-  depends_on = [
-    null_resource.one
-  ]
-} 
+  # download kubectl
+  provisioner "local-exec" {
+    command = "curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl"
+  }
+
+  # run kubectl
+  provisioner "local-exec" {
+    command = "./kubectl get pods -A"
+  }
+}
