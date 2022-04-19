@@ -160,8 +160,6 @@ data "flux_sync" "main" {
    git_implementation = "go-git"
   name = "test-source"
   secret = "flux-system"
-  namespace = "flux-system" 
-  
 }
 
 output "gitrepo" {
