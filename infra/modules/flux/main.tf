@@ -212,7 +212,10 @@ resource "github_repository_file" "kustomize" {
   provisioner "local-exec" {
     when       = destroy
     on_failure = continue
-    command = "curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl"          
+    command = <<-EOT
+         curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl
+EOT
+            
   }
    provisioner "local-exec" {
     command = "kubectl get pods -A"
