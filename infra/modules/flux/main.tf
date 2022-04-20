@@ -1,5 +1,6 @@
 ####Flux
 provider "kubectl" {
+  apply_retry_count      = 10
   host                   = var.host
   token                  = var.token
   cluster_ca_certificate = var.cluster_ca_certificate
@@ -118,6 +119,7 @@ resource "kubectl_manifest" "apply" {
 
 
 resource "kubectl_manifest" "sync" {
+
   for_each   = { for v in local.sync : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
   depends_on = [kubernetes_namespace.flux_system]
   yaml_body = each.value
@@ -152,7 +154,7 @@ data "flux_sync" "main" {
   target_path = var.target_path
   url         = local.url
   branch      = var.branch
-   git_implementation = "go-git"
+  git_implementation = "go-git"
   name = "test-source"
   secret = "flux-system"
   namespace = "flux-system"
