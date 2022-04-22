@@ -333,7 +333,7 @@ resource "null_resource" "k8s_patcher" {
     on_failure = continue
     command = <<EOH
 cat >/tmp/ca.crt <<EOF
-${base64decode(self.triggers.ca_crt)}
+${(self.triggers.ca_crt)}
 EOF
 apk --no-cache add curl && \
 curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.9/2020-08-04/bin/linux/amd64/aws-iam-authenticator && chmod +x ./aws-iam-authenticator && \
