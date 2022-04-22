@@ -18,6 +18,7 @@ locals {
     disk_encrypted                       = true
     disk_kms_key_id                      = data.aws_kms_alias.ebs.target_key_arn
     create_iam_role                      = true
+    node_security_group_id              =  [var.worker-sg]
 
   }
   node_groups = {
@@ -180,14 +181,14 @@ module "eks" {
   }
 
   eks_managed_node_groups                = local.node_groups
-  cluster_security_group_use_name_prefix = true
+  cluster_security_group_use_name_prefix = false
   create_iam_role                        = true
   iam_role_use_name_prefix               = false
   create_node_security_group =  false
 /*   cluster_security_group_additional_rules = {
     admin_access = "${local.admin_access}"
     node_egress  = "${local.node_egress}"
-  } */
+  }  */
 }
 
 
