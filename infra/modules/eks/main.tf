@@ -125,7 +125,7 @@ locals {
       }
     )
   }
-  admin_access = {
+ /*  admin_access = {
     description = "Admin ingress to Kubernetes API"
     cidr_blocks = ["10.10.0.0/16"] //TODO add subnets
     protocol    = "all"
@@ -141,7 +141,7 @@ locals {
     to_port     = 65535
     type        = "egress"
   }
-
+ */
 }
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
