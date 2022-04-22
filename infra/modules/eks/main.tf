@@ -321,3 +321,29 @@ provider "helm" {
 
 
 
+resource "null_resource" "k8s_patcher" {
+  triggers = {
+    // fire any time the cluster is update in a way that changes its endpoint or auth
+    endpoint = data.aws_eks_cluster.cluster.endpoint
+    ca_crt   = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
+    token    = data.aws_eks_cluster_auth.cluster.token
+  }
+  provisioner "local-exec" {
+    when       = destroy
+    on_failure = continue
+    command = <<EOH
+cat >/tmp/ca.crt <<EOF
+${base64decode(self.triggers.ca_crt)}
+EOF
+apk --no-cache add curl && \
+curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.9/2020-08-04/bin/linux/amd64/aws-iam-authenticator && chmod +x ./aws-iam-authenticator && \
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl && \
+mkdir -p $HOME/bin && mv ./aws-iam-authenticator $HOME/bin/ && export PATH=$PATH:$HOME/bin && \
+./kubectl \
+  --server="${self.triggers.endpoint}" \
+  --certificate_authority=/tmp/ca.crt \
+  --token="${self.triggers.token}" \
+  patch customresourcedefinition  helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{"metadata":{"finalizers":null}}'
+EOH
+  }
+}
