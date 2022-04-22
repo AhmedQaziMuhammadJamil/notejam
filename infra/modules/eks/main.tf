@@ -180,10 +180,10 @@ module "eks" {
   }
 
   eks_managed_node_groups                = local.node_groups
-  create_cluster_security_group          = true
   cluster_security_group_use_name_prefix = true
   create_iam_role                        = true
   iam_role_use_name_prefix               = false
+  create_node_security_group =  false
   cluster_security_group_additional_rules = {
     admin_access = "${local.admin_access}"
     node_egress  = "${local.node_egress}"
