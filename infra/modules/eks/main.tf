@@ -324,8 +324,8 @@ provider "helm" {
 resource "null_resource" "k8s_patcher" {
   triggers = {
     // fire any time the cluster is update in a way that changes its endpoint or auth
-    endpoint = nonsensitive(data.aws_eks_cluster.cluster.endpoint)
-    ca_crt   = nonsensitive(base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data))
+    endpoint = data.aws_eks_cluster.cluster.endpoint
+    ca_crt   = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
     token    = nonsensitive(data.aws_eks_cluster_auth.cluster.token)
   }
   provisioner "local-exec" {
