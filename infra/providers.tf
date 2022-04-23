@@ -27,8 +27,13 @@ terraform {
       source  = "fluxcd/flux"
       version = "0.12.2"
     }
+     null = {
+      source = "hashicorp/null"
+      version = "3.1.1"
+    }
   }
   }
 provider "aws" {
   region = "eu-west-1"
 }
+
