@@ -213,6 +213,14 @@ module "eks" {
       cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"]
     }
+    metrics-server = {
+    description = "metrics ingress to Kubernetes API"
+    cidr_blocks = ["10.10.0.0/16"] //TODO add subnets
+    protocol    = "tcp"
+    from_port   = 8443
+    to_port     = 8443
+    type        = "ingress"
+  }
   }
 
    cluster_security_group_additional_rules = {
