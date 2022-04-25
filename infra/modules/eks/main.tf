@@ -27,8 +27,8 @@ locals {
 
       instance_types   = ["t3a.medium"]
       max_capacity     = 3
-      min_capacity     = 3
-      desired_capacity = 3
+      min_capacity     = 1
+      desired_capacity = 1
       node_security_group_id              =  [var.worker-sg]
       k8s_labels = {
         scope = "apps"
@@ -44,7 +44,7 @@ locals {
     monitoring = merge(local.eks_managed_node_group_defaults, {
       name_prefix = "monitoring"
       node_security_group_id              =  [var.worker-sg]
-      max_capacity     = 1
+      max_capacity     = 3
       min_capacity     = 1
       desired_capacity = 1
 
@@ -62,9 +62,9 @@ locals {
     operations = merge(local.eks_managed_node_group_defaults, {
       name_prefix = "operations"
       node_security_group_id              =  [var.worker-sg]
-      max_capacity     = 2
-      min_capacity     = 2
-      desired_capacity = 2
+      max_capacity     = 3
+      min_capacity     = 1
+      desired_capacity = 1
 
       k8s_labels = {
         scope = "operations"
@@ -182,7 +182,7 @@ module "eks" {
   subnet_ids = var.private_subnets
   eks_managed_node_group_defaults = {
     create_node_security_group = false
-    //gvpc_security_group_ids     = [var.worker-sg]
+    vpc_security_group_ids     = [var.worker-sg]
     ami_type                   = "AL2_x86_64"
     create_iam_role            = true
     iam_role_use_name_prefix   = true

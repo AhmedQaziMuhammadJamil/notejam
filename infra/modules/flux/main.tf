@@ -106,6 +106,35 @@ locals {
   ] 
   url ="https://git@github.com/${var.github_owner}/${var.repository_name}.git"
   //flux_sync_yaml_documents_without_namespace = [for x in local.sync: x if x.data.kind != "Namespace"]
+
+ecr-patch={
+  patches = <<EOT
+patches:
+  - target:
+      version: v1
+      group: apps
+      kind: Deployment
+      name: image-reflector-controller
+      namespace: flux-system
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --aws-autologin-for-ecr
+  - target:
+      version: v1
+      group: apps
+      kind: Deployment
+      name: source-controller
+      namespace: flux-system
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: 1300Mi
+
+EOT
+}
+
+
 }
 
 
@@ -123,11 +152,21 @@ resource "kubectl_manifest" "sync" {
   for_each   = { for v in local.sync : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
   depends_on = [kubernetes_namespace.flux_system]
   yaml_body = each.value
+ 
 }
 
 ####Flux+GitHub 8-04-2022
 
- 
+ resource "github_repository_file" "patches" {
+  #  `patch_file_paths` is a map keyed by the keys of `flux_sync.main`
+  #  whose values are the paths where the patch files should be installed.
+  for_each   = data.flux_sync.main.patch_file_paths
+
+  repository = github_repository.main.name
+  file       = each.value
+  content    = local.ecr-patch[each.key] # Get content of our patch files
+  branch     = var.branch
+}
 
 resource "github_repository" "main" {
   name       = var.repository_name
@@ -158,6 +197,7 @@ data "flux_sync" "main" {
   name = "test-source"
   secret = "flux-system"
   namespace = "flux-system"
+  patch_names  = keys(local.ecr-patch)
 }
 
 output "gitrepo" {
@@ -196,6 +236,7 @@ resource "github_repository_file" "kustomize" {
   file       = data.flux_sync.main.kustomize_path
   content    = data.flux_sync.main.kustomize_content
   branch     = var.branch
+  overwrite_on_create = true
 }
 
 
@@ -235,3 +276,6 @@ EOT
   }
 } */
 
+
+
+#TODO: naming convention,ECR permissions for the cluster,ELB operations for eks ,enable worker security groups,enable patching with provider for kustomization

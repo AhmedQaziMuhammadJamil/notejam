@@ -4,7 +4,7 @@
 # IRSA Roles
 ################################################################################
 
-module "irsa_role" {
+/* module "irsa_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = local.name
@@ -26,7 +26,7 @@ module "irsa_role" {
 
   tags = var.custom_tags
   
-}
+} */
 
 module "cluster_autoscaler_irsa_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
@@ -38,7 +38,7 @@ module "cluster_autoscaler_irsa_role" {
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:cluster-autoscaler"]
+      namespace_service_accounts = ["monitoring:cluster-autoscaler"]
     }
   }
   tags = var.custom_tags
@@ -140,7 +140,7 @@ module "load_balancer_controller_irsa_role" {
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
+      namespace_service_accounts = ["monitoring:aws-load-balancer-controller"]
     }
   }
 
@@ -157,7 +157,7 @@ module "load_balancer_controller_targetgroup_binding_only_irsa_role" {
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
+      namespace_service_accounts = ["monitoring:aws-load-balancer-controller"]
     }
   }
 
