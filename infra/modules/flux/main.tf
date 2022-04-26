@@ -96,7 +96,7 @@ locals {
     content : v
     }
   ] 
-    //flux_apply_yaml_documents_without_namespace = [for x in local.install: x if x.data.kind != "Namespace"]
+    flux_apply_yaml_documents_without_namespace = [for x in local.install: x if x.data.kind != "Namespace"]
 
   #TODO: uncomment for sync
     sync = [for v in data.kubectl_file_documents.sync.documents : { 
@@ -144,8 +144,8 @@ EOT
 
 resource "kubectl_manifest" "apply" {
 
-  for_each   = { for v in local.install : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
-  //depends_on = [kubernetes_namespace.flux_system]
+  for_each   = { for v in local.flux_apply_yaml_documents_without_namespace : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
+  depends_on = [kubernetes_namespace.flux_system]
   yaml_body = each.value
 }
 
@@ -154,7 +154,7 @@ resource "kubectl_manifest" "apply" {
 resource "kubectl_manifest" "sync" {
 
   for_each   = { for v in local.sync : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
-  //depends_on = [kubernetes_namespace.flux_system]
+  depends_on = [kubernetes_namespace.flux_system]
   yaml_body = each.value
  
 }
