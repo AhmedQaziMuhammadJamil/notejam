@@ -19,7 +19,7 @@ module "mod_kms" {
 }
 
 
-/* module "rds" {
+ module "rds" {
   source      = "./modules/rds"
   vpc_id      = module.mod_vpc.out_nl_vpcid
   rds-subnets = module.mod_vpc.out_nl_rdssubnet
@@ -27,7 +27,7 @@ module "mod_kms" {
   custom_tags = local.custom_tags
   kms_key_arn = module.mod_kms.rds_key_arn
 
-} */
+}
 
 module "mod_iam" {
   source      = "./modules/iam"
@@ -42,10 +42,10 @@ module "mod_iam" {
   custom_tags  = local.custom_tags
   ecr-role-arn = module.mod_iam.ecr-role-arn
 } 
-/* module "mod_waf" {
+ module "mod_waf" {
   source = "./modules/waf"
 }
- */
+ 
 module "mod_eks" {
   source          = "./modules/eks"
   cluster_kms     = module.mod_kms.eks_key_arn

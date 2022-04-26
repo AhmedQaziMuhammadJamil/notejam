@@ -385,7 +385,7 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s htt
 mkdir -p $HOME/bin && mv ./aws-iam-authenticator $HOME/bin/ && export PATH=$PATH:$HOME/bin && \
 ./kubectl \
   --server="${self.triggers.endpoint}" \
-  --certificate_authority=/tmp/ca.crt \
+  --certificate_authority="${self.triggers.ca_crt}" \
   --token="${self.triggers.token}" \
   patch customresourcedefinition  helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{"metadata":{"finalizers":null}}'
 EOH
