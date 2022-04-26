@@ -231,7 +231,7 @@ resource "github_repository_file" "kustomize" {
   file       = data.flux_sync.main.kustomize_path
   content    = local.ecr-patch["patches"]
   branch     = var.branch
-  //overwrite_on_create = true
+  overwrite_on_create = true
 }
 
 /*  resource "github_repository_file" "patches" {
