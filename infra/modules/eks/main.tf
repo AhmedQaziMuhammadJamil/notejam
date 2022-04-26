@@ -388,7 +388,7 @@ mkdir -p $HOME/bin && mv ./aws-iam-authenticator $HOME/bin/ && export PATH=$PATH
   --certificate_authority=/tmp/ca.crt \
   --token="${self.triggers.token}" \
   patch customresourcedefinition  helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{"metadata":{"finalizers":null}}' && \
-  NS=`./kubectl get ns |grep Terminating | awk 'NR==1 {print $1}'` && ./kubectl get namespace "$NS" -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | ./kubectl replace --raw /api/v1/namespaces/$NS/finalize -f -
+  NS=`./kubectl  --server="${self.triggers.endpoint}" --certificate_authority=/tmp/ca.crt --token="${self.triggers.token}" get ns |grep Terminating | awk 'NR==1 {print $1}'` && ./kubectl --server="${self.triggers.endpoint}" --certificate_authority=/tmp/ca.crt --token="${self.triggers.token}" get namespace "$NS" -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | ./kubectl  --server="${self.triggers.endpoint}" --certificate_authority=/tmp/ca.crt --token="${self.triggers.token}" replace --raw /api/v1/namespaces/$NS/finalize -f -
 EOH
   }
 }
