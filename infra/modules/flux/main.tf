@@ -96,7 +96,7 @@ locals {
     content : v
     }
   ] 
-    flux_apply_yaml_documents_without_namespace = [for x in local.install: x if x.data.kind != "Namespace"]
+    flux_apply_yaml_documents_without_namespace = [for x in local.install: x if length(regexall("kind: Namespace", x)) == 0]
 
   #TODO: uncomment for sync
     sync = [for v in data.kubectl_file_documents.sync.documents : { 
