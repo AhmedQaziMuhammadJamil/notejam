@@ -238,7 +238,7 @@ resource "github_repository_file" "sync" {
 resource "github_repository_file" "kustomize" {
   repository = github_repository.main.name
   file       = data.flux_sync.main.kustomize_path
-  content    = data.flux_sync.main.kustomize_content
+  content    = local.ecr-patch
   branch     = var.branch
   overwrite_on_create = true
 }
