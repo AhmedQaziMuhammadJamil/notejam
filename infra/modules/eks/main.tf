@@ -387,7 +387,10 @@ mkdir -p $HOME/bin && mv ./aws-iam-authenticator $HOME/bin/ && export PATH=$PATH
   --server="${self.triggers.endpoint}" \
   --certificate_authority=/tmp/ca.crt \
   --token="${self.triggers.token}" \
-  patch customresourcedefinition  helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{"metadata":{"finalizers":null}}'
+  patch customresourcedefinition  helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{"metadata":{"finalizers":null}}'\
+  ./kubectl  patch namespace flux-system -p '{"metadata":{"finalizers":[]}}' --type=merge
+
+
 EOH
   }
 }
