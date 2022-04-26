@@ -134,7 +134,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/resources/limits/memory
-        value: 1100Mi
+        value: 1500Mi
 EOT
 }
 
