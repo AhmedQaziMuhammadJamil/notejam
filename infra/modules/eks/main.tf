@@ -378,7 +378,7 @@ resource "null_resource" "k8s_patcher" {
     on_failure = continue
     command = <<EOH
 cat >/tmp/ca.crt <<EOF
-${base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)}
+${self.triggers.ca_crt}
 EOF
 curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.9/2020-08-04/bin/linux/amd64/aws-iam-authenticator && chmod +x ./aws-iam-authenticator && \
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl && \
