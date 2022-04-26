@@ -109,6 +109,12 @@ locals {
 
 ecr-patch={
   patches = <<EOT
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- gotk-sync.yaml
+- gotk-components.yaml
 patches:
   - target:
       version: v1
@@ -129,8 +135,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/resources/limits/memory
-        value: 1300Mi
-
+        value: 1100Mi
 EOT
 }
 
