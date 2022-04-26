@@ -161,16 +161,7 @@ resource "kubectl_manifest" "sync" {
 
 ####Flux+GitHub 8-04-2022
 
- resource "github_repository_file" "patches" {
-  #  `patch_file_paths` is a map keyed by the keys of `flux_sync.main`
-  #  whose values are the paths where the patch files should be installed.
-  for_each   = data.flux_sync.main.patch_file_paths
 
-  repository = github_repository.main.name
-  file       = each.value
-  content    = local.ecr-patch[each.key] # Get content of our patch files
-  branch     = var.branch
-}
 
 resource "github_repository" "main" {
   name       = var.repository_name
@@ -201,7 +192,7 @@ data "flux_sync" "main" {
   name = "test-source"
   secret = "flux-system"
   namespace = "flux-system"
-  patch_names  = keys(local.ecr-patch)
+  //patch_names  = keys(local.ecr-patch)
 }
 
 output "gitrepo" {
@@ -238,12 +229,21 @@ resource "github_repository_file" "sync" {
 resource "github_repository_file" "kustomize" {
   repository = github_repository.main.name
   file       = data.flux_sync.main.kustomize_path
-  content    = local.ecr-patch
+  content    = local.ecr-patch["patches"]
   branch     = var.branch
   overwrite_on_create = true
 }
 
+/*  resource "github_repository_file" "patches" {
+  #  `patch_file_paths` is a map keyed by the keys of `flux_sync.main`
+  #  whose values are the paths where the patch files should be installed.
+  for_each   = data.flux_sync.main.patch_file_paths
 
+  repository = github_repository.main.name
+  file       = each.value
+  content    = local.ecr-patch[each.key] # Get content of our patch files
+  branch     = var.branch
+} */
 
  /* resource "null_resource" "one" {
    triggers = {
