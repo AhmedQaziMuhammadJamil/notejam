@@ -373,7 +373,7 @@ resource "null_resource" "k8s_patcher" {
     ca_crt   = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
     token    = nonsensitive(data.aws_eks_cluster_auth.cluster.token)
   }
-  provisioner "local-exec" {
+   provisioner "local-exec" {
     when       = destroy
     on_failure = continue
     command = <<EOH
