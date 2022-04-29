@@ -36,7 +36,7 @@ resource "aws_rds_cluster_parameter_group" "cpg" {
 #Generate random password for Aurora DB
 resource "random_password" "password" {
   length           = 16
-  special          = true
+  special          = false
   override_special = "!#$%^&*()-_=+[]{}<>:?"
 }
 
@@ -49,7 +49,7 @@ resource "aws_ssm_parameter" "username" {
   tags        = var.custom_tags
 }
 
-resource "aws_ssm_parameter" "Lqc>J$THXX=-_+]tpassword" {
+resource "aws_ssm_parameter" "password" {
   name        = "/notejam/aurora/password"
   description = "RDS Password for notejam environment"
   type        = "SecureString"
