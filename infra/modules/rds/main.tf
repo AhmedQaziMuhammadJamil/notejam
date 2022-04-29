@@ -49,7 +49,7 @@ resource "aws_ssm_parameter" "username" {
   tags        = var.custom_tags
 }
 
-resource "aws_ssm_parameter" "password" {
+resource "aws_ssm_parameter" "Lqc>J$THXX=-_+]tpassword" {
   name        = "/notejam/aurora/password"
   description = "RDS Password for notejam environment"
   type        = "SecureString"
@@ -73,6 +73,7 @@ module "rds-aurora" {
   instance_class         = "db.r6g.large"
   master_password        = random_password.password.result
   master_username        = var.db_username
+  database_name  = "notejam"
   instances = {
     writer = {
       instance_class = "db.t3.medium"

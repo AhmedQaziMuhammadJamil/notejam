@@ -1,5 +1,5 @@
 SECRET_KEY="very secret key"
-POSTGRES_USER=postgres_user
-POSTGRES_PASS=postgres_pass
+POSTGRES_USER=master
+POSTGRES_PASS=Lqc>J$THXX=-_+]t
 POSTGRES_DB=db
-POSTGRES_URL=db:5432
+POSTGRES_URL=notejam-db.cluster-cvux3da6a5aa.eu-west-1.rds.amazonaws.com:5432
