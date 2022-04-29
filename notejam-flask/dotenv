@@ -1,5 +1,4 @@
-SECRET_KEY="very secret key"
-POSTGRES_USER=master
-POSTGRES_PASS=gxEqThT5aGbnGbJ7
-POSTGRES_DB=notejam
-POSTGRES_URL=notejam-db.cluster-cvux3da6a5aa.eu-west-1.rds.amazonaws.com:5432
+POSTGRES_USER="master"
+POSTGRES_PASS="gxEqThT5aGbnGbJ7"
+POSTGRES_DB="notejam"
+POSTGRES_URL="notejam-db.cluster-cvux3da6a5aa.eu-west-1.rds.amazonaws.com:5432"
