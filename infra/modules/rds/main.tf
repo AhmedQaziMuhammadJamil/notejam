@@ -2,11 +2,6 @@ resource "aws_db_parameter_group" "db-pg" {
   name        = "notejam-pg"
   family      = var.pgfamily
   description = "Parameter group for notejam"
-  /*  parameter {
-    name         = "innodb_large_prefix"
-    value        = 1
-    apply_method = "pending-reboot"
-  } */
   tags = var.custom_tags
 }
 
@@ -14,32 +9,24 @@ resource "aws_rds_cluster_parameter_group" "cpg" {
   name        = "notejam-cluster-pg"
   family      = var.pgfamily
   description = "Cluster Parameter group for notejam"
-  /*  parameter {
-    name         = "binlog_format"
-    value        = "MIXED"
-    apply_method = "pending-reboot"
-  }
-  parameter {
-    name         = "innodb_large_prefix"
-    value        = 1
-    apply_method = "pending-reboot"
-  }
-
-  parameter {
-    name         = "log_bin_trust_function_creators"
-    value        = 1
-    apply_method = "pending-reboot"
-  } */
   tags = var.custom_tags
 }
 
+locals {
+  db_user={
+    POSTGRES_USER=var.db_user
+  }
+  db_pass={
+    POSTGRES_PASS=var.db_pass
+  }
+}
 resource "aws_secretsmanager_secret" "rds-user" {
   name = "notejam-db-master-username"
 }
 
  resource "aws_secretsmanager_secret_version" "secret-username" {
   secret_id     = aws_secretsmanager_secret.rds-user.id
-  secret_string = var.db_user
+  secret_string = jsonencode(local.db_user)
 } 
 
 
@@ -49,7 +36,7 @@ resource "aws_secretsmanager_secret" "rds-password" {
 
 resource "aws_secretsmanager_secret_version" "secret-password" {
   secret_id     = aws_secretsmanager_secret.rds-password.id
-  secret_string = var.db_pass
+  secret_string = jsonencode(local.db_pass)
 }
 module "rds-aurora" {
   source                 = "terraform-aws-modules/rds-aurora/aws"
