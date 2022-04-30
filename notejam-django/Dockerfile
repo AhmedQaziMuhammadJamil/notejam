@@ -6,7 +6,7 @@ LABEL authors="Hossein Salahi"
 ENV PYTHONUNBUFFERED 1
 ENV APP_HOME /usr/src/app       
 
-COPY notejam/django/notejam /usr/src/app
+COPY notejam-django/notejam /usr/src/app
 
 WORKDIR $APP_HOME
 
