@@ -23,3 +23,6 @@ variable "db_user" {
 variable "db_pass" {
   type =string 
 }
+variable "db_name" {
+  type=string
+}

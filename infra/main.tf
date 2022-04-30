@@ -28,6 +28,7 @@ module "mod_kms" {
   kms_key_arn = module.mod_kms.rds_key_arn
   db_pass = var.db_pass
   db_user = var.db_user
+  db_name= var.db_name
   
 
 }
