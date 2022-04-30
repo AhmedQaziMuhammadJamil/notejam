@@ -37,7 +37,6 @@ resource "aws_rds_cluster_parameter_group" "cpg" {
 resource "random_password" "password" {
   length           = 16
   special          = false
-  override_special = "!#$%^&*()-_=+[]{}<>:?"
 }
 
 #Store data in parameter store
@@ -48,7 +47,14 @@ resource "aws_ssm_parameter" "username" {
   value       = var.db_username
   tags        = var.custom_tags
 }
+resource "aws_secretsmanager_secret" "rds-user" {
+  name = "/notejam/aurora/masterusername"
+}
 
+resource "aws_secretsmanager_secret_version" "secret-value" {
+  secret_id     = aws_secretsmanager_secret.rds-user.id
+  secret_string = (var.db_username)
+}
 resource "aws_ssm_parameter" "password" {
   name        = "/notejam/aurora/password"
   description = "RDS Password for notejam environment"
