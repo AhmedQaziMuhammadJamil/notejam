@@ -26,6 +26,9 @@ module "mod_kms" {
   rds-sg      = module.mod_sg.rds-sg
   custom_tags = local.custom_tags
   kms_key_arn = module.mod_kms.rds_key_arn
+  db_pass = var.db_pass
+  db_user = var.db_user
+  
 
 }
 

@@ -40,20 +40,20 @@ resource "random_password" "password" {
 }
 
 #Store data in parameter store
-resource "aws_ssm_parameter" "username" {
+/* resource "aws_ssm_parameter" "username" {
   name        = "/notejam/aurora/masterusername"
   description = "RDS Username for notejam environment"
   type        = "SecureString"
   value       = var.db_username
   tags        = var.custom_tags
-}
+} */
 resource "aws_secretsmanager_secret" "rds-user" {
   name = "notejam-db-master-username"
 }
 
 resource "aws_secretsmanager_secret_version" "secret-username" {
   secret_id     = aws_secretsmanager_secret.rds-user.id
-  secret_string = (var.db_username)
+  secret_string = var.db_user
 }
 
 
@@ -62,8 +62,8 @@ resource "aws_secretsmanager_secret" "rds-password" {
 }
 
 resource "aws_secretsmanager_secret_version" "secret-password" {
-  secret_id     = aws_secretsmanager_secret.rds-user.id
-  secret_string = "${random_password.password.result}"
+  secret_id     = aws_secretsmanager_secret.rds-password.id
+  secret_string = var.db_pass
 }
 
 
@@ -91,8 +91,8 @@ module "rds-aurora" {
   engine                 = "aurora-postgresql"
   engine_version         = "11.12"
   instance_class         = "db.r6g.large"
-  master_password        = random_password.password.result
-  master_username        = var.db_username
+  master_password        = var.db_pass
+  master_username        = var.db_user
   database_name  = "notejam"
   instances = {
     writer = {

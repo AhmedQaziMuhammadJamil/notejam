@@ -8,11 +8,7 @@ variable "rds-sg" {
   type = string
 }
 //TODO get db username and password from terraform cloud
-variable "db_username" {
-  type    = string
-  default = "master"
 
-}
 
 variable "pgfamily" {
   type    = string
@@ -24,4 +20,11 @@ variable "custom_tags" {
 
 variable "kms_key_arn" {
 
+}
+variable "db_pass" {
+  type    = string
+}
+
+variable "db_user" {
+  type    = string
 }
