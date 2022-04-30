@@ -1,4 +1,4 @@
-name: NEW Build Container Images
+name: Django Workflow 
 
 on:
   push:
