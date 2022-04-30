@@ -17,10 +17,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-       'NAME': 'test',                      
-       'USER': 'test',
-       'PASSWORD': 'admin@123',
-       'HOST': 'db',
+       'NAME': os.environ["POSTGRES_DB"],                      
+       'USER': os.environ["POSTGRES_USER"],
+       'PASSWORD': os.environ["POSTGRES_PASS"],
+       'HOST': os.environ["POSTGRES_URL"],
        'PORT': '5432',
     }
 
