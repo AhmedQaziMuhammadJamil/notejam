@@ -33,20 +33,6 @@ resource "aws_rds_cluster_parameter_group" "cpg" {
   tags = var.custom_tags
 }
 
-#Generate random password for Aurora DB
-resource "random_password" "password" {
-  length           = 16
-  special          = false
-}
-
-#Store data in parameter store
-/* resource "aws_ssm_parameter" "username" {
-  name        = "/notejam/aurora/masterusername"
-  description = "RDS Username for notejam environment"
-  type        = "SecureString"
-  value       = var.db_username
-  tags        = var.custom_tags
-} */
 resource "aws_secretsmanager_secret" "rds-user" {
   name = "notejam-db-master-username"
 }
@@ -65,22 +51,6 @@ resource "aws_secretsmanager_secret_version" "secret-password" {
   secret_id     = aws_secretsmanager_secret.rds-password.id
   secret_string = var.db_pass
 }
-
-
-
-
-
-
-resource "aws_ssm_parameter" "password" {
-  name        = "notejam-aurora-password"
-  description = "RDS Password for notejam environment"
-  type        = "SecureString"
-  value       = random_password.password.result
-  tags        = var.custom_tags
-
-}
-
-
 module "rds-aurora" {
   source                 = "terraform-aws-modules/rds-aurora/aws"
   version                = "6.2.0"
