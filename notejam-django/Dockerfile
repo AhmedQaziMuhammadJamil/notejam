@@ -11,7 +11,7 @@ COPY notejam-django/django/notejam /usr/src/app
 
 WORKDIR $APP_HOME
 
-COPY /django/requirements.txt ./
+COPY notejam-django/django/requirements.txt ./
 RUN pip install -r requirements.txt
 RUN pip install psycopg2
 
