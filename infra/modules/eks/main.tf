@@ -51,13 +51,13 @@ locals {
       k8s_labels = {
         scope = "monitoring"
       }
-      taints = [
+      /* taints = [
         {
           key    = "scope"
           value  = "monitoring"
           effect = "NO_SCHEDULE"
         }
-      ]
+      ] */
     })
     operations = merge(local.eks_managed_node_group_defaults, {
       name_prefix = "operations"
