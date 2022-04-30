@@ -46,7 +46,7 @@ resource "aws_secretsmanager_secret_version" "secret-password" {
 }
 
 resource "aws_secretsmanager_secret" "rds-db-name" {
-  name = "notejam-db"
+  name = "notejam-db-name"
 }
 
 resource "aws_secretsmanager_secret_version" "secret-name" {
