@@ -48,21 +48,35 @@ resource "aws_ssm_parameter" "username" {
   tags        = var.custom_tags
 }
 resource "aws_secretsmanager_secret" "rds-user" {
-  name = "/notejam/aurora/masterusername"
+  name = "notejam-db-master-username"
 }
 
-resource "aws_secretsmanager_secret_version" "secret-value" {
+resource "aws_secretsmanager_secret_version" "secret-username" {
   secret_id     = aws_secretsmanager_secret.rds-user.id
   secret_string = (var.db_username)
 }
+
+
+resource "aws_secretsmanager_secret" "rds-password" {
+  name = "notejam-db-master-password"
+}
+
+resource "aws_secretsmanager_secret_version" "secret-password" {
+  secret_id     = aws_secretsmanager_secret.rds-user.id
+  secret_string = random_password.password.result
+}
+
+
+
+
+
+
 resource "aws_ssm_parameter" "password" {
-  name        = "/notejam/aurora/password"
+  name        = "notejam-aurora-password"
   description = "RDS Password for notejam environment"
   type        = "SecureString"
   value       = random_password.password.result
   tags        = var.custom_tags
-
-
 
 }
 
