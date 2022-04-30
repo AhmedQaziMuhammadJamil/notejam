@@ -37,10 +37,10 @@ resource "aws_secretsmanager_secret" "rds-user" {
   name = "notejam-db-master-username"
 }
 
-/* resource "aws_secretsmanager_secret_version" "secret-username" {
+ resource "aws_secretsmanager_secret_version" "secret-username" {
   secret_id     = aws_secretsmanager_secret.rds-user.id
   secret_string = var.db_user
-} */
+} 
 
 
 resource "aws_secretsmanager_secret" "rds-password" {
