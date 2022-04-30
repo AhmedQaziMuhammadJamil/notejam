@@ -63,7 +63,7 @@ resource "aws_secretsmanager_secret" "rds-password" {
 
 resource "aws_secretsmanager_secret_version" "secret-password" {
   secret_id     = aws_secretsmanager_secret.rds-user.id
-  secret_string = random_password.password.result
+  secret_string = "${random_password.password.result}"
 }
 
 
