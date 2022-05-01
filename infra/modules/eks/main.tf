@@ -6,7 +6,7 @@ locals {
   eks_managed_node_group_defaults = {
     create_launch_template               = true
     subnets                              = var.private_subnets
-    instance_types                       = ["t3a.medium"]
+    instance_types                       = ["t3.large"]
     set_instance_types_on_lt             = true
     capacity_type                        = "ON_DEMAND"
     metadata_http_endpoint               = "enabled"
@@ -25,7 +25,7 @@ locals {
      apps = merge(local.eks_managed_node_group_defaults, {
       name_prefix = "apps"
 
-      instance_types   = ["t3a.medium"]
+      instance_types   = ["t3.large"]
       max_capacity     = 3
       min_capacity     = 1
       desired_capacity = 1
