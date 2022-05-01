@@ -72,7 +72,7 @@ module "rds-aurora" {
   create_random_password = false
   name                   = "notejam-db"
   engine                 = "aurora-postgresql"
-  engine_version         = "11.12"
+  engine_version         = "11.13"
   instance_class         = "db.r6g.large"
   master_password        = var.db_pass
   master_username        = var.db_user
