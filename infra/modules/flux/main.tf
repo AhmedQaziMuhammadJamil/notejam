@@ -235,51 +235,6 @@ resource "github_repository_file" "kustomize" {
   overwrite_on_create = true
 }
 
-/*  resource "github_repository_file" "patches" {
-  #  `patch_file_paths` is a map keyed by the keys of `flux_sync.main`
-  #  whose values are the paths where the patch files should be installed.
-  for_each   = data.flux_sync.main.patch_file_paths
-
-  repository = github_repository.main.name
-  file       = each.value
-  content    = local.ecr-patch[each.key] # Get content of our patch files
-  branch     = var.branch
-} */
-
- /* resource "null_resource" "one" {
-   triggers = {
-    build_number = "${timestamp()}"
-  }
-
-  provisioner "local-exec" {
-    //when       = destroy
-    //on_failure = continue
-    command = <<-EOT
-         curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && kubectl get pods -A
-         
-EOT
-            
-  }
-  
-
-} */
-
-/* resource "null_resource" "custom" {
-  # change trigger to run every time
-  triggers = {
-    build_number = "${timestamp()}"
-  }
-
-  # download kubectl
-  provisioner "local-exec" {
-    command = "curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl"
-  }
-
-  # run kubectl
-  provisioner "local-exec" {
-    command = "./kubectl get pods -A"
-  }
-} */
 
 
 
