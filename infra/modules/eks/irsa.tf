@@ -175,7 +175,7 @@ module "secrets-manger-role" {
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:ascp-csi-secrets-store-provider-aws"]
+      namespace_service_accounts = ["flux-system:ascp-csi-secrets-store-provider-aws"]
 
     }
   }
