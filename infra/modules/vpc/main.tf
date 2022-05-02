@@ -30,7 +30,7 @@ module "mod_subnet_addr" {
    /*    {
       name     = "Private Subnet 3"
       new_bits = 8
-     */},
+     },*/
     {
       name     = "DB Subnet 1"
       new_bits = 8
