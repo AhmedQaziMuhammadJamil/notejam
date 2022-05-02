@@ -27,10 +27,10 @@ module "mod_subnet_addr" {
       name     = "Private Subnet 2"
       new_bits = 8
     },
-      {
+   /*    {
       name     = "Private Subnet 3"
       new_bits = 8
-    },
+     */},
     {
       name     = "DB Subnet 1"
       new_bits = 8
@@ -52,7 +52,7 @@ module "notejam_vpc" {
 
   azs                                  = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1]]
   public_subnets                       = [module.mod_subnet_addr.network_cidr_blocks["Public Subnet 1"], module.mod_subnet_addr.network_cidr_blocks["Public Subnet 2"]]
-  private_subnets                      = [module.mod_subnet_addr.network_cidr_blocks["Private Subnet 1"], module.mod_subnet_addr.network_cidr_blocks["Private Subnet 3"]]
+  private_subnets                      = [module.mod_subnet_addr.network_cidr_blocks["Private Subnet 1"]]
   intra_subnets                        = [module.mod_subnet_addr.network_cidr_blocks["DB Subnet 1"], module.mod_subnet_addr.network_cidr_blocks["DB Subnet 2"]]
   enable_nat_gateway                   = true
   one_nat_gateway_per_az               = true
