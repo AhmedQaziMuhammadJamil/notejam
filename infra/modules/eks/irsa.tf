@@ -157,7 +157,7 @@ module "load_balancer_controller_targetgroup_binding_only_irsa_role" {
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["monitoring:aws-load-balancer-controller"]
+      namespace_service_accounts = ["production:aws-load-balancer-controller"]
     }
   }
 
@@ -175,7 +175,7 @@ module "secrets-manger-role" {
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["flux-system:ascp-csi-secrets-store-provider-aws"]
+      namespace_service_accounts = ["production:ascp-csi-secrets-store-provider-aws"]
 
     }
   }
