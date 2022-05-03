@@ -62,29 +62,8 @@ resource "kubernetes_namespace" "flux_system" {
 }
 
 
-resource "kubernetes_namespace" "monitoring" {
 
-  metadata {
-    name = "monitoring"
-  }
-  lifecycle {
-    ignore_changes = [
-      metadata[0].labels
-    ]
-  }
-}
 
-resource "kubernetes_namespace" "operations" {
-
-  metadata {
-    name = "production"
-  }
-  lifecycle {
-    ignore_changes = [
-      metadata[0].labels
-    ]
-  }
-}
 data "kubectl_file_documents" "install" {
   content = data.flux_install.main.content
 }
