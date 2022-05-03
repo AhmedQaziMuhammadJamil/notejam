@@ -19,7 +19,7 @@ module "mod_kms" {
 }
 
 
-/*  module "rds" {
+  module "rds" {
   source      = "./modules/rds"
   vpc_id      = module.mod_vpc.out_nl_vpcid
   rds-subnets = module.mod_vpc.out_nl_rdssubnet
@@ -31,7 +31,7 @@ module "mod_kms" {
   db_name= var.db_name
   
 
-} */
+} 
 
 module "mod_iam" {
   source      = "./modules/iam"
@@ -60,7 +60,7 @@ module "mod_eks" {
   github_owner = var.github_owner
   github_token = var.github_token
 }
-/* 
+ 
    module "mod_flux" {
   source = "./modules/flux"
   cluster_id= module.mod_eks.cluster_id
@@ -76,4 +76,4 @@ module "mod_github" {
   source = "./modules/github"
   github_actions_ecr = module.mod_iam.github_actions_ecr
 
-} */
+} 
