@@ -28,6 +28,7 @@ locals {
 }
 resource "aws_secretsmanager_secret" "rds-user" {
   name = "notejam-db-master-username"
+  recovery_window_in_days = 0
 }
 
  resource "aws_secretsmanager_secret_version" "secret-username" {
@@ -38,15 +39,18 @@ resource "aws_secretsmanager_secret" "rds-user" {
 
 resource "aws_secretsmanager_secret" "rds-password" {
   name = "notejam-db-master-password"
+   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "secret-password" {
   secret_id     = aws_secretsmanager_secret.rds-password.id
   secret_string = jsonencode(local.db_pass)
+  
 }
 
 resource "aws_secretsmanager_secret" "rds-db-name" {
   name = "notejam-db-name"
+   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "secret-name" {
@@ -56,6 +60,7 @@ resource "aws_secretsmanager_secret_version" "secret-name" {
 
 resource "aws_secretsmanager_secret" "rds-db-host" {
   name = "notejam-db-host"
+   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "secret-host" {
