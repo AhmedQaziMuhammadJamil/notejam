@@ -55,7 +55,7 @@ module "notejam_vpc" {
   name = "${var.env}-vpc"
   cidr = var.vpc_cidr
 
-  azs                                  = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1]]
+  azs                                  = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1] , data.aws_availability_zones.available.names[2]]
   public_subnets                       = [module.mod_subnet_addr.network_cidr_blocks["Public Subnet 1"], module.mod_subnet_addr.network_cidr_blocks["Public Subnet 2"],module.mod_subnet_addr.network_cidr_blocks["Public Subnet 3"]]
   private_subnets                      = [module.mod_subnet_addr.network_cidr_blocks["Private Subnet 1"],module.mod_subnet_addr.network_cidr_blocks["Private Subnet 2"],module.mod_subnet_addr.network_cidr_blocks["Private Subnet 3"]]
   intra_subnets                        = [module.mod_subnet_addr.network_cidr_blocks["DB Subnet 1"], module.mod_subnet_addr.network_cidr_blocks["DB Subnet 2"]]
