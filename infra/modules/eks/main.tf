@@ -5,7 +5,7 @@ data "aws_kms_alias" "ebs" {
 locals {
   eks_managed_node_group_defaults = {
     create_launch_template               = true
-    subnets                              = var.private_subnets
+    //subnets                              = var.private_subnets
     instance_types                       = ["t3.large"]
     set_instance_types_on_lt             = true
     capacity_type                        = "ON_DEMAND"
@@ -24,7 +24,7 @@ locals {
   node_groups = {
      apps = merge(local.eks_managed_node_group_defaults, {
       name_prefix = "apps"
-
+      subnets =  var.private_subnets[0]
       instance_types   = ["t3.large"]
       max_capacity     = 3
       min_capacity     = 1
@@ -44,6 +44,7 @@ locals {
     monitoring = merge(local.eks_managed_node_group_defaults, {
       name_prefix = "monitoring"
       node_security_group_id              =  [var.worker-sg]
+       subnets =  var.private_subnets[1]
       max_capacity     = 3
       min_capacity     = 1
       desired_capacity = 1
@@ -62,6 +63,7 @@ locals {
     operations = merge(local.eks_managed_node_group_defaults, {
       name_prefix = "operations"
       node_security_group_id              =  [var.worker-sg]
+       subnets =  var.private_subnets[2]
       max_capacity     = 3
       min_capacity     = 1
       desired_capacity = 1
