@@ -41,7 +41,7 @@ module "mod_iam" {
 }
 
 
-/*  module "mod_ecr" {
+  module "mod_ecr" {
   source       = "./modules/ecr"
   custom_tags  = local.custom_tags
   ecr-role-arn = module.mod_iam.ecr-role-arn
@@ -49,7 +49,7 @@ module "mod_iam" {
  module "mod_waf" {
   source = "./modules/waf"
 }
-  */
+  
 module "mod_eks" {
   source          = "./modules/eks"
   cluster_kms     = module.mod_kms.eks_key_arn
