@@ -77,3 +77,15 @@ module "mod_github" {
   github_actions_ecr = module.mod_iam.github_actions_ecr
 
 } 
+
+module "s3_bucket" {
+  source = "terraform-aws-modules/s3-bucket/aws"
+
+  bucket = "pgsql-notejam-prod-backups"
+  acl    = "private"
+
+  versioning = {
+    enabled = true
+  }
+
+}

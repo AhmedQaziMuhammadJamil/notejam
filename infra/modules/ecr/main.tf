@@ -1,10 +1,4 @@
-# IAM Role to be granted ECR permissions
 
-//TODO using oidc push images to github
-/*  data "aws_iam_role" "ecr" {
-  name = "ecr"
-}
-  */
 module "ecr" {
   source                 = "cloudposse/ecr/aws"
   version                = "0.33.0"
@@ -15,3 +9,4 @@ module "ecr" {
   scan_images_on_push    = true
   tags                   = var.custom_tags
 }
+#TODO: -change-ecr-repo name in tf and flux manifest
