@@ -87,5 +87,13 @@ module "s3_bucket" {
   versioning = {
     enabled = true
   }
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = module.mod_kms.s3_key_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 
 }
