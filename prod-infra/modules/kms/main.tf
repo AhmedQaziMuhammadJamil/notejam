@@ -5,9 +5,9 @@ module "rds_kms_key" {
   enabled                 = true
   name                    = local.rds_key_name
   description             = "KMS key for RDS"
-  deletion_window_in_days = 10
+  deletion_window_in_days = 0
   enable_key_rotation     = true
-  alias                   = "alias/rds-cmk"
+  alias                   = "alias/rds-cmk-${var.env}"
   multi_region            = true
   tags                    = var.custom_tags
 }
@@ -20,9 +20,9 @@ module "eks_kms_key" {
   enabled                 = true
   name                    = local.eks_key_name
   description             = "KMS key for EKS"
-  deletion_window_in_days = 10
+  deletion_window_in_days = 0
   enable_key_rotation     = true
-  alias                   = "alias/eks-cmk"
+  alias                   = "alias/eks-cmk-${var.env}"
   multi_region            = true
   tags                    = var.custom_tags
 }
@@ -34,9 +34,9 @@ module "s3_kms_key" {
   enabled                 = true
   name                    = local.s3_key_name
   description             = "KMS key for S3 objects"
-  deletion_window_in_days = 10
+  deletion_window_in_days = 0
   enable_key_rotation     = true
-  alias                   = "alias/s3-cmk"
+  alias                   = "alias/s3-cmk-${var.env}"
   multi_region            = true
   tags                    = var.custom_tags
 }
