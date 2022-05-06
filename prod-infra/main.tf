@@ -19,7 +19,7 @@ module "mod_kms" {
   custom_tags = local.custom_tags
    env         = var.env
 }
-/* 
+
 
   module "rds" {
   source      = "./modules/rds"
@@ -31,10 +31,11 @@ module "mod_kms" {
   db_pass = var.db_pass
   db_user = var.db_user
   db_name= var.db_name
+  env         = var.env
   
 
 } 
-
+/* 
 module "mod_iam" {
   source      = "./modules/iam"
   custom_tags = local.custom_tags
