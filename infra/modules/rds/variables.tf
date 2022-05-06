@@ -31,3 +31,6 @@ variable "db_user" {
 variable "db_name" {
   type=string
 }
+variable "env" {
+  type = string
+}

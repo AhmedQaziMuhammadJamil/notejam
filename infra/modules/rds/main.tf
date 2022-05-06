@@ -1,14 +1,14 @@
 resource "aws_db_parameter_group" "db-pg" {
-  name        = "notejam-pg"
+  name        = "notejam-pg-${var.env}"
   family      = var.pgfamily
-  description = "Parameter group for notejam"
+  description = "Parameter group for notejam -${var.env}"
   tags = var.custom_tags
 }
 
 resource "aws_rds_cluster_parameter_group" "cpg" {
-  name        = "notejam-cluster-pg"
+  name        = "notejam-cluster-pg-${var.env}"
   family      = var.pgfamily
-  description = "Cluster Parameter group for notejam"
+  description = "Cluster Parameter group for notejam -${var.env}"
   tags = var.custom_tags
 }
 
@@ -27,7 +27,7 @@ locals {
   }
 }
 resource "aws_secretsmanager_secret" "rds-user" {
-  name = "notejam-db-master-username"
+  name = "notejam-db-master-username-${var.env}"
   recovery_window_in_days = 0
 }
 
@@ -38,7 +38,7 @@ resource "aws_secretsmanager_secret" "rds-user" {
 
 
 resource "aws_secretsmanager_secret" "rds-password" {
-  name = "notejam-db-master-password"
+  name = "notejam-db-master-password-${var.env}"
    recovery_window_in_days = 0
 }
 
@@ -49,7 +49,7 @@ resource "aws_secretsmanager_secret_version" "secret-password" {
 }
 
 resource "aws_secretsmanager_secret" "rds-db-name" {
-  name = "notejam-db-name"
+  name = "notejam-db-name-${var.env}"
    recovery_window_in_days = 0
 }
 
@@ -59,7 +59,7 @@ resource "aws_secretsmanager_secret_version" "secret-name" {
 }
 
 resource "aws_secretsmanager_secret" "rds-db-host" {
-  name = "notejam-db-host"
+  name = "notejam-db-host-${var.env}"
    recovery_window_in_days = 0
 }
 
@@ -75,10 +75,10 @@ module "rds-aurora" {
   create_db_subnet_group = true
   create_security_group  = false
   create_random_password = false
-  name                   = "notejam-db"
+  name                   = "notejam-db-${var.env}"
   engine                 = "aurora-postgresql"
   engine_version         = "11.13"
-  instance_class         = "db.r6g.large"
+  instance_class         = "db.t3.medium"
   master_password        = var.db_pass
   master_username        = var.db_user
   database_name          = var.db_name     

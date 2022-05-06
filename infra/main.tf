@@ -19,7 +19,7 @@ module "mod_kms" {
   env         = var.env
 }
 
-/* 
+
   module "rds" {
   source      = "./modules/rds"
   vpc_id      = module.mod_vpc.out_nl_vpcid
@@ -29,11 +29,12 @@ module "mod_kms" {
   kms_key_arn = module.mod_kms.rds_key_arn
   db_pass = var.db_pass
   db_user = var.db_user
-  db_name= var.db_name
+  db_name = var.db_name
+  env         = var.env
   
 
 } 
-
+/*
 module "mod_iam" {
   source      = "./modules/iam"
   custom_tags = local.custom_tags
