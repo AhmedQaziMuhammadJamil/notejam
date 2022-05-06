@@ -2,7 +2,7 @@
 module "ecr" {
   source                 = "cloudposse/ecr/aws"
   version                = "0.33.0"
-  namespace              = "notejam"
+  namespace              = "ecr"
   stage                  = var.env
   name                   = "notejam"
   principals_full_access = [var.ecr-role-arn]
