@@ -36,7 +36,7 @@ module "s3_kms_key" {
   description             = "KMS key for S3 objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  alias                   = "alias/s3-cmk"
+  alias                   = "alias/s3-cmk-${var.env}"
   multi_region            = true
   tags                    = var.custom_tags
 }
