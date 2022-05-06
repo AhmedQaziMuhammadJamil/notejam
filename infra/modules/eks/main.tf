@@ -389,3 +389,13 @@ mkdir -p $HOME/bin && mv ./aws-iam-authenticator $HOME/bin/ && export PATH=$PATH
 EOH
   }
 }
+
+data "aws_iam_policy" "cw_agent_policy" {
+  arn="arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+resource "aws_iam_role_policy_attachment" "additional" {
+  for_each =module.eks.eks_managed_node_groups
+
+  policy_arn = data.aws_iam_policy.cw_agent_policy.arn
+  role       = each.value.iam_role_name
+}

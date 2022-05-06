@@ -50,3 +50,4 @@ resource "aws_iam_policy" "github_actions" {
   description = "Grant Github Actions the ability to push to ${var.ecr_repository_name}"
   policy      = data.aws_iam_policy_document.source_policy_document_github.json
 }
+
