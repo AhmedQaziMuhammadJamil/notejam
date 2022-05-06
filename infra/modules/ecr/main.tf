@@ -3,7 +3,7 @@ module "ecr" {
   source                 = "cloudposse/ecr/aws"
   version                = "0.33.0"
   namespace              = "notejam"
-  stage                  = "test"
+  stage                  = "dev"
   name                   = "ecr"
   principals_full_access = [var.ecr-role-arn]
   scan_images_on_push    = true

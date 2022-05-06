@@ -4,7 +4,7 @@ module "mod_vpc" {
   env         = var.env
   custom_tags = local.custom_tags
 }
-
+/* 
 module "mod_sg" {
   source      = "./modules/security-groups"
   env         = var.env
@@ -59,6 +59,7 @@ module "mod_eks" {
   worker-sg       = module.mod_sg.worker-sg
   github_owner = var.github_owner
   github_token = var.github_token
+  
 }
  
    module "mod_flux" {
@@ -70,22 +71,25 @@ module "mod_eks" {
   token=module.mod_eks.token
    github_owner = var.github_owner
   github_token = var.github_token
+  custom_tags = local.custom_tags
 }   
    
 module "mod_github" {
   source = "./modules/github"
   github_actions_ecr = module.mod_iam.github_actions_ecr
+  custom_tags = local.custom_tags
 
 } 
 
 module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
-  bucket = "pgsql-notejam-prod-backups"
+  bucket = local.s3_name
   acl    = "private"
-
+  custom_tags = local.custom_tags
+  force_destroy = true
   versioning = {
-    enabled = true
+    enabled = false
   }
   server_side_encryption_configuration = {
     rule = {
@@ -96,4 +100,4 @@ module "s3_bucket" {
     }
   }
 
-}
+} */

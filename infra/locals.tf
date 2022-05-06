@@ -5,4 +5,5 @@ locals {
     ManagedBy   = "Terraform"
     Project     = "NoteJam"
   }
+  s3_name="pgsql-notejam-backup-${var.env}"
 }
