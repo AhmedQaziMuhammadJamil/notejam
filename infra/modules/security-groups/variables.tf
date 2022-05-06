@@ -15,11 +15,11 @@ variable "alb-sg-name" {
 
 variable "worker-sg-name" {
   type    = string
-  default = "Worker-Node-SG"
+  default = "NoteJam-Worker-Node-SG"
 }
 variable "rds-sg-name" {
   type    = string
-  default = "RDS-SG"
+  default = "NoteJam-RDS-SG"
 }
 
 variable "alb-sg" {
