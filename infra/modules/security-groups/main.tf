@@ -23,7 +23,7 @@ resource "aws_security_group" "alb" {
     protocol    = -1
     cidr_blocks = ["0.0.0.0/0"]
   }
-  tags = merge(var.custom_tags, { Name = each.key })
+  tags = merge(var.custom_tags, { Name = local.alb_sg_name })
 
 }
 
@@ -55,7 +55,7 @@ resource "aws_security_group" "worker-node" {
   }
 
 
-  tags = merge(var.custom_tags, { Name = each.key })
+  tags = merge(var.custom_tags, { Name = local.worker_sg_name })
 
 }
 
@@ -84,7 +84,7 @@ resource "aws_security_group" "rds" {
     protocol    = -1
     cidr_blocks = ["0.0.0.0/0"]
   }
-  tags = merge(var.custom_tags, { Name = each.key })
+  tags = merge(var.custom_tags, { Name = local.rds_sg_name })
 
 }
 
