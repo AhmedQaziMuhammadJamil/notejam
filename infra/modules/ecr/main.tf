@@ -2,9 +2,9 @@
 module "ecr" {
   source                 = "cloudposse/ecr/aws"
   version                = "0.33.0"
-  namespace              = "ecr"
+  namespace              = "notejam"
   stage                  = var.env
-  name                   = "notejam"
+  name                   = "repo"
   principals_full_access = [var.ecr-role-arn]
   scan_images_on_push    = true
   tags                   = var.custom_tags
