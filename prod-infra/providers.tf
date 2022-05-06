@@ -6,7 +6,7 @@ terraform {
     organization = "Alpha-Project"
 
     workspaces {
-      name = "notejam"
+      name = "notejam-prod"
     }
   }
   required_providers {
