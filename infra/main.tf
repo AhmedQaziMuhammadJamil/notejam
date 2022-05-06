@@ -34,12 +34,13 @@ module "mod_kms" {
   
 
 } 
-/*
+
 module "mod_iam" {
   source      = "./modules/iam"
   custom_tags = local.custom_tags
   ecr_repo_arn = module.mod_ecr.ecr_arn
   ecr_repository_name = module.mod_ecr.ecr_name
+  env         = var.env
 }
 
 
@@ -47,7 +48,9 @@ module "mod_iam" {
   source       = "./modules/ecr"
   custom_tags  = local.custom_tags
   ecr-role-arn = module.mod_iam.ecr-role-arn
+  env         = var.env
 } 
+/*
  module "mod_waf" {
   source = "./modules/waf"
 }

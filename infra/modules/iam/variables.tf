@@ -8,3 +8,6 @@ variable "ecr_repository_name" {
 variable "ecr_repo_arn" {
   type = string
 }
+variable "env" {
+  type=string
+}
