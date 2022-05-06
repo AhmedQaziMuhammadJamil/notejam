@@ -4,7 +4,7 @@ module "mod_vpc" {
   env         = var.env
   custom_tags = local.custom_tags
 }
-/* 
+
 module "mod_sg" {
   source      = "./modules/security-groups"
   env         = var.env
@@ -12,7 +12,7 @@ module "mod_sg" {
   custom_tags = local.custom_tags
 }
 
-
+/* 
 module "mod_kms" {
   source      = "./modules/kms"
   custom_tags = local.custom_tags

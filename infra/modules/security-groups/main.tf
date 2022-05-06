@@ -3,7 +3,7 @@ resource "aws_security_group" "alb" {
     ignore_changes = [ingress]
   }
   for_each = var.alb-sg
-  name     = var.alb-sg-name
+  name     = local.alb_sg_name
   vpc_id   = var.vpc_id
   dynamic "ingress" {
     for_each = each.value.rules
@@ -33,7 +33,7 @@ resource "aws_security_group" "worker-node" {
     ignore_changes = [ingress]
   }
   for_each = var.worker-node-sg
-  name     = var.worker-sg-name
+  name     = local.worker_sg_name
   vpc_id   = var.vpc_id
   dynamic "ingress" {
     for_each = each.value.rules
@@ -65,7 +65,7 @@ resource "aws_security_group" "rds" {
     ignore_changes = [ingress]
   }
   for_each = var.rds-sg
-  name     = each.key
+  name     = local.rds_sg_name
   vpc_id   = var.vpc_id
   dynamic "ingress" {
     for_each = each.value.rules

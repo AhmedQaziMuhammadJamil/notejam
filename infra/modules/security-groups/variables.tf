@@ -17,6 +17,10 @@ variable "worker-sg-name" {
   type    = string
   default = "Worker-Node-SG"
 }
+variable "rds-sg-name" {
+  type    = string
+  default = "RDS-SG"
+}
 
 variable "alb-sg" {
   default = {
