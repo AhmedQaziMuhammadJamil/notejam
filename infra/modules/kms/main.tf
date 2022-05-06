@@ -7,7 +7,7 @@ module "rds_kms_key" {
   description             = "KMS key for RDS"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  alias                   = "alias/rds-cmk"
+  alias                   = "alias/rds-cmk-${var.env}s"
   multi_region            = true
   tags                    = var.custom_tags
 }
@@ -22,7 +22,7 @@ module "eks_kms_key" {
   description             = "KMS key for EKS"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  alias                   = "alias/eks-cmk"
+  alias                   = "alias/eks-cmk-${var.env}"
   multi_region            = true
   tags                    = var.custom_tags
 }
