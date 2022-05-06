@@ -12,13 +12,14 @@ module "mod_sg" {
   custom_tags = local.custom_tags
 }
 
-/* 
+
 
 module "mod_kms" {
   source      = "./modules/kms"
   custom_tags = local.custom_tags
+   env         = var.env
 }
-
+/* 
 
   module "rds" {
   source      = "./modules/rds"
