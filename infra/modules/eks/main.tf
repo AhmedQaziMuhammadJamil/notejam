@@ -24,7 +24,7 @@ locals {
   }
   node_groups = {
      apps = merge(local.eks_managed_node_group_defaults, {
-      name_prefix = "apps-${var.env}"
+      name = "apps-${var.env}"
       subnets =  var.private_subnets[0]
       instance_types   = ["t3.large"]
       max_capacity     = 3
@@ -43,7 +43,7 @@ locals {
       ] */
     }) 
     monitoring = merge(local.eks_managed_node_group_defaults, {
-      name_prefix = "monitoring-${var.env}"
+      name = "monitoring-${var.env}"
       node_security_group_id              =  [var.worker-sg]
        subnets =  var.private_subnets[1]
       max_capacity     = 3
@@ -62,7 +62,7 @@ locals {
       ] */
     })
     operations = merge(local.eks_managed_node_group_defaults, {
-      name_prefix = "operations-${var.env}"
+      name  = "operations-${var.env}"
       node_security_group_id              =  [var.worker-sg]
        subnets =  var.private_subnets[2]
       max_capacity     = 3
