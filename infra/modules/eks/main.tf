@@ -155,7 +155,7 @@ locals {
 }
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
-  version                         = "18.20.2"
+  version                         = "18.20.5"
   cluster_name                    = local.cluster_name
   cluster_version                 = local.cluster_version
   cluster_endpoint_private_access = true
