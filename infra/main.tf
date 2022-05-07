@@ -56,6 +56,14 @@ module "mod_iam" {
    env         = var.env
 }
 
+module "mod_github" {
+  source = "./modules/github"
+  github_actions_ecr = module.mod_iam.github_actions_ecr
+  custom_tags = local.custom_tags
+
+} 
+
+
 
 /*
 module "mod_eks" {
@@ -82,12 +90,6 @@ module "mod_eks" {
   custom_tags = local.custom_tags
 }   
    
-module "mod_github" {
-  source = "./modules/github"
-  github_actions_ecr = module.mod_iam.github_actions_ecr
-  custom_tags = local.custom_tags
-
-} 
 
 module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"

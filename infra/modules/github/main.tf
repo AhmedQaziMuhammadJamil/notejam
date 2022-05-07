@@ -14,6 +14,6 @@ module "oidc-github" {
   github_organisation           = var.github_organisation
   github_repositories           = var.github_repositories
   max_session_duration          = var.max_session_duration
-  tags                          = var.tags
+  tags                          = var.custom_tags
 }
 

@@ -106,4 +106,6 @@ variable "github_actions_ecr" {
   description= "arn of policy created in  IAM role module"
 }
 
-
+variable "custom_tags" {
+  
+}
