@@ -178,6 +178,7 @@ module "eks" {
   vpc_id     = var.vpc_id
   subnet_ids = var.private_subnets
   eks_managed_node_group_defaults = {
+     iam_role_attach_cni_policy = true 
     create_node_security_group = false
     vpc_security_group_ids     = [var.worker-sg]
     ami_type                   = "AL2_x86_64"
