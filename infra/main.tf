@@ -94,6 +94,7 @@ module "mod_eks" {
   worker-sg       = module.mod_sg.worker-sg
   github_owner = var.github_owner
   github_token = var.github_token
+   env         = var.env
   
 }
  /*
