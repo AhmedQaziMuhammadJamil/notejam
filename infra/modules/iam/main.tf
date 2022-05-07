@@ -108,7 +108,7 @@ module "iam-policy" {
         "s3:*"
       ],
       "Effect": "Allow",
-      "Resource": "${s3_bucket_arn}"
+      "Resource": "${var.s3_bucket_arn}"
     }
   ]
 }
