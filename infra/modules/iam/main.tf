@@ -32,7 +32,7 @@ data "aws_iam_policy_document" "source_policy_document_github" {
       "ecr:PutImage",
       "ecr:UploadLayerPart",
     ]
-    resources = [var.ecr_repo_arn]
+    resources = ["*"]
   }
 
   statement {
