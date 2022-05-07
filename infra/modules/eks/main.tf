@@ -4,8 +4,7 @@ data "aws_kms_alias" "ebs" {
 
 locals {
   eks_managed_node_group_defaults = {
-    iam_role_attach_cni_policy = true
-
+    
     create_launch_template               = true
     //subnets                              = var.private_subnets
     instance_types                       = ["t3.large"]
@@ -107,7 +106,8 @@ locals {
     addon_version = "v1.10.2-eksbuild.1"
 
     resolve_conflicts        = "OVERWRITE"
-    service_account_role_arn = "arn:aws:iam::003767002475:role/vpc-cni-ipv4-dev"
+    service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
+
     tags = merge(
       var.custom_tags,
       {
@@ -245,7 +245,7 @@ module "eks" {
 module "vpc_cni_irsa" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
-  role_name             = "vpc_cni"
+  role_name             = "vpc_cni_${var.env}"
   attach_vpc_cni_policy = true
   vpc_cni_enable_ipv4   = true
 
