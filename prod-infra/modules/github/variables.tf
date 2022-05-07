@@ -18,7 +18,7 @@ variable "enabled" {
 }
 
 variable "force_detach_policies" {
-  default     = false
+  default     = true
   description = "Flag to force detachment of policies attached to the IAM role."
   type        = string
 }
@@ -28,7 +28,7 @@ variable "force_detach_policies" {
 variable "github_repositories" {
   description = "List of GitHub repository names."
   type        = list(string)
-  default = [ "notejam" ]
+  default = [ "AhmedQaziMuhammadJamil/notejam" ]
 }
 
 variable "github_organisation" {
@@ -43,17 +43,6 @@ variable "github_thumbprint" {
   type        = string
 }
 
-variable "iam_policy_name" {
-  default     = "github-oidc"
-  description = "Name of the IAM policy to be assumed by GitHub."
-  type        = string
-}
-
-variable "iam_policy_path" {
-  default     = "/"
-  description = "Path to the IAM policy."
-  type        = string
-}
 
 variable "iam_role_name" {
   default     = "github-oidc"

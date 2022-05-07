@@ -56,13 +56,15 @@ module "mod_iam" {
    env         = var.env
 }
 
-module "mod_github" {
+/* module "mod_github" {
   source = "./modules/github"
   github_actions_ecr = module.mod_iam.github_actions_ecr
   custom_tags = local.custom_tags
 
 } 
 
+
+ */
 /* 
 module "mod_eks" {
   source          = "./modules/eks"

@@ -32,7 +32,8 @@ data "aws_iam_policy_document" "source_policy_document_github" {
       "ecr:PutImage",
       "ecr:UploadLayerPart",
     ]
-    resources = [var.ecr_repo_arn]
+   ## resources = [var.ecr_repo_arn] single repo
+      resources = ["*"] ## multiple repos-including-dev-stage-prod
   }
 
   statement {
