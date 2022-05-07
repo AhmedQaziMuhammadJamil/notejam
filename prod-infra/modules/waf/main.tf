@@ -26,13 +26,13 @@ resource "aws_wafv2_web_acl" "main" {
         statement {
 
           ip_set_reference_statement {
-            arn = aws_wafv2_ip_set.ip_sets["whitelist_ipv4"].arn
+            arn = aws_wafv2_ip_set.ip_sets["whitelist_ipv4_prod"].arn
           }
         }
         statement {
 
           ip_set_reference_statement {
-            arn = aws_wafv2_ip_set.ip_sets["whitelist_ipv6"].arn
+            arn = aws_wafv2_ip_set.ip_sets["whitelist_ipv6_prod"].arn
           }
         }
       }
@@ -60,13 +60,13 @@ resource "aws_wafv2_web_acl" "main" {
         statement {
 
           ip_set_reference_statement {
-            arn = aws_wafv2_ip_set.ip_sets["ip_badbot_ipv4"].arn
+            arn = aws_wafv2_ip_set.ip_sets["ip_badbot_ipv4_prod"].arn
           }
         }
         statement {
 
           ip_set_reference_statement {
-            arn = aws_wafv2_ip_set.ip_sets["ip_badbot_ipv6"].arn
+            arn = aws_wafv2_ip_set.ip_sets["ip_badbot_ipv6_prod"].arn
           }
         }
       }
@@ -94,13 +94,13 @@ resource "aws_wafv2_web_acl" "main" {
         statement {
 
           ip_set_reference_statement {
-            arn = aws_wafv2_ip_set.ip_sets["blacklist_ipv6"].arn
+            arn = aws_wafv2_ip_set.ip_sets["blacklist_ipv6_prod"].arn
           }
         }
         statement {
 
           ip_set_reference_statement {
-            arn = aws_wafv2_ip_set.ip_sets["blacklist_ipv6"].arn
+            arn = aws_wafv2_ip_set.ip_sets["blacklist_ipv6_prod"].arn
           }
         }
       }
@@ -152,13 +152,13 @@ resource "aws_wafv2_web_acl" "main" {
         statement {
 
           ip_set_reference_statement {
-            arn = aws_wafv2_ip_set.ip_sets["ipreputationlist_ipv4"].arn
+            arn = aws_wafv2_ip_set.ip_sets["ipreputationlist_ipv4_prod"].arn
           }
         }
         statement {
 
           ip_set_reference_statement {
-            arn = aws_wafv2_ip_set.ip_sets["ipreputationlist_ipv6"].arn
+            arn = aws_wafv2_ip_set.ip_sets["ipreputationlist_ipv6_prod"].arn
           }
         }
       }
@@ -186,13 +186,13 @@ resource "aws_wafv2_web_acl" "main" {
         statement {
 
           ip_set_reference_statement {
-            arn = aws_wafv2_ip_set.ip_sets["scanners_probes_ipv4"].arn
+            arn = aws_wafv2_ip_set.ip_sets["scanners_probes_ipv4_prod"].arn
           }
         }
         statement {
 
           ip_set_reference_statement {
-            arn = aws_wafv2_ip_set.ip_sets["scanners_probes_ipv6"].arn
+            arn = aws_wafv2_ip_set.ip_sets["scanners_probes_ipv6_prod"].arn
           }
         }
       }
