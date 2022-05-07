@@ -1,4 +1,7 @@
-
+locals {
+  ACCESS_KEY_ID=module.iam_user.iam_access_key_id
+  AWS_SECRET_ACCESS_KEY=module.iam_user.iam_user.iam_access_key_secret
+}
 module "iam" {
   source                            = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
   version                           = "4.17.2"
@@ -64,12 +67,22 @@ module "iam_user" {
   force_destroy = true
 }
 
-resource "aws_secretsmanager_secret" "iam-s3-user" {
-  name = "notejam-${var.env}-s3-cronjob-user"
+resource "aws_secretsmanager_secret" "s3_user_ak" {
+  name = "notejam-${var.env}-s3-cronjob-user-ak"
    recovery_window_in_days = 0
 }
 
-resource "aws_secretsmanager_secret_version" "secret-name" {
-  secret_id     = aws_secretsmanager_secret.iam-s3-user.id
-  secret_string = jsonencode(module.iam_user.iam_access_key_id)
+resource "aws_secretsmanager_secret_version" "access_key" {
+  secret_id     = aws_secretsmanager_secret.s3_user_ak.id
+  secret_string = jsonencode(local.ACCESS_KEY_ID)
+}
+
+resource "aws_secretsmanager_secret" "s3_user_sk" {
+  name = "notejam-${var.env}-s3-cronjob-user-sk"
+   recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "secret-key" {
+  secret_id     = aws_secretsmanager_secret.s3_user_sk.id
+  secret_string = jsonencode(local.AWS_SECRET_ACCESS_KEY)
 }
