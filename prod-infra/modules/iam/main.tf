@@ -77,7 +77,7 @@ resource "aws_secretsmanager_secret" "s3_user_ak" {
 
 resource "aws_secretsmanager_secret_version" "access_key" {
   secret_id     = aws_secretsmanager_secret.s3_user_ak.id
-  secret_string = jsonencode(local.default.ACCESS_KEY_ID)
+  secret_string = jsonencode(local.default)
  
 }
 
