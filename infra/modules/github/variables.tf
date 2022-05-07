@@ -28,7 +28,7 @@ variable "force_detach_policies" {
 variable "github_repositories" {
   description = "List of GitHub repository names."
   type        = list(string)
-  default = [ "notejam" ]
+  default = [ "AhmedQaziMuhammadJamil/notejam" ]
 }
 
 variable "github_organisation" {

@@ -9,7 +9,6 @@ module "oidc-github" {
   iam_role_path                 = var.iam_role_path
   iam_role_permissions_boundary = var.iam_role_permissions_boundary
   iam_role_policy_arns          = [var.github_actions_ecr]
-  github_organisation           = var.github_organisation
   github_repositories           = var.github_repositories
   max_session_duration          = var.max_session_duration
   tags                          = var.custom_tags
