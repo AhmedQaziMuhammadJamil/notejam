@@ -41,6 +41,7 @@ module "mod_iam" {
   ecr_repo_arn = module.mod_ecr.ecr_arn
   ecr_repository_name = module.mod_ecr.ecr_name
   env         = var.env
+  s3_bucket_arn = module.s3_bucket.s3_bucket_arn
 }
 
 
@@ -63,8 +64,26 @@ module "mod_github" {
 
 } 
 
+module "s3_bucket" {
+  source = "terraform-aws-modules/s3-bucket/aws"
 
+  bucket = local.s3_name
+  acl    = "private"
+  custom_tags = local.custom_tags
+  force_destroy = true
+  versioning = {
+    enabled = false
+  }
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = module.mod_kms.s3_key_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 
+}
 /*
 module "mod_eks" {
   source          = "./modules/eks"
@@ -91,23 +110,5 @@ module "mod_eks" {
 }   
    
 
-module "s3_bucket" {
-  source = "terraform-aws-modules/s3-bucket/aws"
-
-  bucket = local.s3_name
-  acl    = "private"
-  custom_tags = local.custom_tags
-  force_destroy = true
-  versioning = {
-    enabled = false
-  }
-  server_side_encryption_configuration = {
-    rule = {
-      apply_server_side_encryption_by_default = {
-        kms_master_key_id = module.mod_kms.s3_key_arn
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
 
 } */
