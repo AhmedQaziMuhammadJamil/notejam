@@ -108,7 +108,7 @@ module "iam-policy" {
         "s3:*"
       ],
       "Effect": "Allow",
-      "Resource": "pgsql-notejam-backup-${var.env}"
+      "Resource": "${var.s3_bucket_arn}"
     }
   ]
 }

@@ -11,3 +11,6 @@ variable "ecr_repo_arn" {
 variable "env" {
   type=string
 }
+variable "s3_bucket_arn" {
+  
+}
