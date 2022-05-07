@@ -113,6 +113,7 @@ module "iam-policy" {
   ]
 }
 EOF
+
   tags=var.custom_tags 
 }
 

@@ -69,7 +69,7 @@ module "s3_bucket" {
 
   bucket = local.s3_name
   acl    = "private"
-  custom_tags = local.custom_tags
+  tags = local.custom_tags
   force_destroy = true
   versioning = {
     enabled = false
