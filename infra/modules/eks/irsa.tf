@@ -54,7 +54,7 @@ module "efs_csi_irsa_role" {
   tags = var.custom_tags
 }
 
-module "vpc_cni_ipv4_irsa_role" {
+/* module "vpc_cni_ipv4_irsa_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name             = "vpc-cni-ipv4-${var.env}"
@@ -89,7 +89,7 @@ module "vpc_cni_ipv6_irsa_role" {
     tags = var.custom_tags
   
 } 
-
+ */
 module "node_termination_handler_irsa_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
