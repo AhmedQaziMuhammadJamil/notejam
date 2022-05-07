@@ -3,7 +3,6 @@ locals {
   ACCESS_KEY_ID = module.iam_user.iam_access_key_id
   AWS_SECRET_ACCESS_KEY = module.iam_user.iam_access_key_secret
   }
-  
 }
 module "iam" {
   source                            = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
@@ -89,5 +88,4 @@ resource "aws_secretsmanager_secret" "s3_user_sk" {
 resource "aws_secretsmanager_secret_version" "secret-key" {
   secret_id     = aws_secretsmanager_secret.s3_user_sk.id
   secret_string = jsonencode(local.default)
-  
 }
