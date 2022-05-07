@@ -33,9 +33,8 @@ module "mod_kms" {
   db_name= var.db_name
   env         = var.env
   
-
 } 
-/* 
+
 module "mod_iam" {
   source      = "./modules/iam"
   custom_tags = local.custom_tags
@@ -49,6 +48,7 @@ module "mod_iam" {
   custom_tags  = local.custom_tags
   ecr-role-arn = module.mod_iam.ecr-role-arn
 } 
+/* 
  module "mod_waf" {
   source = "./modules/waf"
 }
