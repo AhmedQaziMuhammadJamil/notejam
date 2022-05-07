@@ -14,3 +14,4 @@ module "oidc-github" {
   tags                          = var.custom_tags
 }
 
+//TODO create github secrets using terraform for REGIStry SECRETS

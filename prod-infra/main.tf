@@ -85,10 +85,8 @@ module "s3_bucket" {
   custom_tags = local.custom_tags
 
 } 
-
-
  */
-/* 
+
 module "mod_eks" {
   source          = "./modules/eks"
   cluster_kms     = module.mod_kms.eks_key_arn
@@ -96,12 +94,10 @@ module "mod_eks" {
   vpc_id          = module.mod_vpc.out_nl_vpcid
   private_subnets = module.mod_vpc.out_nl_privatesubnet
   worker-sg       = module.mod_sg.worker-sg
-  github_owner = var.github_owner
-  github_token = var.github_token
-  
+  env = var.env
 }
 
- 
+ /* 
    module "mod_flux" {
   source = "./modules/flux"
   cluster_id= module.mod_eks.cluster_id
