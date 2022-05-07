@@ -1,6 +1,6 @@
 locals {
   ACCESS_KEY_ID=module.iam_user.iam_access_key_id
-  AWS_SECRET_ACCESS_KEY=module.iam_user.iam_user.iam_access_key_secret
+  AWS_SECRET_ACCESS_KEY=module.iam_user.iam_access_key_secret
 }
 module "iam" {
   source                            = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
