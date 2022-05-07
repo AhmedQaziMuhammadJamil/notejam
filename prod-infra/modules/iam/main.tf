@@ -1,8 +1,9 @@
 locals {
   default ={
-  ACCESS_KEY_ID = module.iam_user.iam_access_key_id
-  AWS_SECRET_ACCESS_KEY = module.iam_user.iam_access_key_secret
+  ACCESS_KEY_ID = sensitive(module.iam_user.iam_access_key_id)
+  AWS_SECRET_ACCESS_KEY =sensitive(module.iam_user.iam_access_key_secret)
   }
+  
 }
 module "iam" {
   source                            = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
@@ -88,4 +89,34 @@ resource "aws_secretsmanager_secret" "s3_user_sk" {
 resource "aws_secretsmanager_secret_version" "secret-key" {
   secret_id     = aws_secretsmanager_secret.s3_user_sk.id
   secret_string = jsonencode(local.default)
+}
+
+
+
+module "iam-policy" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "4.24.0"
+  create_policy=true
+  description="IAM Policy for S3 cronjob user"
+  name = "s3-pgsql-backup-cronjob-${var.env}"
+    policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:*"
+      ],
+      "Effect": "Allow",
+      "Resource": "pgsql-notejam-backup-${var.env}"
+    }
+  ]
+}
+EOF
+  tags=var.custom_tags 
+}
+
+resource "aws_iam_user_policy_attachment" "s3-policy-attach" {
+  user       = module.iam_user.iam_user_name
+  policy_arn = module.iam-policy.arn
 }
