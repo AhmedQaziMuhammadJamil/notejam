@@ -56,6 +56,8 @@ module "mod_iam" {
    env         = var.env
 }
 
+
+####Should only be created in single env(Dev or Prod),we can't create multiple oidc of the same audience
 /* module "mod_github" {
   source = "./modules/github"
   github_actions_ecr = module.mod_iam.github_actions_ecr

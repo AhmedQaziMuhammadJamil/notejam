@@ -53,3 +53,23 @@ resource "aws_iam_policy" "github_actions" {
   tags = var.custom_tags
 }
 
+
+module "iam_user" {
+  source                            = "terraform-aws-modules/iam/aws//modules/iam-user"
+  version                           = "4.17.2"
+  name = "S3-backup-cronjob-${var.env}"
+  create_iam_user_login_profile = false
+  create_iam_access_key         = true
+  tags = var.custom_tags
+  force_destroy = true
+}
+
+resource "aws_secretsmanager_secret" "iam-s3-user" {
+  name = "notejam-${var.env}-s3-cronjob-user"
+   recovery_window_in_days = 0
+}
+
+resource "aws_secretsmanager_secret_version" "secret-name" {
+  secret_id     = aws_secretsmanager_secret.iam-s3-user.id
+  secret_string = jsonencode(module.iam_user.iam_access_key_id)
+}
