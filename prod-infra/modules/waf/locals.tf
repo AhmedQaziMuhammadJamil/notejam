@@ -14,7 +14,7 @@ locals {
       description        = "Block Scanners/Probes IPV6 addresses"
     }
     scanners_probes_ipv4 = {
-      ip_address_version = "IPV4"
+      ip_address_version = "IPV4-${var.env}"
       description        = "Block Scanners/Probes IPV4 addresses"
     }
     ipreputationlist_ipv6 = {
