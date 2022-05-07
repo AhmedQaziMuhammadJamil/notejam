@@ -92,9 +92,7 @@ module "mod_eks" {
   vpc_id          = module.mod_vpc.out_nl_vpcid
   private_subnets = module.mod_vpc.out_nl_privatesubnet
   worker-sg       = module.mod_sg.worker-sg
-  github_owner = var.github_owner
-  github_token = var.github_token
-   env         = var.env
+  env         = var.env
   
 }
  /*
