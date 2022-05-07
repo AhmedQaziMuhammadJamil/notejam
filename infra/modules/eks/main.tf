@@ -340,34 +340,6 @@ provider "helm" {
   }
 }
 
-
-
- /*  module "alb_controller" {
-  source  = "iplabs/alb-ingress-controller/kubernetes"
-  version = "3.4.0"
-
-    depends_on = [
-    module.eks
-    ]
-
-  providers = {
-    kubernetes = "kubernetes.eks",
-    helm       = "helm.eks"
-  }
-
-  k8s_cluster_type = "eks"
-  k8s_namespace    = "kube-system"
-
-  aws_region_name  = data.aws_region.current.name
-  k8s_cluster_name = data.aws_eks_cluster.target.name
-  } 
-
-*/
-
-
-
-
-
 resource "null_resource" "k8s_patcher" {
   triggers = {
     // fire any time the cluster is update in a way that changes its endpoint or auth

@@ -84,7 +84,7 @@ module "s3_bucket" {
   }
 
 }
-/*
+
 module "mod_eks" {
   source          = "./modules/eks"
   cluster_kms     = module.mod_kms.eks_key_arn
@@ -96,7 +96,7 @@ module "mod_eks" {
   github_token = var.github_token
   
 }
- 
+ /*
    module "mod_flux" {
   source = "./modules/flux"
   cluster_id= module.mod_eks.cluster_id
