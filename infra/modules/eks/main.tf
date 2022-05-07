@@ -106,7 +106,7 @@ locals {
     addon_version = "v1.10.2-eksbuild.1"
 
     resolve_conflicts        = "OVERWRITE"
-    service_account_role_arn = vmodule.vpc_cni_ipv4_irsa_role  #module.vpc_cni_irsa.iam_role_arn
+    service_account_role_arn = module.vpc_cni_ipv4_irsa_role  #module.vpc_cni_irsa.iam_role_arn
 
     tags = merge(
       var.custom_tags,
