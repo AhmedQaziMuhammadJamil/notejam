@@ -1,7 +1,7 @@
 resource "aws_wafv2_web_acl" "main" {
   description = "Custom WAFWebACL"
 
-  name  = var.waf_name
+  name  = local.waf_name
   scope = "REGIONAL"
 
 
@@ -524,7 +524,7 @@ resource "aws_wafv2_ip_set" "ip_sets" {
 }
  */
 resource "aws_cloudwatch_log_group" "waf" {
-  name = "aws-waf-logs-prod-group" // As per AWS waf logs for resources such as S3 and Cloudwatch logs name should start with aws-waf-log
+  name = "aws-waf-logs-${var.env}-group" // As per AWS waf logs for resources such as S3 and Cloudwatch logs name should start with aws-waf-log
 }
 
 

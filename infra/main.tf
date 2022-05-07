@@ -50,11 +50,14 @@ module "mod_iam" {
   ecr-role-arn = module.mod_iam.ecr-role-arn
   env         = var.env
 } 
-/*
+
  module "mod_waf" {
   source = "./modules/waf"
+   env         = var.env
 }
-  
+
+
+/*
 module "mod_eks" {
   source          = "./modules/eks"
   cluster_kms     = module.mod_kms.eks_key_arn
