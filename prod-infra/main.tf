@@ -97,7 +97,7 @@ module "mod_eks" {
   env = var.env
 }
 
- /* 
+  
    module "mod_flux" {
   source = "./modules/flux"
   cluster_id= module.mod_eks.cluster_id
@@ -107,9 +107,6 @@ module "mod_eks" {
   token=module.mod_eks.token
    github_owner = var.github_owner
   github_token = var.github_token
-  custom_tags = local.custom_tags
+  env = var.env
 }   
    
-
-
- */
