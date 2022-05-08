@@ -157,7 +157,7 @@ module "eks" {
 
   cluster_endpoint_public_access = true //TODO: Make it public
 
-  create_cni_ipv6_iam_policy = false
+  create_cni_ipv6_iam_policy = true
   
   enable_irsa                = true
   cluster_enabled_log_types = [
