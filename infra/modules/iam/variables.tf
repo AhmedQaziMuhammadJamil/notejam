@@ -14,3 +14,6 @@ variable "env" {
 variable "s3_bucket_arn" {
   
 }
+variable "s3_kms_master_key_id" {
+  
+}

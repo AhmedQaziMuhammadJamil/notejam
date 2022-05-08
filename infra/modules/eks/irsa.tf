@@ -129,7 +129,7 @@ module "load_balancer_controller_irsa_role" {
 module "load_balancer_controller_targetgroup_binding_only_irsa_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
-  role_name                                                       = "load-balancer-controller-targetgroup-binding-only-${var.env}"
+  role_name                                                       = "load-balancer-controller-targetgroup-binding-only-${var.env}" #TODO: change as per ns in flux
   attach_load_balancer_controller_targetgroup_binding_only_policy = true
 
   oidc_providers = {
@@ -153,7 +153,7 @@ module "secrets-manger-role" {
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["dev:ascp-csi-secrets-store-provider-aws"]
+      namespace_service_accounts = ["dev:ascp-csi-secrets-store-provider-aws"] #TODO: change ns as per choice of deployment
 
     }
   }
