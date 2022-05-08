@@ -104,11 +104,19 @@ module "iam-policy" {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Action": [
-        "s3:*"
-      ],
-      "Effect": "Allow",
-      "Resource": "${var.s3_bucket_arn}"
+        "Sid": "AllowAttachmentBucketWrite",
+        "Effect": "Allow",
+        "Action": [
+            "s3:PutObject",
+            "kms:Decrypt",
+            "s3:AbortMultipartUpload",
+            "kms:Encrypt",
+            "kms:GenerateDataKey"
+        ],
+        "Resource": [
+            "${var.s3_bucket_arn}/*",
+            "${var.s3_kms_master_key_id}"
+        ]
     }
   ]
 }

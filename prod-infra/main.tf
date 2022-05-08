@@ -42,6 +42,7 @@ module "mod_iam" {
   ecr_repository_name = module.mod_ecr.ecr_name
   env         = var.env
   s3_bucket_arn =  module.s3_bucket.s3_bucket_arn
+    s3_kms_master_key_id = module.mod_kms.s3_key_arn
 }
 
 
