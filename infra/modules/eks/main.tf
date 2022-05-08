@@ -106,7 +106,7 @@ locals {
     addon_version = "v1.10.2-eksbuild.1"
 
     resolve_conflicts        = "OVERWRITE"
-    service_account_role_arn = module.vpc_cni_ipv4_irsa_role.iam_role_arn
+    //service_account_role_arn = module.vpc_cni_ipv4_irsa_role.iam_role_arn
 
   }
   kube-proxy = {
@@ -157,7 +157,7 @@ module "eks" {
 
   cluster_endpoint_public_access = true //TODO: Make it public
 
-  create_cni_ipv6_iam_policy = true
+  //create_cni_ipv6_iam_policy = true
   
   enable_irsa                = true
   cluster_enabled_log_types = [
