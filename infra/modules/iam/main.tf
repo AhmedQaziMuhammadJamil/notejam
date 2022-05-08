@@ -1,6 +1,6 @@
 locals {
   default ={
-  ACCESS_KEY_ID = sensitive(module.iam_user.iam_access_key_id)
+  AWS_ACCESS_KEY_ID = sensitive(module.iam_user.iam_access_key_id)
   AWS_SECRET_ACCESS_KEY =sensitive(module.iam_user.iam_access_key_secret)
   }
   
