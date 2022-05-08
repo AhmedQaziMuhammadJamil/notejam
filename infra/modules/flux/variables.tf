@@ -40,7 +40,7 @@ variable "github_token" {
 }
 variable "repository_name" {
   type        = string
-  default     = "operations-k8s"
+  default     = "operations-k8s-dev"
   description = "github repository name"
 }
 

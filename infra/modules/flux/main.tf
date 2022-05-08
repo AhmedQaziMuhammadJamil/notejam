@@ -1,8 +1,5 @@
 ####Flux
-locals {
-  repo_name="${var.repository_name}-${var.env}"
 
-}
 provider "kubectl" {
   apply_retry_count      = 10
   host                   = var.host
@@ -72,7 +69,7 @@ locals {
     content : v
     }
   ] 
-  url ="https://git@github.com/${var.github_owner}/${local.repo_name}.git"
+  url ="https://git@github.com/${var.github_owner}/${var.repository_name}.git"
   //flux_sync_yaml_documents_without_namespace = [for x in local.sync: x if x.data.kind != "Namespace"]
 
 ecr-patch={
@@ -132,7 +129,7 @@ resource "kubectl_manifest" "sync" {
 
 
 resource "github_repository" "main" {
-  name       = local.repo_name
+  name       = var.repository_name
   visibility = var.repository_visibility
   auto_init  = true
 }
