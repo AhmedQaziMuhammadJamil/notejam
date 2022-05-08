@@ -1,4 +1,8 @@
 ####Flux
+locals {
+  repo_name="${var.repository_name}-${var.env}"
+
+}
 provider "kubectl" {
   apply_retry_count      = 10
   host                   = var.host
@@ -21,18 +25,7 @@ provider "github" {
   token = var.github_token
 }
 
-# SSH
-/* locals {
-  known_hosts = "github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg="
-} */
-
-/* resource "tls_private_key" "main" {
-  algorithm   = "ECDSA"
-  ecdsa_curve = "P256"
-}
- */
 data "flux_install" "main" {
-   /*  depends_on = [module.eks] */
   target_path      = var.target_path
   components_extra = var.components_extra
   network_policy = false
@@ -53,11 +46,6 @@ resource "kubernetes_namespace" "flux_system" {
       metadata[0].labels
     ]
   }
-/* provisioner "local-exec" {
-    when       = destroy
-    command    = "kubectl patch customresourcedefinition helmcharts.source.toolkit.fluxcd.io helmreleases.helm.toolkit.fluxcd.io helmrepositories.source.toolkit.fluxcd.io kustomizations.kustomize.toolkit.fluxcd.io gitrepositories.source.toolkit.fluxcd.io -p '{\"metadata\":{\"finalizers\":null}}'"
-    on_failure = continue
-  } */
  
 }
 
@@ -84,7 +72,7 @@ locals {
     content : v
     }
   ] 
-  url ="https://git@github.com/${var.github_owner}/${var.repository_name}.git"
+  url ="https://git@github.com/${var.github_owner}/${local.repo_name}.git"
   //flux_sync_yaml_documents_without_namespace = [for x in local.sync: x if x.data.kind != "Namespace"]
 
 ecr-patch={
@@ -144,7 +132,7 @@ resource "kubectl_manifest" "sync" {
 
 
 resource "github_repository" "main" {
-  name       = var.repository_name
+  name       = local.repo_name
   visibility = var.repository_visibility
   auto_init  = true
 }
@@ -215,6 +203,3 @@ resource "github_repository_file" "kustomize" {
 }
 
 
-
-
-#TODO: naming convention,ECR permissions for the cluster,ELB operations for eks ,enable worker security groups,enable patching with provider for kustomization

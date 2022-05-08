@@ -1,4 +1,6 @@
-
+variable "env" {
+  
+}
 variable "cluster_id" {
   
 }
@@ -6,6 +8,7 @@ variable "cluster_id" {
 variable "cluster_auth" {
   
 }
+
 
 variable "host" {
   
