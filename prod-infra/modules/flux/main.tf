@@ -157,7 +157,7 @@ data "flux_sync" "main" {
   url         = local.url
   branch      = var.branch
   git_implementation = "go-git"
-  name = "test-source"
+  name = "${var.env}-source"
   secret = "flux-system"
   namespace = "flux-system"
   //patch_names  = keys(local.ecr-patch)
