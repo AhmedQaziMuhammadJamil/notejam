@@ -60,6 +60,7 @@ module "efs_csi_irsa_role" {
   role_name             = "vpc-cni-ipv4-${var.env}"
   attach_vpc_cni_policy = true
   vpc_cni_enable_ipv4   = true
+  vpc_cni_enable_ipv6   = true
 
   oidc_providers = {
     ex = {
