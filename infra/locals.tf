@@ -6,5 +6,4 @@ locals {
     Project     = "NoteJam"
   }
   s3_name="pgsql-notejam-backup-${var.env}"
-  cluster_name="notejam-${var.env}"
 }

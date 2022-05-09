@@ -65,7 +65,7 @@ module "notejam_vpc" {
 
   public_subnet_tags = {
     Name = "Public Subnets-${var.env}"
-    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
+    "kubernetes.io/cluster/notejam-${var.env}" = "shared"
     "kubernetes.io/role/elb"   = "1"
   }
   
