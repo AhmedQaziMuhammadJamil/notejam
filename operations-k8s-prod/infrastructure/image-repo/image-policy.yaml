@@ -1,0 +1,14 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: notejam-prod-app
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: notejam-prod-repo
+  filterTags:
+    pattern: '^[0-9.]+main-[a-fA-F0-9]+-(?P<id>.*)'
+    extract: '$id'
+  policy:
+     numerical:
+      order: asc

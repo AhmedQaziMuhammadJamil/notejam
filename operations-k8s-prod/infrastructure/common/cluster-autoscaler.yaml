@@ -1,0 +1,48 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: cluster-autoscaler
+spec:
+  releaseName: cluster-autoscaler
+  chart:
+    spec:
+      chart: cluster-autoscaler
+      sourceRef:
+        kind: HelmRepository
+        name: autoscaler
+        namespace: flux-system
+      version: "9.18.0"      
+  interval: 5m0s
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: 3 
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 4
+  values:
+    awsRegion: eu-west-1
+
+    rbac:
+      create: true
+      serviceAccount:
+        name: "cluster-autoscaler"
+        annotations:
+          eks.amazonaws.com/role-arn: "arn:aws:iam::003767002475:role/cluster-autoscaler-prod" ##Change role as per your irsa role name
+    
+    autoDiscovery:
+      clusterName: notejam-prod ##TODO: change as per the env
+      enabled: true
+    
+    extraArgs:
+      skip-nodes-with-system-pods: false
+      skip-nodes-with-local-storage: false
+      scale-down-utilization-threshold: 0.75
+    
+    serviceMonitor:
+      enabled: true
+      interval: 20s
+      namespace: monitoring
+      selector:
+        release: kube-prometheus-stack

@@ -1,0 +1,64 @@
+---
+apiVersion: batch/v1  
+kind: CronJob
+metadata:
+  name: psql-backup-s3
+  namespace: production  ##TODO: Change to env
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: ascp-csi-secrets-store-provider-aws
+          containers:
+          - name: psql-backup-s3-container
+            image: itbm/postgresql-backup-s3
+            volumeMounts:
+            - mountPath: "/mnt/secrets/s3"
+              name: backup-vol
+            env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_USER
+                  name: db-credentials
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key:  POSTGRES_PASS
+                  name: db-credentials
+            - name: S3_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: AWS_ACCESS_KEY_ID
+                  name: s3-backup-credentials
+            - name: S3_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: AWS_SECRET_ACCESS_KEY
+                  name: s3-backup-credentials
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_URL
+                  name: db-credentials
+            - name: POSTGRES_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_DB
+                  name: db-credentials
+            envFrom:
+            - configMapRef:
+                name: psql-backup-s3
+          restartPolicy: Never 
+          volumes:
+          - csi:
+              driver: secrets-store.csi.k8s.io
+              readOnly: true
+              volumeAttributes:
+                secretProviderClass: pgsql-secrets
+            name: backup-vol
+            
+  schedule: "* 0/4 * * *"
+
+    

@@ -1,0 +1,17 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: notejam-prod-application 
+  namespace: flux-system
+
+spec:
+  dependsOn:
+    - name: infrastructure
+  interval: 1m0s
+  sourceRef:
+    kind: GitRepository
+    name: prod-source  #TODO: change to the source set in terraform default dev-source
+  path: ./microservices/  #Path for the application
+  prune: true
+  wait: false
+  timeout: 10m

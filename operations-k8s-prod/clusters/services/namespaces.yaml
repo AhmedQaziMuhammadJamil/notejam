@@ -1,0 +1,14 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: namespaces 
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  sourceRef:
+    kind: GitRepository
+    name: prod-source  #TODO: Change the source here as per the source set in Terraform flux module
+  path: ./namespaces/
+  prune: true
+  wait: false
+  timeout: 10m

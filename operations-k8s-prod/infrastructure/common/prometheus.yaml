@@ -1,0 +1,30 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: monitoring
+spec:
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+  interval: 1h0m0s
+  releaseName: kube-prometheus-stack
+  targetNamespace: monitoring
+  values:
+    grafana:
+      persistence:
+        enabled: true
+        ingress:
+          enabled: true
+          ingressClassName: public
+          path: /
+          annotations:
+              alb.ingress.kubernetes.io/scheme: internet-facing
+              alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}'
+              alb.ingress.kubernetes.io/group.name: "public"
+          hosts:
+            - prod.grafana.aqazi.xyz

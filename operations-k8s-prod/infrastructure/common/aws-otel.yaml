@@ -1,0 +1,36 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: aws-metrics
+spec:
+  releaseName: amazon-metrics
+  chart:
+    spec:
+      chart: adot-exporter-for-eks-on-ec2
+      sourceRef:
+        kind: HelmRepository
+        name: aws-otel
+        namespace: flux-system     
+  interval: 5m0s
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: 3 
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 4
+  values:
+    awsRegion: eu-west-1
+    clusterName: notejam
+    fluentbit:
+      enabled: true
+      imdsVersion: v2
+      image: 
+         tag: "2.23.4"
+    adotCollector:
+      daemonSet:
+        service:
+          metrics:
+            receivers: ["awscontainerinsightreceiver"]
+            exporters: ["awsemf"]
