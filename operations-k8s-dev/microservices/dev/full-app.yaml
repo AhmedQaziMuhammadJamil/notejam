@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: dev
+  name: notejam-dev
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: notejam-dev
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: notejam-dev
+    spec:
+      serviceAccountName: ascp-csi-secrets-store-provider-aws
+      containers:
+      - image: 003767002475.dkr.ecr.eu-west-1.amazonaws.com/notejam-dev-ecr-registry:2022.05.08.main-8647c69d-2290972206 #{"$imagepolicy": "flux-system:notejam-dev-app"}
+        imagePullPolicy: Always
+        name: notejam-dev
+        command: ["/bin/sh", "-c"]
+        args: ["python manage.py syncdb --noinput && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: app-secrets
+          mountPath: "/mnt/secrets"
+          readOnly: true
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: POSTGRES_USER
+        - name: POSTGRES_PASS
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: POSTGRES_PASS
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: POSTGRES_DB
+        - name: POSTGRES_URL
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: POSTGRES_URL
+      volumes:
+      - name: app-secrets
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: notejam-deployment-spc-k8s-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: dev
+  name: notejam-dev-service
+spec:
+  ports:
+  - port: 80
+    targetPort: 8000
+    protocol: TCP
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: notejam-dev

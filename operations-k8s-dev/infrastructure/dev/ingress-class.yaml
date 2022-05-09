@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: public
+spec:
+  controller: ingress.k8s.aws/alb
+  parameters:
+    apiGroup: elbv2.k8s.aws
+    kind: IngressClassParams
+    name: public
+
+---
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: IngressClassParams
+metadata:
+  name: public
+spec:
+  group:
+    name: public
+  scheme: internet-facing
+  ipAddressType: ipv4

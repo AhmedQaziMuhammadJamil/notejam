@@ -1,0 +1,38 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: aws-load-balancer-controller
+spec:
+  releaseName: aws-load-balancer-controller
+  chart:
+    spec:
+      chart: aws-load-balancer-controller
+      sourceRef:
+        kind: HelmRepository
+        name: eks
+        namespace: flux-system
+      version: "1.2.7"
+  interval: 5m0s
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  values:
+    clusterName: "notejam-dev" #TODO: add cluster name as per eks-module
+    enableShield: false
+    enableWaf: true
+    enableWafv2: true
+    keepTLSSecret: false 
+    serviceAccount.create: true
+    serviceAccount:
+      name: aws-load-balancer-controller
+      annotations:
+        eks.amazonaws.com/role-arn: "arn:aws:iam::003767002475:role/load-balancer-controller-dev" ##Change as per your role name from irsa in eks module
+    enablePodReadinessGateInject: true
+    disableIngressClassAnnotation: true
+    podDisruptionBudget:
+      maxUnavailable: 1

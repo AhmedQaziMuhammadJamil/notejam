@@ -1,0 +1,25 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: notejam-dev-img-update
+  namespace: flux-system
+spec:
+  interval: 30s
+  sourceRef:
+    name: dev-source #TODO: Change as per your source set in flux
+    kind: GitRepository
+    namespace: flux-system
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        email: a.qazi@easygenerator.com
+        name: eg-build-svc
+      messageTemplate: '[skip ci] Automated image update by Flux'
+    push:
+      branch: main
+  update:
+    path: ./microservices/dev/
+    strategy: Setters

@@ -1,0 +1,12 @@
+  apiVersion: kustomize.config.k8s.io/v1beta1
+  kind: Kustomization
+  namespace: dev
+  resources:
+    - full-app.yaml
+    - ingress.yaml
+    - notejam-deployment-secrets.yaml
+    - hpa.yaml
+    - cron-backup-secret-store.yaml
+    - backup-cronjob.yaml
+    - backup-cm.yaml
+

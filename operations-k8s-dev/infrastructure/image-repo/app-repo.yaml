@@ -1,0 +1,8 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageRepository
+metadata:
+  name: notejam-dev-repo
+  namespace: flux-system
+spec:
+  image: 003767002475.dkr.ecr.eu-west-1.amazonaws.com/notejam-dev-ecr-registry #TODO: change as per your ecr repo name created in ecr-module
+  interval: 30s
