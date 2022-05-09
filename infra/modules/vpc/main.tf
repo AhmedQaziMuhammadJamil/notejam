@@ -65,14 +65,11 @@ module "notejam_vpc" {
 
   public_subnet_tags = {
     Name = "Public Subnets-${var.env}"
-    "kubernetes.io/cluster/notejam" = "shared"
+    "kubernetes.io/cluster/notejam-dev" = "shared"
     "kubernetes.io/role/elb"   = "1"
   }
   
-  private_subnet_tags = {
-    Name = "Private Subnets-${var.env}"
-    "kubernetes.io/role/internal-elb" = "1"
-  }
+
 
   intra_subnet_tags = {
     Name = "RDS Subnets-${var.env}"
