@@ -26,3 +26,7 @@ variable "db_pass" {
 variable "db_name" {
   type=string
 }
+variable "var_region" {
+  type=string
+  default = "eu-west-1"
+}

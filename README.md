@@ -119,14 +119,37 @@ The following structure was choosen to follow modular design,this allows us to s
 │   ├── ecr --> Creates ECR Repo as Per Env
 │   ├── eks --> Creates EKS Cluster and IRSA roles as per env
 │   ├── flux --> Flux provider to Bootstrap flux to EKS cluster
-│   ├── github --> Used to create github oidc connection for ECR 
+│   ├── github --> Used to create github OIDC connection for ECR 
 │   ├── iam --> Responsible for creating various roles and IAM users
 │   ├── kms --> Responsible for creating KMS keys for worker nodes,S3 and RDs
 │   ├── rds --> Creates RDS Cluster with reader and writer ,username ,DB-Name,DB-Host and password are sent to Secrets Manager
 │   ├── security-groups --> security groups for RDS,ALB,EKS
 │   ├── vpc -->  Creates VPC with 3Public,3Private Subnets,3DB-Subnets
-│   └── waf -- > Creates AWS  Regional WAF 
+│   └── waf -- > Creates AWS  Regional WAF with ALB
 ```
+
+
+## Inputs
+| Name                  | Description                                 | Type    | Default                 | Required | Variable Location |
+|-----------------------|---------------------------------------------|---------|-------------------------|----------|-------------------|
+| region                | Infrastructure-Deployment-Region            | String  | eu-west-1               | No       | variables.tf      |
+| vpc_cidr              | VPC-CIDR for the env                        | String  | 192.168.0.0/16          | No       | variables.tf      |
+| env                   | Env name used                               | String  | Prod                    | No       | variables.tf      |
+| TF_VAR_github_owner   | Github Owner Name                           | String  | AhmedQaziMuhammadJamil  | Yes      | Terraform-Cloud   |
+| TF_VAR_github_token   | Github Owner Token                          | String  | Set Your Token          | Yes      | Terraform-Cloud   |
+| TF_VAR_db_user        | DBuser for the DB                           | String  | Set Your DBuser name    | Yes      | Terraform-Cloud   |
+| TF_VAR_db_name        | Name of the DB in RDS                       | String  | Set your DB-Name        | Yes      | Terraform-Cloud   |
+| TF_VAR_db_pass        | DB password                                 | String  | Set your DB-Pass        | Yes      | Terraform-Cloud   |
+| AWS_ACCESS_KEY_ID     | AWS Access Key for deployment of resources  | String  | Set your AWS Access Key | Yes      | Terraform-Cloud   |
+| AWS_SECRET_ACCESS_KEY | AWS Access Key for deployment of resources  | String  | Set your AWS Secret Key | Yes      | Terraform-Cloud   |
+| github_repositories   | Github repo name required by modules/github | String  | notejam                 |          |                   |
+
+
+***Some of the variables stated above need to explicitly defined in Terraform cloud either as variables for  each workspace,variables such as db_name,db_pass can differ as per workspace env(stage or prod) but since we are using Accesskeys,Secrets Keys and Github token  we can use variable sets and apply these variables to more than one workspace as these are not environment independent.***
+
+
+
+
 
 
 
