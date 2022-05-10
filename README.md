@@ -77,7 +77,7 @@ The infrastructure is deployed using Terraform.AWS resources are created using d
 
 
 ```
-├── infra
+├── dev-infra
 ├── notejam-django
 ├── notejam-django-prod
 ├── operations-k8s-dev
