@@ -24,6 +24,19 @@
 ## Proposed Architecure:
 ![nord-cloud-eks.png](https://i.imgur.com/OE618Jh.png)  *Production and Staging Env's are exact replicas*
 
+### Architecutre BreakDown: 
+- GitHub is used for storing code
+- GitHub Actions are used as CI to build the image using buildah and push the OCI compliant image to Private ECR repo. 
+- The EKS Control Plane is in AWS account and the access to worker nodes is done via an ENI attached to the Worker Node VPC.
+- VPC is created with multiple Private,Public and DB subnets in each AZ.
+- Each Public Subnet contains NAT GateWay for outbound traffic.
+- Inbound Traffic is controlled via AWS Load Balancer that has WAF 
+- TCP and UDP traffic and ports  are restricted using AWS Security Groups
+- RDS DataBase has a subnet group that consists of multiple subnets across different AZ's
+- AWS Cloudwatch is used to get metrics and logs from Worker Nodes,RDS,WAF and VPC flow logs
+- S3 is used to store DB backups
+- AWS Secrets Manager is used to store secrets for kubernetes Pods
+
 ## Proposed Solution:
  In order to meet the business requirements it is essential to adhere to AWS WAF(Well-Architected-Framework) principles.The proposed solution is aligned with the WAF 5 pillars.
 
