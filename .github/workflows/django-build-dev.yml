@@ -5,10 +5,10 @@ on:
     branches:
       - main
     paths:
-    - notejam-django/**
+    - notejam-django-dev/**
   pull_request:
     paths:
-    - notejam-django/**
+    - notejam-django-dev/**
   workflow_dispatch:
 
 jobs:
