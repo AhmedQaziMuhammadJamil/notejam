@@ -148,8 +148,120 @@ The following structure was choosen to follow modular design,this allows us to s
 ***Some of the variables stated above need to explicitly defined in Terraform cloud either as variables for  each workspace,variables such as db_name,db_pass can differ as per workspace env(stage or prod) but since we are using Accesskeys,Secrets Keys and Github token  we can use variable sets and apply these variables to more than one workspace as these are not environment independent.***
 
 
+## Steps to create resources with TF:
+1. Change the name of the organization and workspace in  provider.tf of each env
+2. Add the relevant values given in the table above to start creating infrastructure through Terraform.
+3. Once the resources are created with Terraform its time to configure github actions and flux manifests
+### GitHub Secrets
+
+| Name           | Description           | Type          |
+|----------------|-----------------------|---------------|
+| AWS_ACCOUNT_ID | AWS Account ID        | GitHub-Secret |
+| AWS_REGION     | AWS Region for ECR    | GitHub-Secret |
+| PROD_REGISTRY  | ECR PROD REGISTRY URL | GitHub-Secret |
+| REGISTRY       | ECR DEV REGISTRY URL  | GitHub-Secret |
+
+**Update GitHub Secrets after Terraform deployment**
+
+Its important that the github secrets are updated incase you are deploying to a different account id and the ecr repos are following different naming convention.Test the image creation.
+
+### Flux Deployments
+By using Terraform flux provider,flux is  bootstrapped to our EKS cluster with all the required controllers and configurations. Terraform flux provider from each env creates repository for each env,depending on the env it can be operations-k8s-prod or operations-k8s-dev.These repositories contain flux-manifsts that are applied to the Cluster as well as target path where all the flux manifests should be placed .
+
+## Steps:
+1. Copy the kubernetes manifests in the notejam repo from the folder operations-k8s-dev or operations-k8s-prod.Do not copy flux-system,this folder was created during the bootstrap process.Each newly created  target repo has its own flux-system folder.Only copy the manifests infrastructure.yaml,ingress-Class.yaml,microservices.yaml and namespaces.yaml.These manifests refer to folder with further configurations copy and paste them maintaining the same hierarcy
+2. Once copied the final list should be something like this
+```
+├── clusters
+│   └── services
+│       ├── flux-system
+│       ├── infrastructure.yaml
+│       ├── ingress-Class.yaml
+│       ├── microservices.yaml
+│       └── namespaces.yaml
+├── infrastructure
+│   ├── base
+│   │   ├── helmrepositories
+│   │   └── kustomization.yaml
+│   ├── common
+│   │   ├── aws-otel.yaml
+│   │   ├── cluster-autoscaler.yaml
+│   │   ├── ingress-prom.yaml
+│   │   ├── kustomization.yaml
+│   │   ├── metrics-server.yaml
+│   │   └── prometheus.yaml
+│   ├── csi-driver
+│   │   ├── kustomization.yaml
+│   │   └── secrets-csi-driver.yaml
+│   ├── image-repo
+│   │   ├── app-repo.yaml
+│   │   ├── image-policy.yaml
+│   │   ├── image-update.yaml
+│   │   └── kustomization.yaml
+│   └── production
+│       ├── aws-alb-controller.yaml
+│       ├── kustomization.yaml
+│       └── new-ascp.yaml
+├── ingress-Class
+│   ├── ingress-class.yaml
+│   └── kustomization.yaml
+├── microservices
+│   ├── app.yaml
+│   ├── backup-cm.yaml
+│   ├── backup-cronjob.yaml
+│   ├── cron-backup-secret-store.yaml
+│   ├── hpa.yaml
+│   ├── ingress.yaml
+│   ├── kustomization.yaml
+│   └── notejam-deployment-secrets.yaml
+├── namespaces
+│   ├── kustomization.yaml
+│   ├── monitoring.yaml
+│   └── prod.yaml
+└── README.md
+```
 
 
+Once the files are added and changes are committed you can either wait for flux to apply the changes or run the following commands to reconcile git and helm releases.
+
+1. `flux reconcile source git prod-source -n flux-system`
+2. ` flux reconcile kustomization infrastructure -n flux-system`
+3. ` flux reconcile kustomization notejam-prod-application -n flux-system`
+4. `flux reconcile helmrelease aws-load-balancer-controller -n production`
+
+
+**The notejam-application pod will fail to start due to ImagePullBack error,this is because the ecr image address is older and obselete .You can initate a build from Github actions and based on the availability of the fresh image the manifest is automatically updated in GitHub and the newly modified manifest is automatically applied.Once the pod is up and running check if your AWS-Ingress-Controller automatically created ALB in AWS Console.Create a Route53 Alias Record and map the ALB DNS to this record for usage**
+
+
+
+
+### Business Requirements Fulfilled: 
+- [x]  The resources can dynamically scale up and down using AWS Autoscaling with Cluster AutoScaler.During Big events we can setup scheduled scaling policy that enables us to have extra nodes inplace.
+- [x]  Using Kubernetes Cronjob we are take pgsql backups and storing them in S3 for 3 years,AWS snapshots through AWS Backup are also an option but considering the size of snapshots and retention costs,its better to go with Kubernetes Cronjob  
+- [x] RDS Aurora  Cluster with Read Replica(Different AZ) and Multi AZ  is highly available  helps against data center failure. EKS nodes are spread across multiple AZ's.Failure in one data center shouldn't impact workloads.
+- [x] Kubernetes gives us the flexibility to not only be vendor agnostic   but also makes it easier to deploy application easily on other kubernetes enviornments.Kubernetes manifests and yaml files that are in github,along with terraform code.By changing the env variable in terraform code   new env can easily be created.
+- [x]  Using GitHub Actions and flux image controllers we can update the pod images automatically.Once an image is updated in ecr ,flux conrtoller scans this repo and updates the respective kubernetes manifest with the new image tag.Once this change is commited flux kustomization controller reconciles and  applies this change
+- [x]  We have setup 2 env's prod and stage with the same resource types.These env's have their own terraform code and kubernetes manifests.Each env is independent from the other.
+- [x]  AWS Container insights and fluentd allow for metrics and logs to be visible in cloudwatch for monitoring and analysis purposes.Moreover Graffana and Prometheus are also deplloyed but not configured 
+
+
+
+
+
+### Common  Debug Commands
+```
+Update kubeconfig
+aws eks --region eu-west-1 --profile sandbox update-kubeconfig --name notejam-dev
+
+aws eks --region eu-west-1 --profile sandbox update-kubeconfig --name notejam-prod
+
+Delete Namespace stuck in terminating state
+NS=`kubectl get ns |grep Terminating | awk 'NR==1 {print $1}'` && kubectl get namespace "$NS" -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | kubectl replace --raw /api/v1/namespaces/$NS/finalize -f -
+
+Force Delete secret 
+aws secretsmanager delete-secret --secret-id your-secret --force-delete-without-recovery --region eu-west-1 --profile sandbox
+
+```
 
 
 
@@ -170,13 +282,6 @@ The following structure was choosen to follow modular design,this allows us to s
 - [x]  AWS-Ingress-Controller is created  using helm  chart and deployed via Flux
 - [x] Application and dependencies  are Deployed via Flux Image Controllers.
 - [x] RDS DBBackups are done via kubernetes cronjob.
-
-
-## Wip 
-  ### Documentation  in Wip
-
- 
-
 
 ---------------------------
 
