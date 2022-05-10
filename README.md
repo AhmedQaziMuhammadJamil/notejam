@@ -72,7 +72,7 @@
 - Changes to the infrastructure are made using IaC (Terraform),git acts as the main source of truth.
 
 
-# Terraform Deployment
+# Terraform 
 The infrastructure is deployed using Terraform.AWS resources are created using different terraform modules.Terraform is integrated with GitHub as the source,Pull Requests can be used to initiate terraform plan before merging the code into the main git branch.This allows  us to evaluate our changes in desired env before merging them .Speculative plans can also be run from terminal to view planned changes without creating PR.The terraform state is managed by Terraform Cloud.Terraform Cloud is ideal for state management as it provides versioning and stat locking features.
 
 
