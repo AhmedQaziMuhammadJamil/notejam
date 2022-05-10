@@ -69,14 +69,64 @@
  - Different tiers such as Data Tier,Application Tier are decoupled.The networking layer is secured using the best pratices ,the application and database have their own networking subnets,security groups.
  - Application resources have fine grained IAM policy access to ensure only relevant access is allowed.
 - Underlying block volumes of storage are encrypted using AWS KMS keys.
-- Changes to the infrastructure are made using IaC (Terraform),git acts as the main source of Truth.
+- Changes to the infrastructure are made using IaC (Terraform),git acts as the main source of truth.
 
 
+# Terraform Deployment
+The infrastructure is deployed using Terraform.AWS resources are created using different terraform modules.Terraform is integrated with GitHub as the source,Pull Requests can be used to initiate terraform plan before merging the code into the main git branch.This allows  us to evaluate our changes in desired env before merging them .Speculative plans can also be run from terminal to view planned changes without creating PR.The terraform state is managed by Terraform Cloud.Terraform Cloud is ideal for state management as it provides versioning and stat locking features.
 
 
+```
+├── infra
+├── notejam-django
+├── notejam-django-prod
+├── operations-k8s-dev
+├── operations-k8s-prod
+├── prod-infra
+└── README.md
+```
+Folders infra and prod-infra contain code terraform code for staging and production env.
 
+```
+├── locals.tf
+├── main.tf
+├── modules
+│   ├── ecr
+│   ├── eks
+│   ├── flux
+│   ├── github
+│   ├── iam
+│   ├── kms
+│   ├── rds
+│   ├── security-groups
+│   ├── vpc
+│   └── waf
+├── providers.tf
+└── variables.tf
+ ```
+The following structure was choosen to follow modular design,this allows us to seperate functionality of different modules,allowing us to make changes without impacting other modules ,better re-usability and easier debugging are also a major benefit of this modular design.
 
+#### main.tf --> This file is used to call on other modules that are needed to build  the env.
 
+#### variable.tf --> contains different variables that are passed to the modules eg env variable is used to create resources based on env.
+#### locals.tf --> contains local values that are primarily used within main.tf
+
+#### providers.tf ---> contains the information about terraform workspaces and required providers that interact with different cloud apis for creating the resources
+
+### Modules
+```
+├── modules
+│   ├── ecr --> Creates ECR Repo as Per Env
+│   ├── eks --> Creates EKS Cluster and IRSA roles as per env
+│   ├── flux --> Flux provider to Bootstrap flux to EKS cluster
+│   ├── github --> Used to create github oidc connection for ECR 
+│   ├── iam --> Responsible for creating various roles and IAM users
+│   ├── kms --> Responsible for creating KMS keys for worker nodes,S3 and RDs
+│   ├── rds --> Creates RDS Cluster with reader and writer ,username ,DB-Name,DB-Host and password are sent to Secrets Manager
+│   ├── security-groups --> security groups for RDS,ALB,EKS
+│   ├── vpc -->  Creates VPC with 3Public,3Private Subnets,3DB-Subnets
+│   └── waf -- > Creates AWS  Regional WAF 
+```
 
 
 
