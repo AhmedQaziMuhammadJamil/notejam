@@ -36,6 +36,7 @@
 - AWS Cloudwatch is used to get metrics and logs from Worker Nodes,RDS,WAF and VPC flow logs
 - S3 is used to store DB backups
 - AWS Secrets Manager is used to store secrets for kubernetes Pods
+- Flux is bootstrapped to the cluster using Terraform Provider it contains image repo controller that continously scans ECR for image updates and update this image in the kubernetes manifest that then is deployed.
 
 ## Proposed Solution:
  In order to meet the business requirements it is essential to adhere to AWS WAF(Well-Architected-Framework) principles.The proposed solution is aligned with the WAF 5 pillars.
