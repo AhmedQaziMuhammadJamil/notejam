@@ -67,7 +67,7 @@ module "mod_github" {
 
 module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
-
+  
   bucket = local.s3_name
   acl    = "private"
   tags = local.custom_tags

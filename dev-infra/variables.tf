@@ -29,5 +29,5 @@ variable "db_name" {
 
 variable "var_region" {
   type=string
-  default = "eu-west-1"
+  default = "eu-central-1"
 }
