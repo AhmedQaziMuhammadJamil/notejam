@@ -62,7 +62,7 @@ jobs:
         shell: bash
         run: |
           echo Building image "${{steps.config.outputs.image}}"
-          buildah bud -f ./notejam-django/Dockerfile --squash --format=docker --pull -t "${{steps.config.outputs.image}}"
+          buildah bud -f ./notejam-django-dev/Dockerfile --squash --format=docker --pull -t "${{steps.config.outputs.image}}"
   
       - name: Push Container Image 
         shell: bash
