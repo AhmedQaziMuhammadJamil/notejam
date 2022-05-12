@@ -336,7 +336,11 @@ EOF
 curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.9/2020-08-04/bin/linux/amd64/aws-iam-authenticator && chmod +x ./aws-iam-authenticator && \
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl && \
 mkdir -p $HOME/bin && mv ./aws-iam-authenticator $HOME/bin/ && export PATH=$PATH:$HOME/bin && \
-./kubectl --server="${self.triggers.endpoint}" --certificate_authority=${self.triggers.ca_crt}--token="${self.triggers.token}" get namespace flux-system -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | ./kubectl  --server="${self.triggers.endpoint}" --certificate_authority=/tmp/ca.crt --token="${self.triggers.token}" replace --raw /api/v1/namespaces/flux-system/finalize -f -
+
+./kubectl --server="${self.triggers.endpoint}" --certificate_authority=/tmp/ca.crt  --token="${self.triggers.token}" get namespace flux-system -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | ./kubectl  --server="${self.triggers.endpoint}" --certificate_authority=/tmp/ca.crt --token="${self.triggers.token}" replace --raw /api/v1/namespaces/flux-system/finalize -f - \
+./kubectl --server="${self.triggers.endpoint}" --certificate_authority=/tmp/ca.crt  --token="${self.triggers.token}"  patch ns flux-system -p '{"metadata":{"finalizers":null}}'
+
+
 EOH
   }
 }
