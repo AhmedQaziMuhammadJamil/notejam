@@ -338,8 +338,26 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s htt
 mkdir -p $HOME/bin && mv ./aws-iam-authenticator $HOME/bin/ && export PATH=$PATH:$HOME/bin && \
 
 ./kubectl --server="${self.triggers.endpoint}" --certificate_authority=/tmp/ca.crt  --token="${self.triggers.token}" get namespace flux-system -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | ./kubectl  --server="${self.triggers.endpoint}" --certificate_authority=/tmp/ca.crt --token="${self.triggers.token}" replace --raw /api/v1/namespaces/flux-system/finalize -f - \
-./kubectl --server="${self.triggers.endpoint}" --certificate_authority=/tmp/ca.crt  --token="${self.triggers.token}"  patch ns flux-system -p '{"metadata":{"finalizers":null}}'
+cat > delete_stuck_ns.sh << "EOF"
+#!/usr/bin/env bash
 
+function delete_namespace () {
+    echo "Deleting namespace $1"
+    kubectl get namespace $1 -o json > tmp.json
+    sed -i 's/"kubernetes"//g' tmp.json
+    kubectl replace --raw "/api/v1/namespaces/$1/finalize" -f ./tmp.json
+    rm ./tmp.json
+}
+
+TERMINATING_NS=$(kubectl get ns | awk '$2=="Terminating" {print $1}')
+
+for ns in $TERMINATING_NS
+do
+    delete_namespace $ns
+done
+EOF
+
+chmod +x delete_stuck_ns.sh
 
 EOH
   }
