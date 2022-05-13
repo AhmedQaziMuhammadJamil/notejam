@@ -161,3 +161,41 @@ module "secrets-manger-role" {
     tags = var.custom_tags
   
 }
+module "iam_assumable_role_external_dns" {
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version                       = "4.7.0"
+  create_role                   = true
+  role_name                     = "external-dns-${var.env}"
+  provider_url                  = module.eks.cluster_oidc_issuer_url
+  oidc_fully_qualified_subjects = ["system:serviceaccount:dev:external-dns"]
+}
+
+resource "aws_iam_role_policy" "karpenter_controller" {
+  name = "external-dns-policy-${var.env}"
+  role = module.iam_assumable_role_external_dns.iam_role_name
+
+  policy = jsonencode({
+    "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "route53:ChangeResourceRecordSets"
+      ],
+      "Resource": [
+        "arn:aws:route53:::hostedzone/Z066262639G7W5SCF5VR0"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "route53:ListHostedZones",
+        "route53:ListResourceRecordSets"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+  })
+}
