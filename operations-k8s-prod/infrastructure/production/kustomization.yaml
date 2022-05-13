@@ -4,6 +4,7 @@ namespace: production
 resources:
   - aws-alb-controller.yaml
   - new-ascp.yaml
+  - external-dns.yaml
  
 
 
