@@ -170,7 +170,7 @@ module "iam_assumable_role_external_dns" {
   oidc_fully_qualified_subjects = ["system:serviceaccount:dev:external-dns"]
 }
 
-resource "aws_iam_role_policy" "karpenter_controller" {
+resource "aws_iam_role_policy" "external_dns" {
   name = "external-dns-policy-${var.env}"
   role = module.iam_assumable_role_external_dns.iam_role_name
 
