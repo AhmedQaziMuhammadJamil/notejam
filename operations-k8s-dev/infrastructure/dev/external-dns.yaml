@@ -1,0 +1,35 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: external-dns
+spec:
+  releaseName: external-dns
+  chart:
+    spec:
+      chart: external-dns
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: flux-system
+
+  interval: 5m0s
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  values:
+    provider: aws
+    zoneType: public
+    domainFilters: [aqazi.xyz]
+    txtOwnerId: Z066262639G7W5SCF5VR0
+    sources: [ingress] 
+    serviceAccount.create: true
+    serviceAccount:
+      name: external-dns
+      annotations:
+        eks.amazonaws.com/role-arn: "arn:aws:iam::003767002475:role/external-dns-dev" ##Change as per your role name from irsa in eks module
+   
