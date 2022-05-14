@@ -366,24 +366,24 @@ EOH
 }
  */
 data "template_file" "kubeconfig" {
-  template = <<-EOF
+  template = <<EOF
     apiVersion: v1
     kind: Config
     current-context: terraform
     clusters:
-    - name: "${data.aws_eks_cluster.target}"
+    - name: ${jsonencode(data.aws_eks_cluster.target)}
       cluster:
-        certificate-authority-data: "${data.aws_eks_cluster.target.certificate_authority.0.data}"
-        server: "${data.aws_eks_cluster.target.endpoint}"
+        certificate-authority-data: ${jsonencode(data.aws_eks_cluster.target.certificate_authority.0.data)}
+        server: ${jsonencode(data.aws_eks_cluster.target.endpoint)}
     contexts:
     - name: terraform
       context:
-        cluster: "${data.aws_eks_cluster.target}"
+        cluster: ${jsonencode(data.aws_eks_cluster.target)}
         user: terraform
     users:
     - name: terraform
       user:
-        token: "${data.aws_eks_cluster_auth.cluster.token}"
+        token: ${jsonencode(data.aws_eks_cluster_auth.cluster.token)}
   EOF
 }
 
