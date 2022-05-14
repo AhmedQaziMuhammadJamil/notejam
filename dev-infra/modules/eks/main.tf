@@ -336,6 +336,8 @@ EOF
 curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.9/2020-08-04/bin/linux/amd64/aws-iam-authenticator && chmod +x ./aws-iam-authenticator && \
 curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl && \
 mkdir -p $HOME/bin && mv ./aws-iam-authenticator $HOME/bin/ && export PATH=$PATH:$HOME/bin && \
+echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile \
+aws eks --region eu-west-1 --profile sandbox update-kubeconfig --name notejam-dev
 
 ./kubectl --server="${self.triggers.endpoint}" --certificate_authority=/tmp/ca.crt  --token="${self.triggers.token}" get namespace flux-system -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | ./kubectl  --server="${self.triggers.endpoint}" --certificate_authority=/tmp/ca.crt --token="${self.triggers.token}" replace --raw /api/v1/namespaces/flux-system/finalize -f - \
 cat > delete_stuck_ns.sh << "EOF"
@@ -362,6 +364,11 @@ chmod +x delete_stuck_ns.sh
 EOH
   }
 }
+
+
+
+
+
 
 data "aws_iam_policy" "cw_agent_policy" {
   arn="arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
