@@ -371,19 +371,19 @@ data "template_file" "kubeconfig" {
     kind: Config
     current-context: terraform
     clusters:
-    - name: ${data.aws_eks_cluster.target}
+    - name: "${data.aws_eks_cluster.target}"
       cluster:
-        certificate-authority-data: ${data.aws_eks_cluster.target.certificate_authority.0.data}
-        server: ${data.aws_eks_cluster.target.endpoint}
+        certificate-authority-data: "${data.aws_eks_cluster.target.certificate_authority.0.data}"
+        server: "${data.aws_eks_cluster.target.endpoint}"
     contexts:
     - name: terraform
       context:
-        cluster: ${data.aws_eks_cluster.target}
+        cluster: "${data.aws_eks_cluster.target}"
         user: terraform
     users:
     - name: terraform
       user:
-        token: ${data.aws_eks_cluster_auth.cluster.token}
+        token: "${data.aws_eks_cluster_auth.cluster.token}"
   EOF
 }
 
