@@ -318,7 +318,7 @@ provider "helm" {
     
   }
 }
-
+/* 
 resource "null_resource" "k8s_patcher" {
   triggers = {
     // fire any time the cluster is update in a way that changes its endpoint or auth
@@ -364,8 +364,54 @@ chmod +x delete_stuck_ns.sh
 EOH
   }
 }
+ */
+data "template_file" "kubeconfig" {
+  template = <<-EOF
+    apiVersion: v1
+    kind: Config
+    current-context: terraform
+    clusters:
+    - name: ${data.aws_eks_cluster.target}
+      cluster:
+        certificate-authority-data: ${data.aws_eks_cluster.target.certificate_authority.0.data}
+        server: ${data.aws_eks_cluster.target.endpoint}
+    contexts:
+    - name: terraform
+      context:
+        cluster: ${data.aws_eks_cluster.target}
+        user: terraform
+    users:
+    - name: terraform
+      user:
+        token: ${data.aws_eks_cluster_auth.cluster.token}
+  EOF
+}
 
+resource "null_resource" "update_ns_annotations" {
+  triggers = {
+    kubeconfig = base64encode(data.template_file.kubeconfig.rendered)
+    cmd_patch = <<-EOF
+      cat <<YAML | kubectl \
+        -n kube-system \
+        --kubeconfig <(echo $KUBECONFIG | base64 --decode) \
+        patch ns flux-system \
+        --type json \
+        -p='[ { "op": "remove", "path": "/metadata/finalizers" } ]'
+    EOF
+  }
 
+  provisioner "local-exec" {
+    when       = destroy
+    on_failure = continue
+    interpreter = ["/bin/bash", "-c"]
+    environment = {
+      KUBECONFIG = self.triggers.kubeconfig
+    }
+    command = self.triggers.cmd_patch
+  }
+
+  depends_on = [ data.aws_eks_cluster.cluster]
+}
 
 
 
