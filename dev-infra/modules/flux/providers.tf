@@ -18,7 +18,7 @@
     
     flux = {
       source  = "fluxcd/flux"
-      version = "0.13.3"
+      version = "0.14.1"
     }
   }
 }
