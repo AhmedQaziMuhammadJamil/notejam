@@ -371,40 +371,40 @@ data "template_file" "kubeconfig" {
     kind: Config
     current-context: terraform
     clusters:
-    - name: ${jsonencode(data.aws_eks_cluster.target)}
+    - name: "${data.aws_eks_cluster.target.name}"
       cluster:
-        certificate-authority-data: ${jsonencode(data.aws_eks_cluster.target.certificate_authority.0.data)}
-        server: ${jsonencode(data.aws_eks_cluster.target.endpoint)}
+        certificate-authority-data: ${data.aws_eks_cluster.target.certificate_authority.0.data}
+        server: "${data.aws_eks_cluster.target.endpoint}"
     contexts:
     - name: terraform
       context:
-        cluster: ${jsonencode(data.aws_eks_cluster.target)}
+        cluster: "${data.aws_eks_cluster.target.name}"
         user: terraform
     users:
     - name: terraform
       user:
-        token: ${jsonencode(data.aws_eks_cluster_auth.cluster.token)}
-  EOF
+        token: "${data.aws_eks_cluster_auth.cluster.token}"
+EOF
 }
 
 resource "null_resource" "update_ns_annotations" {
   triggers = {
     kubeconfig = base64encode(data.template_file.kubeconfig.rendered)
     cmd_patch = <<-EOF
-      curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl && \
+      curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl  \
       cat <<YAML | kubectl \
         -n kube-system \
         --kubeconfig <(echo $KUBECONFIG | base64 --decode) \
         patch ns flux-system \
         --type json \
         -p='[ { "op": "remove", "path": "/metadata/finalizers" } ]'
-    EOF
+     EOF
   }
 
   provisioner "local-exec" {
     when       = destroy
     on_failure = continue
-    interpreter = ["/bin/bash", "-c"]
+    interpreter = ["/bin/bash", "-c","curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl"]
     environment = {
       KUBECONFIG = self.triggers.kubeconfig
     }
@@ -413,6 +413,7 @@ resource "null_resource" "update_ns_annotations" {
 
   depends_on = [ data.aws_eks_cluster.cluster]
 }
+
 
 
 
