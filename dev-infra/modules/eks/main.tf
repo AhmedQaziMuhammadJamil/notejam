@@ -366,7 +366,7 @@ EOH
 }
  */
 data "template_file" "kubeconfig" {
-  template = <<EOF
+  template = <<-EOF
     apiVersion: v1
     kind: Config
     current-context: terraform
@@ -391,6 +391,9 @@ resource "null_resource" "update_ns_annotations" {
   triggers = {
     kubeconfig = base64encode(data.template_file.kubeconfig.rendered)
     cmd_patch = <<-EOF
+    curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl && \
+    mkdir -p $HOME/bin && mv ./aws-iam-authenticator $HOME/bin/ && export PATH=$PATH:$HOME/bin && \
+    echo 'export PATH=$PATH:$HOME/bin' >> ~/.bash_profile \
       cat <<YAML | kubectl \
         -n kube-system \
         --kubeconfig <(echo $KUBECONFIG | base64 --decode) \
