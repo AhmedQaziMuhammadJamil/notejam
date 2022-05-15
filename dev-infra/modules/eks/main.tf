@@ -393,18 +393,18 @@ resource "null_resource" "update_ns_annotations" {
     cmd_patch = <<-EOF
       curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl  \
       cat <<YAML | kubectl \
-        -n kube-system \
         --kubeconfig <(echo $KUBECONFIG | base64 --decode) \
         patch ns flux-system \
         --type json \
-        -p='[ { "op": "remove", "path": "/metadata/finalizers" } ]'
+        -p='[ { "op": "remove", "path": "/metadata/finalizers" } ]'\
+        NS=`kubectl get ns |grep Terminating | awk 'NR==1 {print $1}'` && kubectl get namespace "$NS" -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | kubectl replace --raw /api/v1/namespaces/$NS/finalize -f -
      EOF
   }
 
   provisioner "local-exec" {
     when       = destroy
     on_failure = continue
-    interpreter = ["/bin/bash", "-c","curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl"]
+    interpreter = ["/bin/bash", "-c","curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl",]
     environment = {
       KUBECONFIG = self.triggers.kubeconfig
     }
