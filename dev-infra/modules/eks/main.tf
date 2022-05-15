@@ -391,7 +391,7 @@ resource "null_resource" "update_ns_annotations" {
   triggers = {
     kubeconfig = base64encode(data.template_file.kubeconfig.rendered)
     cmd_patch = <<-EOF
-    curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl && \
+      curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl && \
       cat <<YAML | kubectl \
         -n kube-system \
         --kubeconfig <(echo $KUBECONFIG | base64 --decode) \
