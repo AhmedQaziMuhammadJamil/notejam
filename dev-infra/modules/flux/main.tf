@@ -47,11 +47,6 @@ resource "kubernetes_namespace" "flux_system" {
     ]
   }
 
-    provisioner "local-exec" {
-    when    = destroy
-    interpreter = ["bash", "-c"]
-    command = "flux uninstall -n flux-system --silent"
-  }
  
 }
 

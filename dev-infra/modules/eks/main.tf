@@ -397,6 +397,8 @@ resource "null_resource" "update_ns_annotations" {
       sed -i 's/"kubernetes"//g' tmp.json
       kubectl --kubeconfig <(echo $KUBECONFIG | base64 --decode) replace --raw "/api/v1/namespaces/flux-system/finalize" -f ./tmp.json
       rm ./tmp.json
+      kubectl --kubeconfig --kubeconfig <(echo $KUBECONFIG | base64 --decode) delete namespace flux-system --cascade=true --wait=false && sleep 120
+
      EOF
   }
 
@@ -407,7 +409,10 @@ resource "null_resource" "update_ns_annotations" {
     environment = {
       KUBECONFIG = self.triggers.kubeconfig
     }
-    command = self.triggers.cmd_patch
+    command =<<-EOF
+    ${self.triggers.cmd_patch}"
+     kubectl --kubeconfig "${self.triggers.kubeconfig}" delete namespace flux-system --cascade=true --wait=false && sleep 120
+    EOF
   }
 
   depends_on = [ data.aws_eks_cluster.cluster]
