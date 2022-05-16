@@ -371,19 +371,19 @@ data "template_file" "kubeconfig" {
     kind: Config
     current-context: terraform
     clusters:
-    - name: "${data.aws_eks_cluster.target[0].name}"
+    - name: "${data.aws_eks_cluster.target.name}"
       cluster:
         certificate-authority-data: ${data.aws_eks_cluster.target[0].certificate_authority.0.data}
-        server: "${data.aws_eks_cluster.target[0].endpoint}"
+        server: "${data.aws_eks_cluster.target.endpoint}"
     contexts:
     - name: terraform
       context:
-        cluster: "${data.aws_eks_cluster.target[0].name}"
+        cluster: "${data.aws_eks_cluster.target.name}"
         user: terraform
     users:
     - name: terraform
       user:
-        token: "${data.aws_eks_cluster_auth.cluster[0].token}"
+        token: "${data.aws_eks_cluster_auth.cluster.token}"
 EOF
 }
 
@@ -393,14 +393,17 @@ resource "null_resource" "update_ns_annotations" {
     cmd_patch = <<-EOF
       curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl  \
       echo $KUBECONFIG | base64 --decode \
-      kubectl --kubeconfig <(echo $KUBECONFIG | base64 --decode) get namespace flux-system -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | kubectl   --kubeconfig <(echo $KUBECONFIG | base64 --decode) \ replace --raw /api/v1/namespaces/flux-system/finalize -f -
+      kubectl --kubeconfig <(echo $KUBECONFIG | base64 --decode) get namespace flux-system -o json  > tmp.json  | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | kubectl   --kubeconfig <(echo $KUBECONFIG | base64 --decode) \ replace --raw /api/v1/namespaces/flux-system/finalize -f - \
+      sed -i 's/"kubernetes"//g' tmp.json
+      kubectl --kubeconfig <(echo $KUBECONFIG | base64 --decode) replace --raw "/api/v1/namespaces/flux-system/finalize" -f ./tmp.json
+      rm ./tmp.json
      EOF
   }
 
   provisioner "local-exec" {
     when       = destroy
     on_failure = continue
-    interpreter = ["/bin/bash", "-c","curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl"]
+    interpreter = ["/bin/bash", "-c","curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl","echo $KUBECONFIG | base64 --decode"]
     environment = {
       KUBECONFIG = self.triggers.kubeconfig
     }
@@ -423,3 +426,6 @@ resource "aws_iam_role_policy_attachment" "additional" {
   policy_arn = data.aws_iam_policy.cw_agent_policy.arn
   role       = each.value.iam_role_name
 }
+
+
+
