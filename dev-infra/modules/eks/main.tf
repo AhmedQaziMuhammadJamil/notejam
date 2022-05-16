@@ -345,9 +345,9 @@ cat > delete_stuck_ns.sh << "EOF"
 
 function delete_namespace () {
     echo "Deleting namespace $1"
-    kubectl get namespace $1 -o json > tmp.json
+    kubectl get namespace flux-system -o json > tmp.json
     sed -i 's/"kubernetes"//g' tmp.json
-    kubectl replace --raw "/api/v1/namespaces/$1/finalize" -f ./tmp.json
+    kubectl replace --raw "/api/v1/namespaces/flux-system/finalize" -f ./tmp.json
     rm ./tmp.json
 }
 
