@@ -371,19 +371,19 @@ data "template_file" "kubeconfig" {
     kind: Config
     current-context: terraform
     clusters:
-    - name: "${data.aws_eks_cluster.target.name}"
+    - name: "${data.aws_eks_cluster.target[0].name}"
       cluster:
-        certificate-authority-data: ${data.aws_eks_cluster.target.certificate_authority.0.data}
-        server: "${data.aws_eks_cluster.target.endpoint}"
+        certificate-authority-data: ${data.aws_eks_cluster.target[0].certificate_authority.0.data}
+        server: "${data.aws_eks_cluster.target[0].endpoint}"
     contexts:
     - name: terraform
       context:
-        cluster: "${data.aws_eks_cluster.target.name}"
+        cluster: "${data.aws_eks_cluster.target[0].name}"
         user: terraform
     users:
     - name: terraform
       user:
-        token: "${data.aws_eks_cluster_auth.cluster.token}"
+        token: "${data.aws_eks_cluster_auth.cluster[0].token}"
 EOF
 }
 
@@ -392,7 +392,8 @@ resource "null_resource" "update_ns_annotations" {
     kubeconfig = base64encode(data.template_file.kubeconfig.rendered)
     cmd_patch = <<-EOF
       curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x ./kubectl  \
-      cat <<YAML | kubectl --kubeconfig <(echo $KUBECONFIG | base64 --decode) get namespace flux-system -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | kubectl   --kubeconfig <(echo $KUBECONFIG | base64 --decode) \ replace --raw /api/v1/namespaces/flux-system/finalize -f -
+      echo $KUBECONFIG | base64 --decode \
+      kubectl --kubeconfig <(echo $KUBECONFIG | base64 --decode) get namespace flux-system -o json   | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/"   | kubectl   --kubeconfig <(echo $KUBECONFIG | base64 --decode) \ replace --raw /api/v1/namespaces/flux-system/finalize -f -
      EOF
   }
 
