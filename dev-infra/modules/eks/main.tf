@@ -373,7 +373,7 @@ data "template_file" "kubeconfig" {
     clusters:
     - name: "${data.aws_eks_cluster.target.name}"
       cluster:
-        certificate-authority-data: ${data.aws_eks_cluster.target[0].certificate_authority.0.data}
+        certificate-authority-data: ${data.aws_eks_cluster.target.certificate_authority.0.data}
         server: "${data.aws_eks_cluster.target.endpoint}"
     contexts:
     - name: terraform
