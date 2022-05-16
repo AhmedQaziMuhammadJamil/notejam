@@ -114,7 +114,7 @@ EOT
 resource "kubectl_manifest" "apply" {
 
   for_each   = { for v in local.install : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
-  depends_on = [kubernetes_namespace.flux_system]
+  //depends_on = [kubernetes_namespace.flux_system]
   yaml_body = each.value
 }
 
@@ -123,7 +123,7 @@ resource "kubectl_manifest" "apply" {
 resource "kubectl_manifest" "sync" {
 
   for_each   = { for v in local.sync : lower(join("/", compact([v.data.apiVersion, v.data.kind, lookup(v.data.metadata, "namespace", ""), v.data.metadata.name]))) => v.content }
-  depends_on = [kubernetes_namespace.flux_system]
+  //depends_on = [kubernetes_namespace.flux_system]
   yaml_body = each.value
  
 }
