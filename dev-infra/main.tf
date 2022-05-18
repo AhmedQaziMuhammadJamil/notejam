@@ -20,7 +20,7 @@ module "mod_kms" {
 }
 
 
-/*    module "rds" {
+  module "rds" {
   source      = "./modules/rds"
   vpc_id      = module.mod_vpc.out_nl_vpcid
   rds-subnets = module.mod_vpc.out_nl_rdssubnet
@@ -34,7 +34,7 @@ module "mod_kms" {
   
 
 }  
- */
+
 module "mod_iam" {
   source      = "./modules/iam"
   custom_tags = local.custom_tags
