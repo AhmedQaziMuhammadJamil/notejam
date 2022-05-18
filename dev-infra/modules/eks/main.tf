@@ -318,7 +318,7 @@ provider "helm" {
     
   }
 }
-
+/* 
 resource "null_resource" "k8s_patcher" {
   triggers = {
     // fire any time the cluster is update in a way that changes its endpoint or auth
@@ -363,7 +363,7 @@ chmod +x delete_stuck_ns.sh
 
 EOH
   }
-}
+} */
  
 data "template_file" "kubeconfig" {
   template = <<-EOF
