@@ -302,12 +302,12 @@ data "aws_eks_cluster" "cluster" {
 data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
 }
-/* provider "kubernetes" {
+provider "kubernetes" {
   alias = "eks"
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-} */
+  host                   = data.aws_eks_cluster.target.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority.0.data)
+  token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
+}
 
 provider "helm" {
   alias = "eks"
@@ -318,18 +318,6 @@ provider "helm" {
      load_config_file       = false
     
   }
-}
-
-provider "kubernetes" {
-    version                = "~>1.10.0"
-    host                   = data.aws_eks_cluster.target.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority.0.data)
-    exec {
-        api_version = "client.authentication.k8s.io/v1alpha1"
-        args        = ["eks", "get-token", "--cluster-name", data.aws_eks_cluster.cluster.name]
-        command     = "aws"
-     }
-     load_config_file       = false
 }
 /* 
 resource "null_resource" "k8s_patcher" {
