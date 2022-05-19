@@ -434,3 +434,9 @@ resource "aws_iam_role_policy_attachment" "additional" {
 
 
 
+module "alb-ingress" {
+  source       = "Young-ook/eks/aws//modules/alb-ingress"
+  cluster_name = module.eks.cluster.name
+  oidc         = module.eks.oidc
+  tags         = { env = "test" }
+}
