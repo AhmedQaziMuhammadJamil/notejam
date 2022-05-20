@@ -224,8 +224,8 @@ module "eks" {
     description = "alb ingress to Kubernetes API"
     source_security_group_id = var.alb-sg //TODO add subnets
     protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
+    from_port   = 8000
+    to_port     = 8000
     type        = "ingress"
 
   }
