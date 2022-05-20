@@ -31,5 +31,5 @@ spec:
     serviceAccount:
       name: external-dns
       annotations:
-        eks.amazonaws.com/role-arn: "arn:aws:iam::003767002475:role/external-dns-dev" ##Change as per your role name from irsa in eks module
+        eks.amazonaws.com/role-arn: "arn:aws:iam::003767002475:role/external-dns-prod" ##Change as per your role name from irsa in eks module
    
