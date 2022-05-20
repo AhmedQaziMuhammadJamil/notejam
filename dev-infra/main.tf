@@ -114,7 +114,6 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "6.10.0"
    name=  "notejam-dev"
-
    subnets = module.mod_vpc.out_nl_publicsubnet
    vpc_id = module.mod_vpc.out_nl_vpcid
    tags={
