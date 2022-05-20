@@ -94,7 +94,7 @@ module "mod_eks" {
   private_subnets = module.mod_vpc.out_nl_privatesubnet
   worker-sg       = module.mod_sg.worker-sg
   env         = var.env
-  
+  alb-sg = module.mod_sg.alb-sg
 }
 
    module "mod_flux" {

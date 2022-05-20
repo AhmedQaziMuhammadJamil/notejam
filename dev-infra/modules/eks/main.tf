@@ -220,6 +220,15 @@ module "eks" {
     to_port     = 8443
     type        = "ingress"
   }
+  alb-sg ={
+    description = "alb ingress to Kubernetes API"
+    source_security_group_id = var.alb-sg //TODO add subnets
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    type        = "ingress"
+
+  }
    ingress_allow_access_from_control_plane = {
       type                          = "ingress"
       protocol                      = "tcp"
