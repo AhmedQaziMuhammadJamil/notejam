@@ -116,6 +116,7 @@ module "alb" {
    name=  "notejam-dev"
    subnets = module.mod_vpc.out_nl_publicsubnet
    vpc_id = module.mod_vpc.out_nl_vpcid
+   security_groups = [module.mod_sg.alb-sg]
    tags={
      "ingress.k8s.aws/stack"    = "public"
      "ingress.k8s.aws/resource" = "LoadBalancer"
