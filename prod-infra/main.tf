@@ -96,6 +96,7 @@ module "mod_eks" {
   private_subnets = module.mod_vpc.out_nl_privatesubnet
   worker-sg       = module.mod_sg.worker-sg
   env = var.env
+    alb-sg = module.mod_sg.alb-sg
 }
 
   
@@ -111,3 +112,16 @@ module "mod_eks" {
   env = var.env
 }   
    
+module "alb" {
+  source  = "terraform-aws-modules/alb/aws"
+  version = "6.10.0"
+   name=  "notejam-prod"
+   subnets = module.mod_vpc.out_nl_publicsubnet
+   vpc_id = module.mod_vpc.out_nl_vpcid
+   security_groups = [module.mod_sg.alb-sg]
+   tags={
+     "ingress.k8s.aws/stack"    = "public"
+     "ingress.k8s.aws/resource" = "LoadBalancer"
+     "elbv2.k8s.aws/cluster"    = "notejam-prod"
+   }
+}
