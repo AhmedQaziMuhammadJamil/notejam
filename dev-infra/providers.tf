@@ -12,12 +12,12 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 3.74.2"
+      version = ">= 4.0"
     }
 
-    kubernetes = {
-      source  = "registry.terraform.io/hashicorp/kubernetes"
-      version = ">=2.9.0"
+ kubernetes = {
+      source = "hashicorp/kubernetes"
+      version = "2.11.0"
     }
    kubectl = {
       source  = "gavinbunney/kubectl"
@@ -29,7 +29,7 @@ terraform {
     }
      null = {
       source = "hashicorp/null"
-      version = "3.1.1"
+      version = ">=3.1.1"
     }
   }
   }
