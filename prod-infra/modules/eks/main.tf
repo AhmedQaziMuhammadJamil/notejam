@@ -224,13 +224,20 @@ module "eks" {
     type        = "ingress"
   }
     alb-sg ={
-    description = "alb ingress to Kubernetes API"
+    description = "noteja, ingress to Kubernetes API"
     source_security_group_id = var.alb-sg //TODO add subnets
     protocol    = "tcp"
     from_port   = 8000
     to_port     = 8000
     type        = "ingress"
-
+  }
+     grafana-sg ={
+    description = "gfrana ingress to Kubernetes API"
+    source_security_group_id = var.alb-sg //TODO add subnets
+    protocol    = "tcp"
+    from_port   = 3000
+    to_port     = 3000
+    type        = "ingress"
   }
    ingress_allow_access_from_control_plane = {
       type                          = "ingress"
