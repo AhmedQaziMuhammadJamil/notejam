@@ -26,5 +26,7 @@ spec:
               alb.ingress.kubernetes.io/scheme: internet-facing
               alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}'
               alb.ingress.kubernetes.io/group.name: "public"
+              alb.ingress.kubernetes.io/manage-backend-security-group-rules: "false"
+              alb.ingress.kubernetes.io/security-groups: "NoteJam-Alb-SG-prod"
           hosts:
             - prod.grafana.aqazi.xyz

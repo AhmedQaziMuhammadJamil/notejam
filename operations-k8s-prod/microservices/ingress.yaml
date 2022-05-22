@@ -9,6 +9,7 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/group.name: "public"
     alb.ingress.kubernetes.io/security-groups: "NoteJam-Alb-SG-prod"
+    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "false"
 
 spec:
   ingressClassName: public
