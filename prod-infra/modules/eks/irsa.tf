@@ -167,7 +167,7 @@ module "iam_assumable_role_external_dns" {
   create_role                   = true
   role_name                     = "external-dns-${var.env}"
   provider_url                  = module.eks.cluster_oidc_issuer_url
-  oidc_fully_qualified_subjects = ["system:serviceaccount:production:external-dns-${var.env}"]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:production:external-dns"]
 }
 
 resource "aws_iam_role_policy" "external_dns" {
