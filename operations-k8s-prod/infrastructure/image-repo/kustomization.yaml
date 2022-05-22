@@ -4,3 +4,5 @@ resources:
   - app-repo.yaml
   - image-policy.yaml
   - image-update.yaml
+  - slack.yaml
+  - alert.yaml
