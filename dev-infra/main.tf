@@ -56,7 +56,7 @@ module "mod_iam" {
   module "mod_waf" {
   source = "./modules/waf"
    env         = var.env
-  load_balancer_arn =module.alb.lb_arn
+  load_balancer_arn =module.alb.lb_id
 } 
 
 module "mod_github" {
