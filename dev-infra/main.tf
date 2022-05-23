@@ -53,10 +53,11 @@ module "mod_iam" {
   env         = var.env
 } 
 
-/*  module "mod_waf" {
+  module "mod_waf" {
   source = "./modules/waf"
    env         = var.env
-} */
+  load_balancer_arn =module.alb.lb_arn
+} 
 
 module "mod_github" {
   source = "./modules/github"
