@@ -1,5 +1,5 @@
 
- variable "load_balancer_arn" {
+variable "load_balancer_arn" {
 }
 variable "waf_name" {
   type    = string
@@ -7,5 +7,5 @@ variable "waf_name" {
 }
 
 variable "env" {
-  
+
 }

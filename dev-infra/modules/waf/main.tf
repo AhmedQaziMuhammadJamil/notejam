@@ -517,11 +517,11 @@ resource "aws_wafv2_ip_set" "ip_sets" {
 
 }
 
- resource "aws_wafv2_web_acl_association" "alb_association" {
+resource "aws_wafv2_web_acl_association" "alb_association" {
   resource_arn = var.load_balancer_arn
   web_acl_arn  = aws_wafv2_web_acl.main.arn
 }
- 
+
 resource "aws_cloudwatch_log_group" "waf" {
   name = "aws-waf-logs-${var.env}-group" // As per AWS waf logs for resources such as S3 and Cloudwatch logs name should start with aws-waf-log
 }

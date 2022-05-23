@@ -7,5 +7,5 @@ output "eks_key_arn" {
 }
 
 output "s3_key_arn" {
-  value  = module.s3_kms_key.key_arn
+  value = module.s3_kms_key.key_arn
 }

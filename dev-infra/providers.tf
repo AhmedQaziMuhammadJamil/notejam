@@ -15,11 +15,11 @@ terraform {
       version = ">= 4.0"
     }
 
- kubernetes = {
-      source = "hashicorp/kubernetes"
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
       version = "2.11.0"
     }
-   kubectl = {
+    kubectl = {
       source  = "gavinbunney/kubectl"
       version = ">= 1.14.0"
     }
@@ -27,12 +27,12 @@ terraform {
       source  = "fluxcd/flux"
       version = "0.14.1"
     }
-     null = {
-      source = "hashicorp/null"
+    null = {
+      source  = "hashicorp/null"
       version = ">=3.1.1"
     }
   }
-  }
+}
 provider "aws" {
   region = var.var_region
 }

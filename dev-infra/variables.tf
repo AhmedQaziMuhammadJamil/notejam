@@ -18,16 +18,16 @@ variable "github_token" {
   type = string
 }
 variable "db_user" {
-  type=string
+  type = string
 }
 variable "db_pass" {
-  type =string 
+  type = string
 }
 variable "db_name" {
-  type=string
+  type = string
 }
 
 variable "var_region" {
-  type=string
+  type    = string
   default = "eu-west-1"
 }

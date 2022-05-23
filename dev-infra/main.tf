@@ -20,58 +20,54 @@ module "mod_kms" {
 }
 
 
-  module "rds" {
+module "rds" {
   source      = "./modules/rds"
   vpc_id      = module.mod_vpc.out_nl_vpcid
   rds-subnets = module.mod_vpc.out_nl_rdssubnet
   rds-sg      = module.mod_sg.rds-sg
   custom_tags = local.custom_tags
   kms_key_arn = module.mod_kms.rds_key_arn
-  db_pass = var.db_pass
-  db_user = var.db_user
-  db_name = var.db_name
+  db_pass     = var.db_pass
+  db_user     = var.db_user
+  db_name     = var.db_name
   env         = var.env
-  
 
-}  
+
+}
 
 module "mod_iam" {
-  source      = "./modules/iam"
-  custom_tags = local.custom_tags
-  ecr_repo_arn = module.mod_ecr.ecr_arn
-  ecr_repository_name = module.mod_ecr.ecr_name
-  env         = var.env
-  s3_bucket_arn = module.s3_bucket.s3_bucket_arn
+  source               = "./modules/iam"
+  custom_tags          = local.custom_tags
+  ecr_repo_arn         = module.mod_ecr.ecr_arn
+  ecr_repository_name  = module.mod_ecr.ecr_name
+  env                  = var.env
+  s3_bucket_arn        = module.s3_bucket.s3_bucket_arn
   s3_kms_master_key_id = module.mod_kms.s3_key_arn
 }
 
 
-  module "mod_ecr" {
+module "mod_ecr" {
   source       = "./modules/ecr"
   custom_tags  = local.custom_tags
   ecr-role-arn = module.mod_iam.ecr-role-arn
-  env         = var.env
-} 
+  env          = var.env
+}
 
-  module "mod_waf" {
-  source = "./modules/waf"
-   env         = var.env
-  load_balancer_arn =module.alb.lb_id
-} 
+
 
 module "mod_github" {
-  source = "./modules/github"
+  source             = "./modules/github"
   github_actions_ecr = module.mod_iam.github_actions_ecr
-  custom_tags = local.custom_tags
+  custom_tags        = local.custom_tags
 
-} 
+}
 
 module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
-  
-  bucket = local.s3_name
-  acl    = "private"
-  tags = local.custom_tags
+
+  bucket        = local.s3_name
+  acl           = "private"
+  tags          = local.custom_tags
   force_destroy = true
   versioning = {
     enabled = false
@@ -94,33 +90,42 @@ module "mod_eks" {
   vpc_id          = module.mod_vpc.out_nl_vpcid
   private_subnets = module.mod_vpc.out_nl_privatesubnet
   worker-sg       = module.mod_sg.worker-sg
-  env         = var.env
-  alb-sg = module.mod_sg.alb-sg
+  env             = var.env
+  alb-sg          = module.mod_sg.alb-sg
 }
 
-   module "mod_flux" {
-  source = "./modules/flux"
-  cluster_id= module.mod_eks.cluster_id
-  cluster_auth = module.mod_eks.cluster_auth
-  host=module.mod_eks.eks_host
+module "mod_flux" {
+  source                 = "./modules/flux"
+  cluster_id             = module.mod_eks.cluster_id
+  cluster_auth           = module.mod_eks.cluster_auth
+  host                   = module.mod_eks.eks_host
   cluster_ca_certificate = module.mod_eks.cluster_ca_certificate
-  token=module.mod_eks.token
-  github_owner = var.github_owner
-  github_token = var.github_token
-  env=var.env
-}   
-  
+  token                  = module.mod_eks.token
+  github_owner           = var.github_owner
+  github_token           = var.github_token
+  env                    = var.env
+}
+
 
 module "alb" {
-  source  = "terraform-aws-modules/alb/aws"
-  version = "6.10.0"
-   name=  "notejam-dev"
-   subnets = module.mod_vpc.out_nl_publicsubnet
-   vpc_id = module.mod_vpc.out_nl_vpcid
-   security_groups = [module.mod_sg.alb-sg]
-   tags={
-     "ingress.k8s.aws/stack"    = "public"
-     "ingress.k8s.aws/resource" = "LoadBalancer"
-     "elbv2.k8s.aws/cluster"    = "notejam-dev"
-   }
+  source          = "terraform-aws-modules/alb/aws"
+  version         = "6.10.0"
+  name            = "notejam-dev"
+  subnets         = module.mod_vpc.out_nl_publicsubnet
+  vpc_id          = module.mod_vpc.out_nl_vpcid
+  security_groups = [module.mod_sg.alb-sg]
+  tags = {
+    "ingress.k8s.aws/stack"    = "public"
+    "ingress.k8s.aws/resource" = "LoadBalancer"
+    "elbv2.k8s.aws/cluster"    = "notejam-dev"
+  }
 }
+
+module "mod_waf" {
+  depends_on = [
+    module.alb
+  ]
+  source            = "./modules/waf"
+  env               = var.env
+  load_balancer_arn = module.alb.lb_id
+} 

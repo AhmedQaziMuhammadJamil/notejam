@@ -1,7 +1,7 @@
 module "oidc-github" {
-  source  = "unfunco/oidc-github/aws"
-  version = "0.7.0"
-  enabled = var.enabled
+  source                        = "unfunco/oidc-github/aws"
+  version                       = "0.7.0"
+  enabled                       = var.enabled
   create_oidc_provider          = var.create_oidc_provider
   force_detach_policies         = var.force_detach_policies
   github_thumbprint             = var.github_thumbprint

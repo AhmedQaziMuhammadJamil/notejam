@@ -1,9 +1,9 @@
 variable "custom_tags" {
-type = map
+  type = map(any)
 }
 
 variable "ecr-role-arn" {
-type = string
+  type = string
 
 }
 variable "env" {

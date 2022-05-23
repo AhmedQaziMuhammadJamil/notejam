@@ -9,11 +9,11 @@ variable "ecr_repo_arn" {
   type = string
 }
 variable "env" {
-  type=string
+  type = string
 }
 variable "s3_bucket_arn" {
-  
+
 }
 variable "s3_kms_master_key_id" {
-  
+
 }
