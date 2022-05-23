@@ -518,8 +518,7 @@ resource "aws_wafv2_ip_set" "ip_sets" {
 }
 
  resource "aws_wafv2_web_acl_association" "alb_association" {
-  for_each     = var.load_balancer_arn
-  resource_arn = each.value
+  resource_arn = var.load_balancer_arn
   web_acl_arn  = aws_wafv2_web_acl.main.arn
 }
  

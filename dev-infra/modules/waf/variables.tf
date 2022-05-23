@@ -1,6 +1,5 @@
 
  variable "load_balancer_arn" {
-  type = map(any)
 }
 variable "waf_name" {
   type    = string
