@@ -2,55 +2,55 @@ resource "aws_db_parameter_group" "db-pg" {
   name        = "notejam-pg-${var.env}"
   family      = var.pgfamily
   description = "Parameter group for notejam -${var.env}"
-  tags = var.custom_tags
+  tags        = var.custom_tags
 }
 
 resource "aws_rds_cluster_parameter_group" "cpg" {
   name        = "notejam-cluster-pg-${var.env}"
   family      = var.pgfamily
   description = "Cluster Parameter group for notejam -${var.env}"
-  tags = var.custom_tags
+  tags        = var.custom_tags
 }
 
 locals {
-  db_user={
-    POSTGRES_USER=var.db_user
+  db_user = {
+    POSTGRES_USER = var.db_user
   }
-  db_pass={
-    POSTGRES_PASS=var.db_pass
+  db_pass = {
+    POSTGRES_PASS = var.db_pass
   }
-  db_name= {
-    POSTGRES_DB=var.db_name
+  db_name = {
+    POSTGRES_DB = var.db_name
   }
-  db_host={
-    POSTGRES_URL=module.rds-aurora.cluster_endpoint
+  db_host = {
+    POSTGRES_URL = module.rds-aurora.cluster_endpoint
   }
 }
 resource "aws_secretsmanager_secret" "rds-user" {
-  name = "notejam-db-master-username-${var.env}"
+  name                    = "notejam-db-master-username-${var.env}"
   recovery_window_in_days = 0
 }
 
- resource "aws_secretsmanager_secret_version" "secret-username" {
+resource "aws_secretsmanager_secret_version" "secret-username" {
   secret_id     = aws_secretsmanager_secret.rds-user.id
   secret_string = jsonencode(local.db_user)
-} 
+}
 
 
 resource "aws_secretsmanager_secret" "rds-password" {
-  name = "notejam-db-master-password-${var.env}"
-   recovery_window_in_days = 0
+  name                    = "notejam-db-master-password-${var.env}"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "secret-password" {
   secret_id     = aws_secretsmanager_secret.rds-password.id
   secret_string = jsonencode(local.db_pass)
-  
+
 }
 
 resource "aws_secretsmanager_secret" "rds-db-name" {
-  name = "notejam-db-name-${var.env}"
-   recovery_window_in_days = 0
+  name                    = "notejam-db-name-${var.env}"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "secret-name" {
@@ -59,8 +59,8 @@ resource "aws_secretsmanager_secret_version" "secret-name" {
 }
 
 resource "aws_secretsmanager_secret" "rds-db-host" {
-  name = "notejam-db-host-${var.env}"
-   recovery_window_in_days = 0
+  name                    = "notejam-db-host-${var.env}"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "secret-host" {
@@ -81,15 +81,15 @@ module "rds-aurora" {
   instance_class         = "db.t3.medium"
   master_password        = var.db_pass
   master_username        = var.db_user
-  database_name          = var.db_name     
+  database_name          = var.db_name
   instances = {
     writer = {
       instance_class = "db.t3.medium"
     }
-    
-     reader = {
+
+    reader = {
       instance_class = "db.t3.medium"
-    } 
+    }
 
   }
 

@@ -1,24 +1,24 @@
 variable "env" {
-  
+
 }
 variable "cluster_id" {
-  
+
 }
 
 variable "cluster_auth" {
-  
+
 }
 
 
 variable "host" {
-  
+
 }
 variable "token" {
-  
+
 }
 
 variable "cluster_ca_certificate" {
-  
+
 }
 
 variable "target_path" {
@@ -29,7 +29,7 @@ variable "target_path" {
 
 variable "components_extra" {
   type        = list(string)
-  default     =  ["image-reflector-controller","image-automation-controller"]
+  default     = ["image-reflector-controller", "image-automation-controller"]
   description = "extra flux components"
 }
 variable "github_owner" {

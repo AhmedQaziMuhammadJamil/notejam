@@ -28,13 +28,13 @@ variable "force_detach_policies" {
 variable "github_repositories" {
   description = "List of GitHub repository names."
   type        = list(string)
-  default = [ "AhmedQaziMuhammadJamil/notejam" ]
+  default     = ["AhmedQaziMuhammadJamil/notejam"]
 }
 
 variable "github_organisation" {
   description = "GitHub organisation name."
   type        = string
-  default = "AhmedQaziMuhammadJamil"
+  default     = "AhmedQaziMuhammadJamil"
 }
 
 variable "github_thumbprint" {
@@ -82,19 +82,19 @@ variable "max_session_duration" {
 variable "region" {
   description = "AWS region in which to apply resources."
   type        = string
-  default = "eu-west-1"
+  default     = "eu-west-1"
 }
 
 variable "tags" {
-  default     = {Name="Github-oidc"}
+  default     = { Name = "Github-oidc" }
   description = "Map of tags to be applied to all resources."
   type        = map(string)
 }
 
 variable "github_actions_ecr" {
-  description= "arn of policy created in  IAM role module"
+  description = "arn of policy created in  IAM role module"
 }
 
 variable "custom_tags" {
-  
+
 }

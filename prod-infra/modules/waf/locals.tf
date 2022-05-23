@@ -1,6 +1,6 @@
 locals {
   waf_name = "${var.waf_name}-${var.env}"
-  ip_sets= {
+  ip_sets = {
     whitelist_ipv4_prod = {
       ip_address_version = "IPV4"
       description        = "Allow whitelist for IPV4 addresses"

@@ -19,7 +19,7 @@ module "cluster_autoscaler_irsa_role" {
     }
   }
   tags = var.custom_tags
-  
+
 }
 
 
@@ -103,8 +103,8 @@ module "node_termination_handler_irsa_role" {
     }
   }
 
-    tags = var.custom_tags
-  
+  tags = var.custom_tags
+
 }
 
 
@@ -121,8 +121,8 @@ module "load_balancer_controller_irsa_role" {
     }
   }
 
-    tags = var.custom_tags
-  
+  tags = var.custom_tags
+
 }
 
 module "load_balancer_controller_targetgroup_binding_only_irsa_role" {
@@ -138,15 +138,15 @@ module "load_balancer_controller_targetgroup_binding_only_irsa_role" {
     }
   }
 
-   tags = var.custom_tags
-  
+  tags = var.custom_tags
+
 }
 
 
 module "secrets-manger-role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
-  role_name                              = "ascp-${var.env}"
+  role_name                      = "ascp-${var.env}"
   attach_external_secrets_policy = true
 
   oidc_providers = {
@@ -157,8 +157,8 @@ module "secrets-manger-role" {
     }
   }
 
-    tags = var.custom_tags
-  
+  tags = var.custom_tags
+
 }
 
 module "iam_assumable_role_external_dns" {
@@ -175,27 +175,27 @@ resource "aws_iam_role_policy" "external_dns" {
   role = module.iam_assumable_role_external_dns.iam_role_name
 
   policy = jsonencode({
-    "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "route53:ChangeResourceRecordSets"
-      ],
-      "Resource": [
-        "arn:aws:route53:::hostedzone/Z066262639G7W5SCF5VR0"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "route53:ListHostedZones",
-        "route53:ListResourceRecordSets"
-      ],
-      "Resource": [
-        "*"
-      ]
-    }
-  ]
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "route53:ChangeResourceRecordSets"
+        ],
+        "Resource" : [
+          "arn:aws:route53:::hostedzone/Z066262639G7W5SCF5VR0"
+        ]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "route53:ListHostedZones",
+          "route53:ListResourceRecordSets"
+        ],
+        "Resource" : [
+          "*"
+        ]
+      }
+    ]
   })
 }
