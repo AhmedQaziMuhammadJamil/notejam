@@ -53,10 +53,12 @@ module "mod_iam" {
   env         = var.env
 } 
 
- module "mod_waf" {
+  module "mod_waf" {
   source = "./modules/waf"
    env         = var.env
-}
+  load_balancer_arn =module.alb.lb_id
+} 
+
 
 module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
