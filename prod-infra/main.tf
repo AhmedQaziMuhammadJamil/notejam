@@ -116,11 +116,14 @@ module "alb" {
   subnets         = module.mod_vpc.out_nl_publicsubnet
   vpc_id          = module.mod_vpc.out_nl_vpcid
   security_groups = [module.mod_sg.alb-sg]
-  tags = {
+  tags = merge( 
+    local.custom_tags,
+    {
     "ingress.k8s.aws/stack"    = "public"
     "ingress.k8s.aws/resource" = "LoadBalancer"
     "elbv2.k8s.aws/cluster"    = "notejam-prod"
   }
+  )
 }
 
 module "mod_waf" {
