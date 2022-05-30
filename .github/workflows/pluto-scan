@@ -1,0 +1,27 @@
+name: Pluto github action
+
+on: [push, pull_request]
+
+jobs:
+  action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download pluto
+        uses: FairwindsOps/pluto/github-action@master
+      - name: Download Helm
+        uses: Azure/setup-helm@v2.0
+        id: install 
+      - name: Helm version
+        run: |
+            
+      - name: Pluto exists?
+        run: |
+          helm version
+    
+      - name: Use pluto
+        run: |
+          pluto detect-files -d operations-k8s-prod/
+          pluto detect-files -d operations-k8s-dev/
