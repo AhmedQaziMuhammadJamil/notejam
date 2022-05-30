@@ -283,6 +283,20 @@ aws secretsmanager delete-secret --secret-id your-secret --force-delete-without-
 - [x] Application and dependencies  are Deployed via Flux Image Controllers.
 - [x] RDS DBBackups are done via kubernetes cronjob.
 
+
+### Enhancements
+- [ ] Use Velaro for DR
+- [ ] Use Atlantis/Spacelift for Terraform
+- [ ] Use Tekton for Pipelines
+- [ ] Enable Encryption Inside the Cluster Ingress (HTTPS-SSL)
+- [ ] Use Sealed Secrets -Vault
+- [ ] Work with Network Policies
+- [ ] Work on GateKeeper
+- [ ] Work on OPA
+- [ ] Work with Taints and Tolerations ( priority -High)
+- [ ] Configure  Loki  along with Alert Managed
+- [ ] Work with contour or Traefik ingress
+
 ---------------------------
 
 ## Application Access-Dev
