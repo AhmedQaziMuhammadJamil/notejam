@@ -296,6 +296,9 @@ aws secretsmanager delete-secret --secret-id your-secret --force-delete-without-
 - [ ] Work with Taints and Tolerations ( priority -High)
 - [ ] Configure  Loki  along with Alert Managed
 - [ ] Work with contour or Traefik ingress
+- [ ] Use Github Actions with Private Runners and connect with Vault
+- [ ] Use Kaniko in Github Actions using PACKR
+- [ ] Build Github Actions  Runners using Packr
 
 ---------------------------
 
