@@ -28,7 +28,7 @@ locals {
       name                   = "apps-${var.env}"
       //subnets                = var.nodegroup_subnets
       max_size           = 6
-      min_size           = 3
+      min_size           = 2
       desired_size       = 3
       node_security_group_id = [var.worker_sg]
       k8s_labels = {
@@ -47,7 +47,7 @@ locals {
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
       max_size           = 6
-      min_size           = 3
+      min_size           = 2
       desired_size       = 3
 
       k8s_labels = {
@@ -66,7 +66,7 @@ locals {
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
       max_size           = 6
-      min_size           = 3
+      min_size           = 2
       desired_size       = 3
 
       k8s_labels = {
