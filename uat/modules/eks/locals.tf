@@ -28,8 +28,8 @@ locals {
       name                   = "apps-${var.env}"
       //subnets                = var.nodegroup_subnets
       max_size           = 6
-      min_size           = 1
-      desired_size       = 1
+      min_size           = 3
+      desired_size       = 3
       node_security_group_id = [var.worker_sg]
       k8s_labels = {
         scope = "apps"
@@ -47,8 +47,8 @@ locals {
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
       max_size           = 6
-      min_size           = 1
-      desired_size       = 1
+      min_size           = 3
+      desired_size       = 3
 
       k8s_labels = {
         scope = "monitoring"
@@ -66,8 +66,8 @@ locals {
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
       max_size           = 6
-      min_size           = 1
-      desired_size       = 1
+      min_size           = 3
+      desired_size       = 3
 
       k8s_labels = {
         scope = "operations"
