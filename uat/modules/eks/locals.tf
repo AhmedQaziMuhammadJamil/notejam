@@ -26,10 +26,10 @@ locals {
   eks_managed_node_groups = {
     apps = merge(local.eks_managed_node_group_defaults, {
       name                   = "apps-${var.env}"
-      subnets                = var.nodegroup_subnets
-      max_capacity           = 3
-      min_capacity           = 3
-      desired_capacity       = 3
+      //subnets                = var.nodegroup_subnets
+      max_size           = 3
+      min_size           = 3
+      desired_size       = 3
       node_security_group_id = [var.worker_sg]
       k8s_labels = {
         scope = "apps"
@@ -46,9 +46,9 @@ locals {
       name                   = "monitoring-${var.env}"
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
-      max_capacity           = 3
-      min_capacity           = 3
-      desired_capacity       = 3
+      max_size           = 3
+      min_size           = 3
+      desired_size       = 3
 
       k8s_labels = {
         scope = "monitoring"
@@ -65,9 +65,9 @@ locals {
       name                   = "operations-${var.env}"
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
-      max_capacity           = 3
-      min_capacity           = 3
-      desired_capacity       = 3
+      max_size           = 3
+      min_size           = 3
+      desired_size       = 3
 
       k8s_labels = {
         scope = "operations"
