@@ -14,6 +14,7 @@ module "base" {
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = false
   subnet_ids                      = var.control_plane_subnet_ids
+  control_plane_subnet_ids        =  var.nodegroup_subnets
   vpc_id                          = var.vpc_id
   
   

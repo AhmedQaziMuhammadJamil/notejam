@@ -3,7 +3,7 @@ terraform {
 
   backend "remote" {
     hostname     = "app.terraform.io"
-    organization = "Easygenerator"
+    organization = "Alpha-Project"
 
     workspaces {
       name = "uat"
