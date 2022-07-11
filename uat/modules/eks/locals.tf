@@ -27,7 +27,7 @@ locals {
     apps = merge(local.eks_managed_node_group_defaults, {
       name                   = "apps-${var.env}"
       //subnets                = var.nodegroup_subnets
-      max_size           = 3
+      max_size           = 6
       min_size           = 3
       desired_size       = 3
       node_security_group_id = [var.worker_sg]
@@ -46,7 +46,7 @@ locals {
       name                   = "monitoring-${var.env}"
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
-      max_size           = 3
+      max_size           = 6
       min_size           = 3
       desired_size       = 3
 
@@ -65,7 +65,7 @@ locals {
       name                   = "operations-${var.env}"
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
-      max_size           = 3
+      max_size           = 6
       min_size           = 3
       desired_size       = 3
 
