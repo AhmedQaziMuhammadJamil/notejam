@@ -38,8 +38,8 @@ module "rds_kms" {
   key_usage   = "ENCRYPT_DECRYPT"
 
   # Policy
-  /* /key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/administrator-access-eu"] */
-  key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"]
+  key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/administrator-access-eu"]
+  key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
   key_service_users  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"]
 
   # Aliases
