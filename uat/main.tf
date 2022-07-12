@@ -30,6 +30,23 @@ module "mod_eks" {
   
 }
 
+module "rds_kms" {
+  source  = "terraform-aws-modules/kms/aws"
+  version = "1.0.1"
+  
+  description = "EC2 AutoScaling key usage"
+  key_usage   = "ENCRYPT_DECRYPT"
+
+  # Policy
+  key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/administrator-access-eu"]
+  key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"]
+  key_service_users  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-rolerds.amazonaws.com/AWSServiceRoleForRDS"]
+
+  # Aliases
+  aliases = ["uat/rds"]
+
+  tags = local.common_tags
+}
 /* module "mod_rds" {
   source = "./modules/rds"
   

@@ -1,5 +1,5 @@
 module "pgsql" {
-  source  = "terraform-aws-modules/rds/aws"
+  source  = " "
   version = "3.5.0"
 
   identifier = "easygenerator-${local.common_tags.environment}-pgsql"
@@ -53,3 +53,12 @@ module "pgsql" {
       "Name" = "easygenerator-${local.common_tags.environment}-pgsql"
   })
 }
+
+
+
+module "rds" {
+  source  = "terraform-aws-modules/rds/aws"
+  version = "4.5.0"
+ 
+}
+
