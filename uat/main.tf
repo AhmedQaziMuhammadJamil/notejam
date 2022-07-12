@@ -30,6 +30,10 @@ module "mod_eks" {
   
 }
 
+/* module "mod_rds" {
+  source = "./modules/rds"
+  
+} */
 
 
 module "alb" {

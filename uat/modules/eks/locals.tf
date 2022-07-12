@@ -88,7 +88,7 @@ locals {
   coredns = {
     cluster_name      = module.base.cluster_id
     addon_name        = "coredns"
-    addon_version     = "v1.8.4-eksbuild.1"
+    addon_version     = "v1.8.7 -eksbuild.1"
     resolve_conflicts = "OVERWRITE"
 
     tags = merge(
@@ -102,7 +102,7 @@ locals {
     cluster_name = module.base.cluster_id
     addon_name   = "vpc-cni"
 
-    addon_version = "v1.10.2-eksbuild.1"
+    addon_version = "v1.11.2-eksbuild.1"
 
     resolve_conflicts        = "OVERWRITE"
     tags = merge(
@@ -115,7 +115,7 @@ locals {
   kube-proxy = {
     cluster_name      = module.base.cluster_id
     addon_name        = "kube-proxy"
-    addon_version     = "v1.21.2-eksbuild.2"
+    addon_version     = "v1.22.6-eksbuild.1"
     resolve_conflicts = "OVERWRITE"
 
     tags = merge(
@@ -127,7 +127,7 @@ locals {
   }
   admin_access = {
     description = "Admin ingress to Kubernetes API"
-    cidr_blocks = ["10.10.0.0/16"] //TODO add subnets
+    cidr_blocks = ["192.168.0.0/16"] //TODO add subnets
     protocol    = "all"
     from_port   = 0
     to_port     = 65535
