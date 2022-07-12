@@ -88,7 +88,7 @@ locals {
   coredns = {
     cluster_name      = module.base.cluster_id
     addon_name        = "coredns"
-    addon_version     = "v1.8.7 -eksbuild.1"
+    addon_version     = "v1.8.7-eksbuild.1"
     resolve_conflicts = "OVERWRITE"
 
     tags = merge(
