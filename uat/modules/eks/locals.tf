@@ -34,13 +34,13 @@ locals {
       k8s_labels = {
         scope = "apps"
       }
-      /*       taints = [
+             taints = [
         {
           key    = "scope"
           value  = "apps"
           effect = "NO_SCHEDULE"
         }
-      ] */
+      ] 
     })
     monitoring = merge(local.eks_managed_node_group_defaults, {
       name                   = "monitoring-${var.env}"
@@ -53,13 +53,13 @@ locals {
       k8s_labels = {
         scope = "monitoring"
       }
-      /* taints = [
+       taints = [
         {
           key    = "scope"
           value  = "monitoring"
           effect = "NO_SCHEDULE"
         }
-      ] */
+      ] 
     })
     operations = merge(local.eks_managed_node_group_defaults, {
       name                   = "operations-${var.env}"
@@ -72,13 +72,13 @@ locals {
       k8s_labels = {
         scope = "operations"
       }
-      /*        taints = [
+              taints = [
         {
           key    = "CriticalAddonsOnly"
           value  = "true"
           effect = "NO_SCHEDULE"
         }
-      ]  */
+      ]  
     })
   }
 
