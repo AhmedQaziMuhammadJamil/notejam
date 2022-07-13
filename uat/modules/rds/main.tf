@@ -20,7 +20,7 @@ module "rds" {
   password              = var.pg_password
   port                  = 5432
   create_db_subnet_group = true
-  db_subnet_group_name   = "ezgenuat"
+  db_subnet_group_name   = "ezgen-${var.env}"
   subnet_ids             =  var.db_subnets
   vpc_security_group_ids = [var.security_group]
   maintenance_window                    = "Mon:22:00-Mon:23:00"
@@ -33,7 +33,7 @@ module "rds" {
   performance_insights_kms_key_id       = var.kms_key
   create_monitoring_role                = true
   monitoring_interval                   = 60
-  parameter_group_name                  = "ezgen-uat"
+  parameter_group_name                  = "ezgen-${var.env}"
   monitoring_role_name                  = var.env
   auto_minor_version_upgrade = true
   apply_immediately          = false
