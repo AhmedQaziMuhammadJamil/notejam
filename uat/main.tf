@@ -41,9 +41,9 @@ module "rds_kms" {
 
   # Policy
   enable_default_policy                  = true
-  key_administrators = data.aws_caller_identity.current.arn
-  key_users          = data.aws_caller_identity.current.arn
-  key_service_users  = data.aws_caller_identity.current.arn
+  key_administrators = [data.aws_caller_identity.current.arn]
+  key_users          = [data.aws_caller_identity.current.arn]
+  key_service_users  = [data.aws_caller_identity.current.arn]
 
   # Aliases
   aliases = ["uat/rds"]
