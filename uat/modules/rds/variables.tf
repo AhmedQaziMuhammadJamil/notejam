@@ -4,7 +4,7 @@ variable "env" {
 }
 
 
-variable "security_groups" {
+variable "security_group" {
     type = string
     description = "(optional) describe your variable"
 }

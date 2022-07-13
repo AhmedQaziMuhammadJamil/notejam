@@ -22,7 +22,7 @@ module "rds" {
   create_db_subnet_group = true
   db_subnet_group_name   = "ezgen-${var.env}"
   subnet_ids             =  var.db_subnets
-  vpc_security_group_ids = [var.security_groups]
+  vpc_security_group_ids = [var.security_group]
   maintenance_window                    = "Mon:22:00-Mon:23:00"
   backup_window                         = "23:00-02:00"
   backup_retention_period               = 30
