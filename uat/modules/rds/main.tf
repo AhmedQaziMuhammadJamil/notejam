@@ -16,11 +16,11 @@ module "rds" {
   storage_encrypted     = true
   copy_tags_to_snapshot = true
   kms_key_id            = var.kms_key
-  username              = "ezgen-${var.env}"
+  username              = "ezgenuat"
   password              = var.pg_password
   port                  = 5432
   create_db_subnet_group = true
-  db_subnet_group_name   = "ezgen-${var.env}"
+  db_subnet_group_name   = "ezgenuat"
   subnet_ids             =  var.db_subnets
   vpc_security_group_ids = [var.security_group]
   maintenance_window                    = "Mon:22:00-Mon:23:00"
