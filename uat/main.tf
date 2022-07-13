@@ -39,10 +39,8 @@ module "rds_kms" {
   is_enabled              = true
   multi_region            = false
 
-  # Policy
-  enable_default_policy                  = true
    key_administrators = ["arn:aws:iam::003767002475:user/aqazi"]
-   key_users          = ["arn:aws:iam::003767002475:root"]
+   key_users          = ["arn:aws:iam::003767002475:user/aqazi"]
    key_service_users  = ["arn:aws:iam::003767002475:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"]
 
   # Aliases
