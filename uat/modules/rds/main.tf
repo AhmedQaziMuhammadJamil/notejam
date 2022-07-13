@@ -9,7 +9,7 @@ module "rds" {
   engine_version                         = "14.1"
   family                                 = "postgres14"
   major_engine_version                   = "14"
-  instance_class                         = "db.m5.large"
+  instance_class                         = "db.m6gd.large"
   multi_az                               = false
   allocated_storage                      = 20
   max_allocated_storage                  = 650
