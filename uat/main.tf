@@ -41,15 +41,17 @@ module "rds_kms" {
 
   # Policy
   enable_default_policy                  = true
-  //key_administrators = ["arn:aws:iam::003767002475:user/aqazi"]
-  //key_users          = ["arn:aws:iam::003767002475:user/aqazi"]
- // key_service_users  = ["arn:aws:iam::003767002475:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"]
+   key_administrators = ["aqazi"]
+   key_users          = ["aqazi"]
+   key_service_users  = ["AWSServiceRoleForRDS"]
 
   # Aliases
   aliases = ["uat/rds"]
 
   tags = local.common_tags
 }
+
+
 /* module "mod_rds" {
   source = "./modules/rds"
   
