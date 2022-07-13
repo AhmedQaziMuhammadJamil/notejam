@@ -33,6 +33,7 @@ module "rds" {
   performance_insights_kms_key_id       = var.kms_key
   create_monitoring_role                = true
   monitoring_interval                   = 60
+  parameter_group_name                  = "ezgen-uat"
   monitoring_role_name                  = var.env
   auto_minor_version_upgrade = true
   apply_immediately          = false
