@@ -53,8 +53,8 @@ module "rds_kms" {
  module "mod_rds" {
   source = "./modules/rds"
   security_group = module.mod_sg.rds_sg
-  kms_key =   [module.rds_kms.key_id]
-  db_subnets = module.mod_vpc.database_subnets
+  kms_key =   module.rds_kms.key_id
+  db_subnets = module.mod_vpc.db_subnets
   env         = var.env
   pg_password  = var.pg_password
   
