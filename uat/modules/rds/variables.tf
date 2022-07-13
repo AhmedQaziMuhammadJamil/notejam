@@ -1,0 +1,24 @@
+variable "env" {
+    type = string
+    description = "(optional) describe your variable"
+}
+
+
+variable "security_groups" {
+    type = string
+    description = "(optional) describe your variable"
+}
+
+variable "kms_key" {
+    type = string
+    description = "(optional) describe your variable"
+}
+
+variable "db_subnets" {
+    type = string
+    description = "(optional) describe your variable"
+}
+variable "pg_password" {
+    type = string
+    description = "(optional) describe your variable"
+}

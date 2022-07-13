@@ -17,3 +17,8 @@ output "eks_controlplane_eni_subnets" {
   value       = module.uat_vpc.intra_subnets
   description = "RDS Subnets"
 }
+
+
+output "db_subnets" {
+  value = module.uat_vpc.database_subnets
+}

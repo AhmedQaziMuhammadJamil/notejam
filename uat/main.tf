@@ -1,4 +1,4 @@
-/* module "mod_vpc" {
+ module "mod_vpc" {
   source       = "./modules/vpc"
   vpc_cidr     = var.vpc_cidr
   env          = var.env
@@ -17,7 +17,7 @@ module "mod_sg" {
   worker_node_sg = "eks-worker"
 }
 
-module "mod_eks" {
+/* module "mod_eks" {
   source                   = "./modules/eks"
   env                      = var.env
   common_tags              = local.common_tags
@@ -28,8 +28,8 @@ module "mod_eks" {
   alb_sg                   = module.mod_sg.alb_sg
   worker_sg               = module.mod_sg.worker_sg
   
-}
- */
+} */
+ 
 module "rds_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
@@ -38,23 +38,28 @@ module "rds_kms" {
   key_usage   = "ENCRYPT_DECRYPT"
   is_enabled              = true
   multi_region            = false
-   key_owners         = ["arn:aws:iam::003767002475:root"]
-   key_administrators = ["arn:aws:iam::003767002475:user/aqazi"]
-   key_users          = ["arn:aws:iam::003767002475:user/aqazi"]
-   key_service_users  = ["arn:aws:iam::003767002475:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"]
+   key_owners         = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+   key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}5:user/aqazi"]
+   key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
+   key_service_users  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"]
 
   # Aliases
-  aliases = ["uat/rds"]
+  aliases = ["${var.env}-rds"]
 
   tags = local.common_tags
 }
 
 
-/* module "mod_rds" {
+ module "mod_rds" {
   source = "./modules/rds"
+  security_groups = [module.mod_sg.rds_sg]
+  kms_key =   [module.mod_rds_kms.key_id]
+  db_subnets = module.mod_vpc.database_subnets
+  env         = var.env
+  pg_password  = var.pg_password
   
-} */
-
+  
+} 
 
 /* module "alb" {
   source          = "terraform-aws-modules/alb/aws"

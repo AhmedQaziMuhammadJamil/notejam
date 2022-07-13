@@ -17,3 +17,9 @@ variable "cluster_name" {
   type        = string
   description = "(optional) describe your variable"
 } 
+
+
+variable "pg_password" {
+  type = string
+  description = "(optional) describe your variable"
+}
