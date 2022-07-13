@@ -38,7 +38,7 @@ module "rds_kms" {
   key_usage   = "ENCRYPT_DECRYPT"
   is_enabled              = true
   multi_region            = false
-
+   key_owners         = ["arn:aws:iam::003767002475:root"]
    key_administrators = ["arn:aws:iam::003767002475:user/aqazi"]
    key_users          = ["arn:aws:iam::003767002475:user/aqazi"]
    key_service_users  = ["arn:aws:iam::003767002475:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"]
