@@ -1,4 +1,4 @@
-module "mod_vpc" {
+/* module "mod_vpc" {
   source       = "./modules/vpc"
   vpc_cidr     = var.vpc_cidr
   env          = var.env
@@ -29,18 +29,21 @@ module "mod_eks" {
   worker_sg               = module.mod_sg.worker_sg
   
 }
-
+ */
 module "rds_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
   
-  description = "EC2 AutoScaling key usage"
+  description = "RDS"
   key_usage   = "ENCRYPT_DECRYPT"
+  is_enabled              = true
+  multi_region            = false
 
   # Policy
-  key_administrators = ["arn:aws:iam::003767002475:role/administrator-access-eu"]
-  key_users          = ["arn:aws:iam::003767002475:user/aqazi"]
-  key_service_users  = ["arn:aws:iam::003767002475:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"]
+  enable_default_policy                  = true
+  key_administrators = data.aws_caller_identity.current.arn
+  key_users          = data.aws_caller_identity.current.arn
+  key_service_users  = data.aws_caller_identity.current.arn
 
   # Aliases
   aliases = ["uat/rds"]
@@ -53,7 +56,7 @@ module "rds_kms" {
 } */
 
 
-module "alb" {
+/* module "alb" {
   source          = "terraform-aws-modules/alb/aws"
   version         = "6.10.0"
   name            = "public-${var.env}"
@@ -69,7 +72,7 @@ module "alb" {
   }
   )
 }
-
+ */
 
 
 
