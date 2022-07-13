@@ -16,10 +16,10 @@ variable "env" {
 variable "cluster_name" {
   type        = string
   description = "(optional) describe your variable"
-} 
+}
 
 
 variable "pg_password" {
-  type = string
+  type        = string
   description = "(optional) describe your variable"
 }

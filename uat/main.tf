@@ -1,4 +1,4 @@
- module "mod_vpc" {
+module "mod_vpc" {
   source       = "./modules/vpc"
   vpc_cidr     = var.vpc_cidr
   env          = var.env
@@ -29,19 +29,19 @@ module "mod_sg" {
   worker_sg               = module.mod_sg.worker_sg
   
 } */
- 
+
 module "rds_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
-  
-  description = "RDS"
-  key_usage   = "ENCRYPT_DECRYPT"
-  is_enabled              = true
-  multi_region            = false
-   key_owners         = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-   key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}5:user/aqazi"]
-   key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
-   key_service_users  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"]
+
+  description        = "RDS"
+  key_usage          = "ENCRYPT_DECRYPT"
+  is_enabled         = true
+  multi_region       = false
+  key_owners         = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+  key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}5:user/aqazi"]
+  key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
+  key_service_users  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"]
 
   # Aliases
   aliases = ["${var.env}-rds"]
@@ -50,16 +50,16 @@ module "rds_kms" {
 }
 
 
- module "mod_rds" {
-  source = "./modules/rds"
+module "mod_rds" {
+  source         = "./modules/rds"
   security_group = module.mod_sg.rds_sg
-  kms_key =   module.rds_kms.key_id
-  db_subnets = module.mod_vpc.db_subnets
-  env         = var.env
-  pg_password  = var.pg_password
-  
-  
-} 
+  kms_key        = module.rds_kms.key_id
+  db_subnets     = module.mod_vpc.db_subnets
+  env            = var.env
+  pg_password    = var.pg_password
+
+
+}
 
 /* module "alb" {
   source          = "terraform-aws-modules/alb/aws"

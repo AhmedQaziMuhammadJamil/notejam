@@ -13,21 +13,21 @@ module "base" {
   cluster_version                 = local.cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
-  subnet_ids                      = var.nodegroup_subnets 
-  control_plane_subnet_ids        =  var.control_plane_subnet_ids
+  subnet_ids                      = var.nodegroup_subnets
+  control_plane_subnet_ids        = var.control_plane_subnet_ids
   vpc_id                          = var.vpc_id
-  
-  
-  
-  create_kms_key                  = true
+
+
+
+  create_kms_key = true
   cluster_encryption_config = [{
-    resources        = ["secrets"]
-  }] 
+    resources = ["secrets"]
+  }]
   kms_key_deletion_window_in_days = 7
   enable_kms_key_rotation         = true
 
 
-  
+
 
 
 
@@ -92,7 +92,7 @@ module "base" {
 
 
 
-  tags                            = var.common_tags
+  tags = var.common_tags
 }
 
 

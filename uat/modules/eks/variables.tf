@@ -43,6 +43,6 @@ variable "env" {
 }
 
 variable "worker_sg" {
-    type = string
-    description = "(optional) describe your variable"
+  type        = string
+  description = "(optional) describe your variable"
 }
