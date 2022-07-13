@@ -4,7 +4,7 @@
 module "rds" {
   source  = "terraform-aws-modules/rds/aws"
   version = "4.5.0"
-  identifier = "${var.env}-pgsql"
+  identifier = "ezgen-pgsql"
   engine                = "postgres"
   engine_version        = "14.1"
   family                = "postgres14"
