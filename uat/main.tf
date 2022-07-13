@@ -39,7 +39,7 @@ module "rds_kms" {
   is_enabled         = true
   multi_region       = false
   key_owners         = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-  key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}5:user/aqazi"]
+  key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
   key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
   key_service_users  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS"]
 
