@@ -15,7 +15,7 @@ variable "kms_key" {
 }
 
 variable "db_subnets" {
-    type = string
+    type = list
     description = "(optional) describe your variable"
 }
 variable "pg_password" {
