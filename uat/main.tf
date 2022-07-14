@@ -108,13 +108,13 @@ module "mq_broker" {
     auto_minor_version_upgrade = true
     deployment_mode            = "SINGLE_INSTANCE"
     engine_type                = "RabbitMQ"
-    engine_version             = "3.8.6"
+    engine_version             = "3.9.16"
     host_instance_type         = "mq.m5.large"
     publicly_accessible        = false
     general_log_enabled        = true
     audit_log_enabled          = false
-    encryption_enabled         = true
-    use_aws_owned_key          = true
+    encryption_enabled         = false
+    use_aws_owned_key          = false
     vpc_id                     = module.mod_vpc.vpc_id
     subnet_ids                 = [module.mod_vpc.db_subnets[0]]
     associated_security_group_ids = [module.mod_sg.rabbitmq_sg]
