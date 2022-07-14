@@ -116,7 +116,7 @@ module "mq_broker" {
     encryption_enabled         = true
     use_aws_owned_key          = true
     vpc_id                     = module.mod_vpc.vpc_id
-    subnet_ids                 = module.mod_vpc.db_subnets[0]
+    subnet_ids                 = [module.mod_vpc.db_subnets[0]]
     associated_security_group_ids = [module.mod_sg.rabbitmq_sg]
   }
 
