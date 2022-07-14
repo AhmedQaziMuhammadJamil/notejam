@@ -22,3 +22,7 @@ output "eks_controlplane_eni_subnets" {
 output "db_subnets" {
   value = module.uat_vpc.database_subnets
 }
+
+output "elasticache_subnets" {
+  value = module.uat_vpc.elasticache_subnets
+}

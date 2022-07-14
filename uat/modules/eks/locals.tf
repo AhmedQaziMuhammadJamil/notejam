@@ -32,12 +32,12 @@ locals {
       desired_size           = 3
       node_security_group_id = [var.worker_sg]
       k8s_labels = {
-        scope = "apps"
+        scope = "application" //TODO: ask about labels
       }
       taints = [
         {
           key    = "scope"
-          value  = "apps"
+          value  = "application"
           effect = "NO_SCHEDULE"
         }
       ]
@@ -80,6 +80,41 @@ locals {
         }
       ]
     })
+      windows = merge(local.eks_managed_node_group_defaults, {
+      name                   = "windows-${var.env}"
+      ami_type               = "AL2_ARM_64"
+      node_security_group_id = [var.worker_sg]
+      subnets                = var.nodegroup_subnets
+      max_size               = 6
+      min_size               = 3
+      desired_size           = 3
+
+      k8s_labels = {
+        scope = "windows"
+      }
+      taints = [
+        {
+          key    = "CriticalAddonsOnly"
+          value  = "true"
+          effect = "NO_SCHEDULE"
+        }
+      ]
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 
   cluster_version = "1.22"
@@ -151,3 +186,5 @@ locals {
   }
 
 }
+
+//TODO:: Add windows nodes,refer staging

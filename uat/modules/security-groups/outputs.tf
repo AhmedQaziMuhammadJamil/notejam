@@ -10,3 +10,10 @@ output "worker_sg" {
 output "rds_sg" {
   value = module.rds_sg.security_group_id
 }
+
+output "redis_sg" {
+  value =  module.redis_sg.security_group_id
+}
+output "rabbitmq_sg" {
+  value = module.rabbitmq_sg.security_group_id
+}

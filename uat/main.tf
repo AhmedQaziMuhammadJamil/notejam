@@ -14,7 +14,9 @@ module "mod_sg" {
   env            = var.env
   vpc_id         = module.mod_vpc.vpc_id
   rds_sg_name    = "postgres"
-  worker_node_sg = "eks-worker"
+  worker_node_sg_name = "eks-worker"
+  redis_sg_name  = "redis" 
+  rabbitmq_sg_name = "rabbitmq"
 }
 
 /* module "mod_eks" {
@@ -50,18 +52,16 @@ module "rds_kms" {
 }
 
 
-module "mod_rds" {
+/* module "mod_rds" {
   source         = "./modules/rds"
   security_group = module.mod_sg.rds_sg
   kms_key        = module.rds_kms.key_arn
   db_subnets     = module.mod_vpc.db_subnets
   env            = var.env
   pg_password    = var.pg_password
+} */
 
-
-}
-
-/* module "alb" {
+/* module "alb_public" {
   source          = "terraform-aws-modules/alb/aws"
   version         = "6.10.0"
   name            = "public-${var.env}"
@@ -79,7 +79,46 @@ module "mod_rds" {
 }
  */
 
+/* module "alb_internal" {
+  source          = "terraform-aws-modules/alb/aws"
+  version         = "6.10.0"
+  name            = "public-${var.env}"
+  subnets         = module.mod_vpc.public_subnets
+  vpc_id          = module.mod_vpc.vpc_id
+  security_groups = [module.mod_sg.alb_sg]
+  tags = merge( 
+    local.common_tags,
+    {
+    "ingress.k8s.aws/stack"    = "internal"
+    "ingress.k8s.aws/resource" = "LoadBalancer"
+    "elbv2.k8s.aws/cluster"    = var.cluster_name
+  }
+  )
+}
+ */
+module "mq_broker" {
+    source = "cloudposse/mq-broker/aws"
+    # Cloud Posse recommends pinning every module to a specific version
+    # version     = "x.x.x"
 
+    namespace                  = "eg"
+    stage                      =  var.env
+    name                       = "mq-broker"
+    apply_immediately          = true
+    auto_minor_version_upgrade = true
+    deployment_mode            = "ACTIVE_STANDBY_MULTI_AZ"
+    engine_type                = "RabbitMQ"
+    engine_version             = "3.8.6"
+    host_instance_type         = "mq.m5.large"
+    publicly_accessible        = false
+    general_log_enabled        = true
+    audit_log_enabled          = false
+    encryption_enabled         = true
+    use_aws_owned_key          = true
+    vpc_id                     = module.mod_vpc.vpc_id
+    subnet_ids                 = module.mod_vpc.db_subnets
+    associated_security_group_ids = module.mod_sg.rabbitmq_sg
+  }
 
 
 ##Base system overlays--kustomize
