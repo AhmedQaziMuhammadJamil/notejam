@@ -106,7 +106,7 @@ module "mq_broker" {
     name                       = "mq-broker"
     apply_immediately          = true
     auto_minor_version_upgrade = true
-    deployment_mode            = "SINGLE_INSTANCE"
+    deployment_mode            = "CLUSTER_MULTI_AZ"
     engine_type                = "RabbitMQ"
     engine_version             = "3.8.6"
     host_instance_type         = "mq.m5.large"
