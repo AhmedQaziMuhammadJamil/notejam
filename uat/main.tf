@@ -118,8 +118,51 @@ module "mq_broker" {
     vpc_id                     = module.mod_vpc.vpc_id
     subnet_ids                 = [module.mod_vpc.db_subnets[0]]
     associated_security_group_ids = [module.mod_sg.rabbitmq_sg]
+    create_security_group            = false
+
   }
 
+
+
+module "elasticache-redis" {
+  source  = "cloudposse/elasticache-redis/aws"
+  version = "0.44.0"
+  availability_zones               = data.aws_availability_zones.available.names
+  vpc_id                           = module.mod_vpc.vpc_id
+  associated_security_group_ids          = [module.mod_sg.redis_sg]
+  create_security_group            = false
+  subnets                          = module.mod_vpc.elasticache_subnets
+  replication_group_id             = "ezgen-uat"
+  cluster_size                     = var.cluster_size
+  instance_type                    = var.instance_type
+  apply_immediately                = true
+  automatic_failover_enabled       = false
+  engine_version                   = var.engine_version
+  family                           = var.family
+  at_rest_encryption_enabled       = var.at_rest_encryption_enabled
+  transit_encryption_enabled       = var.transit_encryption_enabled
+ 
+
+  parameter = [
+    {
+      name  = "notify-keyspace-events"
+      value = "lK"
+    }
+  ]
+
+    context = module.this.context
+
+}
+
+
+module "this" {
+  source  = "cloudposse/label/null"
+  # Cloud Posse recommends pinning every module to a specific version
+  # version = "x.x.x"
+  namespace  ="ezgen"
+  stage      = "uat"
+  name       = "uat"
+}
 
 ##Base system overlays--kustomize
 
