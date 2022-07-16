@@ -23,11 +23,16 @@ variable "worker_node_sg_name" {
 }
 
 variable "redis_sg_name" {
-  type = string
+  type        = string
   description = "(optional) describe your variable"
 }
 
 variable "rabbitmq_sg_name" {
+  type        = string
+  description = "(optional) describe your variable"
+}
+
+variable "efs_sg_name" {
   type = string
   description = "(optional) describe your variable"
 }

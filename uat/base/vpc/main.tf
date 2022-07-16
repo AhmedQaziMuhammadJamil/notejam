@@ -69,21 +69,21 @@ module "mod_subnet_addr" {
       name     = "DB-SN-6"
       new_bits = 8
     },
-        {
+    {
       name     = "ElastiCache-SN-1"
       new_bits = 8
     },
     {
       name     = "ElastiCache-SN-2"
       new_bits = 8
-    },  
+    },
     {
       name     = "ElastiCache-SN-3"
       new_bits = 8
     },
-    
-    
-    
+
+
+
 
   ]
 }
@@ -99,8 +99,8 @@ module "uat_vpc" {
   azs                                  = [data.aws_availability_zones.available.names[0], data.aws_availability_zones.available.names[1], data.aws_availability_zones.available.names[2]]
   public_subnets                       = [module.mod_subnet_addr.network_cidr_blocks["Public-SN-1"], module.mod_subnet_addr.network_cidr_blocks["Public-SN-2"], module.mod_subnet_addr.network_cidr_blocks["Public-SN-3"]]
   private_subnets                      = [module.mod_subnet_addr.network_cidr_blocks["Private-SN-1"], module.mod_subnet_addr.network_cidr_blocks["Private-SN-2"], module.mod_subnet_addr.network_cidr_blocks["Private-SN-3"]]
-  database_subnets                     = [module.mod_subnet_addr.network_cidr_blocks["DB-SN-1"], module.mod_subnet_addr.network_cidr_blocks["DB-SN-2"],module.mod_subnet_addr.network_cidr_blocks["DB-SN-3"], module.mod_subnet_addr.network_cidr_blocks["DB-SN-4"],module.mod_subnet_addr.network_cidr_blocks["DB-SN-5"], module.mod_subnet_addr.network_cidr_blocks["DB-SN-6"]]
-  elasticache_subnets                  = [module.mod_subnet_addr.network_cidr_blocks["ElastiCache-SN-1"], module.mod_subnet_addr.network_cidr_blocks["ElastiCache-SN-2"],module.mod_subnet_addr.network_cidr_blocks["ElastiCache-SN-3"]]
+  database_subnets                     = [module.mod_subnet_addr.network_cidr_blocks["DB-SN-1"], module.mod_subnet_addr.network_cidr_blocks["DB-SN-2"], module.mod_subnet_addr.network_cidr_blocks["DB-SN-3"], module.mod_subnet_addr.network_cidr_blocks["DB-SN-4"], module.mod_subnet_addr.network_cidr_blocks["DB-SN-5"], module.mod_subnet_addr.network_cidr_blocks["DB-SN-6"]]
+  elasticache_subnets                  = [module.mod_subnet_addr.network_cidr_blocks["ElastiCache-SN-1"], module.mod_subnet_addr.network_cidr_blocks["ElastiCache-SN-2"], module.mod_subnet_addr.network_cidr_blocks["ElastiCache-SN-3"]]
   intra_subnets                        = [module.mod_subnet_addr.network_cidr_blocks["EKS-Control-Plane-SN-1"], module.mod_subnet_addr.network_cidr_blocks["EKS-Control-Plane-SN-2"], module.mod_subnet_addr.network_cidr_blocks["EKS-Control-Plane-SN-3"]]
   enable_nat_gateway                   = true
   one_nat_gateway_per_az               = true

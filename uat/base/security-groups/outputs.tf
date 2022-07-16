@@ -12,8 +12,12 @@ output "rds_sg" {
 }
 
 output "redis_sg" {
-  value =  module.redis_sg.security_group_id
+  value = module.redis_sg.security_group_id
 }
 output "rabbitmq_sg" {
   value = module.rabbitmq_sg.security_group_id
+}
+
+output "efs_sg" {
+  value = module.efs_sg.security_group_id
 }

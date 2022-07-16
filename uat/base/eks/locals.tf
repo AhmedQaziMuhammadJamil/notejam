@@ -80,7 +80,7 @@ locals {
         }
       ]
     })
-      windows = merge(local.eks_managed_node_group_defaults, {
+    windows = merge(local.eks_managed_node_group_defaults, {
       name                   = "windows-${var.env}"
       ami_type               = "AL2_ARM_64"
       node_security_group_id = [var.worker_sg]
