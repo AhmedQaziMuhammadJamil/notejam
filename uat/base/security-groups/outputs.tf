@@ -21,3 +21,7 @@ output "rabbitmq_sg" {
 output "efs_sg" {
   value = module.efs_sg.security_group_id
 }
+
+output "documentdb_sg" {
+  value = module.documentdb_sg.security_group_id
+}

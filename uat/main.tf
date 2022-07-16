@@ -53,6 +53,44 @@ module "rds_kms" {
   tags = local.common_tags
 }
 
+module "efs_kms" {
+  source  = "terraform-aws-modules/kms/aws"
+  version = "1.0.1"
+
+  description        = "EFS"
+  key_usage          = "ENCRYPT_DECRYPT"
+  is_enabled         = true
+  multi_region       = false
+  key_owners         = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+  key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
+  key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
+  key_service_users  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/elasticfilesystem.amazonaws.com/AWSServiceRoleForAmazonElasticFileSystem"]
+
+  # Aliases
+  aliases = ["${var.env}-efs"]
+
+  tags = local.common_tags
+}
+module "documentdb_kms" {
+  source  = "terraform-aws-modules/kms/aws"
+  version = "1.0.1"
+
+  description        = "DocumentDB"
+  key_usage          = "ENCRYPT_DECRYPT"
+  is_enabled         = true
+  multi_region       = false
+  key_owners         = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+  key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
+  key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
+
+  # Aliases
+  aliases = ["${var.env}-efs"]
+
+  tags = local.common_tags
+}
+
+
+
 
 /* module "mod_rds" {
   source         = "./base/rds"
@@ -178,24 +216,7 @@ module "this" {
 
 
 
-module "efs_kms" {
-  source  = "terraform-aws-modules/kms/aws"
-  version = "1.0.1"
 
-  description        = "RDS"
-  key_usage          = "ENCRYPT_DECRYPT"
-  is_enabled         = true
-  multi_region       = false
-  key_owners         = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-  key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
-  key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
-  key_service_users  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/elasticfilesystem.amazonaws.com/AWSServiceRoleForAmazonElasticFileSystem"]
-
-  # Aliases
-  aliases = ["${var.env}-efs"]
-
-  tags = local.common_tags
-}
 
 
  module "efs" {
@@ -235,33 +256,27 @@ module "route53_zones" {
 
 
 
-/*  module "documentdb-cluster" {
+  module "documentdb-cluster" {
   source  = "cloudposse/documentdb-cluster/aws"
   version = "0.15.0"
-  cluster_size                    = var.cluster_size
-  master_username                 = var.master_username
-  master_password                 = var.master_password
-  instance_class                  = var.instance_class
+  cluster_size                    = local.documentdb.cluster_size
+  master_username                 = local.documentdb.master_username
+  master_password                 = local.documentdb.master_password
+  instance_class                  = local.documentdb.instance_class
   vpc_id                          = module.mod_vpc.vpc_id
   subnet_ids                      = module.mod_vpc.db_subnets
   zone_id                         = module.route53_zones.route53_zone_zone_id["internal.easygenerator.com"]
-  allowed_security_groups         = var.allowed_security_groups
-  allowed_cidr_blocks             = var.allowed_cidr_blocks
-  snapshot_identifier             = var.snapshot_identifier
-  retention_period                = var.retention_period
-  preferred_backup_window         = var.preferred_backup_window
-  preferred_maintenance_window    = var.preferred_maintenance_window
-  cluster_parameters              = var.cluster_parameters
-  cluster_family                  = var.cluster_family
-  engine                          = var.engine
-  engine_version                  = var.engine_version
-  storage_encrypted               = var.storage_encrypted
-  kms_key_id                      = var.kms_key_id
-  skip_final_snapshot             = var.skip_final_snapshot
-  enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
-  cluster_dns_name                = var.cluster_dns_name
-  reader_dns_name                 = var.rea
-}  */
+  allowed_security_groups         = [module.mod_sg.documentdb_sg]
+  preferred_backup_window         = local.documentdb.preferred_backup_window
+  preferred_maintenance_window    = local.documentdb.preferred_maintenance_window
+  cluster_parameters              = local.documentdb.cluster_parameters
+  cluster_family                  = local.documentdb.cluster_family
+  engine_version                  = local.documentdb.engine_version
+  kms_key_id                      = module.documentdb_kms.key_arn
+  enabled_cloudwatch_logs_exports = local.documentdb.enabled_cloudwatch_logs_exports
+  cluster_dns_name                = local.documentdb.cluster_dns_name
+  reader_dns_name                 = local.documentdb.reader_dns_name
+}  
 
 
 
