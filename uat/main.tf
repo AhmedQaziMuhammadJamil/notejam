@@ -1,3 +1,59 @@
+##Global Resources
+module "route53_zones" {
+  source  = "terraform-aws-modules/route53/aws//modules/zones"
+  version = "2.9.0"
+  zones = {
+    "${local.route53.domain_internal}"= {
+      comment = "internal easygenertor zone R53 UAT"
+      tags = local.common_tags
+    }
+
+    "${local.route53.domain_uat}" = {
+      comment           = "uat route53 zone"
+      tags = local.common_tags
+    }
+}
+}
+
+
+###Regional-Resources
+
+
+ module "acm_internal" {
+  source  = "terraform-aws-modules/acm/aws"
+  version = "4.0.1"
+  domain_name  = "${local.route53.domain_internal}"
+  zone_id      = module.route53_zones.route53_zone_zone_id["internal.easygenerator.com"]
+
+  subject_alternative_names = [
+    "*.${local.route53.domain_internal}",
+    
+  ]
+
+  wait_for_validation = true
+
+  tags = local.common_tags
+}
+
+
+
+module "acm_uat" {
+  source  = "terraform-aws-modules/acm/aws"
+  version = "4.0.1"
+  domain_name  = local.route53.domain_uat
+  zone_id      = module.route53_zones.route53_zone_zone_id["uat.internal.easygenerator.com"]
+
+  subject_alternative_names = [
+    "*.${local.route53.domain_uat}",
+    
+  ]
+
+  wait_for_validation = true
+
+  tags = local.common_tags
+}
+ 
+
 module "mod_vpc" {
   source       = "./base/vpc"
   vpc_cidr     = var.vpc_cidr
@@ -234,24 +290,11 @@ module "this" {
 
 } 
 
-module "route53_zones" {
-  source  = "terraform-aws-modules/route53/aws//modules/zones"
-  version = "2.9.0"
-  zones = {
-    "internal.easygenerator.com" = {
-      comment = "internal easygenertor zone R53 UAT"
-      tags = local.common_tags
-    }
-
-    "uat.internal.easygenerator.com" = {
-      comment           = "uat route53 zone"
-      tags = local.common_tags
-    }
-}
 
 
 
-}
+
+
 
 
 
@@ -281,6 +324,12 @@ module "route53_zones" {
 }  
 
 
+
+/* module "waf-webaclv2" {
+  source  = "umotif-public/waf-webaclv2/aws"
+  version = "3.8.1"
+  # insert the 2 required variables here
+} */
 
 
 /* module "opensearch" {

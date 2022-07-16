@@ -35,4 +35,11 @@ locals {
  
   } 
 
+
+  route53 = {
+    domain_internal = "internal.easygenerator.com"
+    domain_uat   =   "uat.internal.easygenerator.com"
+
+  }
+
 }
