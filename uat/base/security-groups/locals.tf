@@ -1,6 +1,6 @@
 locals {
   alb_sg_name      = "${var.alb_sg_name}-${var.env}"
-  worker_node_sg_name   = "${var.alb_sg_name}-${var.env}"
+  worker_node_sg_name   = "${var.worker_node_sg_name}-${var.env}"
   rds_sg_name      = "${var.rds_sg_name}-${var.env}"
   redis_sg_name    = "${var.redis_sg_name}-${var.env}"
   rabbitmq_sg_name = "${var.rabbitmq_sg_name}-${var.env}"
