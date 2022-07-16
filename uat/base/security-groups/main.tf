@@ -12,7 +12,7 @@ module "alb_sg" {
 module "worker_nodes_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "4.9.0"
-  name    = local.worker_sg_name
+  name    = local.worker_node_sg_name
   vpc_id  = var.vpc_id
   #ingress_rules       = ["all-all"]
   ingress_with_source_security_group_id = [
