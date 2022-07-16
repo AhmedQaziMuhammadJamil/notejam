@@ -277,6 +277,7 @@ module "route53_zones" {
   enabled_cloudwatch_logs_exports = local.documentdb.enabled_cloudwatch_logs_exports
   cluster_dns_name                = local.documentdb.cluster_dns_name
   reader_dns_name                 = local.documentdb.reader_dns_name
+  tags                            = local.common_tags
 }  
 
 
