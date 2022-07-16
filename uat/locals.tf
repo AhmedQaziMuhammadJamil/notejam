@@ -10,7 +10,7 @@ locals {
     documentdb = {
     name        = lower("ezgen-${var.env}")
     cluster_size = "2"
-    master_username = "ezgen-uat"
+    master_username = "ezgenuat"
     instance_class = "db.t4g.medium"
     preferred_backup_window   = "23:00-02:00"
     cluster_family = "docdb3.6"
