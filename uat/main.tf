@@ -267,7 +267,7 @@ module "route53_zones" {
   vpc_id                          = module.mod_vpc.vpc_id
   subnet_ids                      = module.mod_vpc.db_subnets
   zone_id                         = module.route53_zones.route53_zone_zone_id["internal.easygenerator.com"]
-  allowed_security_groups         = [module.mod_sg.documentdb_sg]
+  allowed_security_groups         = [module.mod_sg.worker_sg]   //At this time the module doesn't allow to attach custom security groups it rather allows us to whitelist our security groups/attaching the worker sg 
   preferred_backup_window         = local.documentdb.preferred_backup_window
   preferred_maintenance_window    = local.documentdb.preferred_maintenance_window
   cluster_parameters              = local.documentdb.cluster_parameters
