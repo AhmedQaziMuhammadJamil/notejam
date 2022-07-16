@@ -24,7 +24,7 @@ module "route53_zones" {
   version = "4.0.1"
   domain_name  = "${local.route53.domain_internal}"
   zone_id      = module.route53_zones.route53_zone_zone_id["internal.easygenerator.com"]
-
+  create_route53_records = true
   subject_alternative_names = [
     "*.${local.route53.domain_internal}",
     
@@ -42,6 +42,7 @@ module "acm_uat" {
   version = "4.0.1"
   domain_name  = local.route53.domain_uat
   zone_id      = module.route53_zones.route53_zone_zone_id["uat.internal.easygenerator.com"]
+  create_route53_records = true
 
   subject_alternative_names = [
     "*.${local.route53.domain_uat}",
