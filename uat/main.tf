@@ -188,7 +188,7 @@ module "efs_kms" {
   key_owners         = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
   key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
   key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
-  key_service_users  = ["arn:aws:iam::714418391833:role/aws-service-role/elasticfilesystem.amazonaws.com/AWSServiceRoleForAmazonElasticFileSystem"]
+  key_service_users  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/elasticfilesystem.amazonaws.com/AWSServiceRoleForAmazonElasticFileSystem"]
 
   # Aliases
   aliases = ["${var.env}-efs"]
