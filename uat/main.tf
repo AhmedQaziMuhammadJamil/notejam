@@ -259,6 +259,7 @@ module "route53_zones" {
   module "documentdb-cluster" {
   source  = "cloudposse/documentdb-cluster/aws"
   version = "0.15.0"
+  name                            = local.documentdb.name
   cluster_size                    = local.documentdb.cluster_size
   master_username                 = local.documentdb.master_username
   master_password                 = local.documentdb.master_password
