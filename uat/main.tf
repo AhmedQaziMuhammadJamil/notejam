@@ -17,7 +17,8 @@ module "mod_sg" {
   worker_node_sg_name = "eks-worker"
   redis_sg_name       = "redis"
   rabbitmq_sg_name    = "rabbitmq"
-  efs_sg_name = "efs"
+  efs_sg_name         = "efs"
+  documentdb_sg_name  = "documentdb"
 }
 
 /* module "mod_eks" {
@@ -234,19 +235,16 @@ module "route53_zones" {
 
 
 
-/* module "documentdb-cluster" {
+/*  module "documentdb-cluster" {
   source  = "cloudposse/documentdb-cluster/aws"
   version = "0.15.0"
   cluster_size                    = var.cluster_size
   master_username                 = var.master_username
   master_password                 = var.master_password
   instance_class                  = var.instance_class
-  db_port                         = var.db_port
-  vpc_id                          = module.vpc.vpc_id
-  subnet_ids                      = module.subnets.private_subnet_ids
-  zone_id                         = var.zone_id
-  apply_immediately               = var.apply_immediately
-  auto_minor_version_upgrade      = var.auto_minor_version_upgrade
+  vpc_id                          = module.mod_vpc.vpc_id
+  subnet_ids                      = module.mod_vpc.db_subnets
+  zone_id                         = module.route53_zones.route53_zone_zone_id["internal.easygenerator.com"]
   allowed_security_groups         = var.allowed_security_groups
   allowed_cidr_blocks             = var.allowed_cidr_blocks
   snapshot_identifier             = var.snapshot_identifier
@@ -263,7 +261,7 @@ module "route53_zones" {
   enabled_cloudwatch_logs_exports = var.enabled_cloudwatch_logs_exports
   cluster_dns_name                = var.cluster_dns_name
   reader_dns_name                 = var.rea
-} */
+}  */
 
 
 

@@ -5,4 +5,6 @@ locals {
   redis_sg_name    = "${var.redis_sg_name}-${var.env}"
   rabbitmq_sg_name = "${var.rabbitmq_sg_name}-${var.env}"
   efs_sg_name      = "${var.efs_sg_name}-${var.env}"
+  documentdb_sg_name = "${var.documentdb_sg_name}-${var.env}"
+  
 } 

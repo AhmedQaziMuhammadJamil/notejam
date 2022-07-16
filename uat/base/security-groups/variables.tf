@@ -36,3 +36,8 @@ variable "efs_sg_name" {
   type = string
   description = "(optional) describe your variable"
 }
+
+variable "documentdb_sg_name" {
+  type = string
+  description = "(optional) describe your variable"
+}

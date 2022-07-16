@@ -79,3 +79,17 @@ module "efs_sg" {
   ]
   tags = var.common_tags
 }
+
+module "documentdb_sg" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "4.9.0"
+  name    = local.documentdb_sg_name
+  vpc_id  = var.vpc_id
+  ingress_with_source_security_group_id = [
+    {
+      rule                     = "mongodb-27017-tcp"
+      source_security_group_id = module.worker_nodes_sg.security_group_id
+    },
+  ]
+  tags = var.common_tags
+}
