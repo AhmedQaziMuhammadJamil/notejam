@@ -83,7 +83,7 @@ module "rds_kms" {
  module "alb_internal" {
   source          = "terraform-aws-modules/alb/aws"
   version         = "6.10.0"
-  name            = "public-${var.env}"
+  name            = "interal-${var.env}"
   subnets         = module.mod_vpc.public_subnets
   vpc_id          = module.mod_vpc.vpc_id
   security_groups = [module.mod_sg.alb_sg]
@@ -188,7 +188,7 @@ module "efs_kms" {
   key_owners         = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
   key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
   key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
-  key_service_users  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForAmazonElasticFileSystem"]
+  key_service_users  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/elasticfilesystem.amazonaws.com/AWSServiceRoleForAmazonElasticFileSystem"]
 
   # Aliases
   aliases = ["${var.env}-efs"]
@@ -207,7 +207,7 @@ module "efs_kms" {
   subnets = module.mod_vpc.private_subnets
   environment = var.env
   kms_key_id = module.efs_kms.key_id
-  associated_security_group_ids = module.mod_sg.efs_sg
+  associated_security_group_ids = [module.mod_sg.efs_sg]
   create_security_group =false
 
 } 
