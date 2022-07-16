@@ -84,7 +84,7 @@ module "documentdb_kms" {
   key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
 
   # Aliases
-  aliases = ["${var.env}-efs"]
+  aliases = ["${var.env}-documentdb"]
 
   tags = local.common_tags
 }
