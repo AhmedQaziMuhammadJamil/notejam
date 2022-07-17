@@ -41,7 +41,7 @@ module "acm_uat" {
   source  = "terraform-aws-modules/acm/aws"
   version = "4.0.1"
   domain_name  = local.route53.domain_uat
-  zone_id      =  "97d266f766676d2dd17f4f3f00dd4b42"
+  zone_id      =  data.cloudflare_zone.this.id
   validation_record_fqdns = cloudflare_record.validation.*.hostname
   create_route53_records = false
 
@@ -60,7 +60,7 @@ module "acm_uat" {
 resource "cloudflare_record" "validation" {
   count = length(module.acm_uat.distinct_domain_names)
 
-  zone_id =  "97d266f766676d2dd17f4f3f00dd4b42"
+  zone_id =  data.cloudflare_zone.this.id
   name    = element(module.acm_uat.validation_domains, count.index)["resource_record_name"]
   type    = element(module.acm_uat.validation_domains, count.index)["resource_record_type"]
   value   = replace(element(module.acm_uat.validation_domains, count.index)["resource_record_value"], "/.$/", "")
@@ -185,8 +185,8 @@ module "documentdb_kms" {
 
  module "alb_public" {
   source          = "terraform-aws-modules/alb/aws"
-  version         = "6.10.0"
-  name            = "public-${var.env}"
+  version         = "7.0.0"
+  name            = "ezgen-public-${var.env}"
   subnets         = module.mod_vpc.public_subnets
   vpc_id          = module.mod_vpc.vpc_id
   security_groups = [module.mod_sg.alb_sg]
@@ -203,8 +203,8 @@ module "documentdb_kms" {
 
  module "alb_internal" {
   source          = "terraform-aws-modules/alb/aws"
-  version         = "6.10.0"
-  name            = "interal-${var.env}"
+  version         = "7.0.0"
+  name            = "ezgen-internal-${var.env}"
   subnets         = module.mod_vpc.public_subnets
   vpc_id          = module.mod_vpc.vpc_id
   security_groups = [module.mod_sg.alb_sg]
@@ -367,6 +367,12 @@ module "this" {
 
 
 
+
+###Cloudfront
+
+
+
+#Waf
 
 
 
