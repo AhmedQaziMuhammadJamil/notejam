@@ -41,7 +41,7 @@ module "acm_uat" {
   source  = "terraform-aws-modules/acm/aws"
   version = "4.0.1"
   domain_name  = local.route53.domain_uat
-  zone_id      =  data.cloudflare_zone.this.id
+  zone_id      =  "97d266f766676d2dd17f4f3f00dd4b42"
   validation_record_fqdns = cloudflare_record.validation.*.hostname
   create_route53_records = false
 
@@ -60,7 +60,7 @@ module "acm_uat" {
 resource "cloudflare_record" "validation" {
   count = length(module.acm_uat.distinct_domain_names)
 
-  zone_id =  data.cloudflare_zone.this.id
+  zone_id =  "97d266f766676d2dd17f4f3f00dd4b42"
   name    = element(module.acm_uat.validation_domains, count.index)["resource_record_name"]
   type    = element(module.acm_uat.validation_domains, count.index)["resource_record_type"]
   value   = replace(element(module.acm_uat.validation_domains, count.index)["resource_record_value"], "/.$/", "")
