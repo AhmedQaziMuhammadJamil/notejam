@@ -201,9 +201,9 @@ module "documentdb_kms" {
 
    target_groups = [
     {
-      name_prefix      = "pref-"
+      name_prefix      = "${var.env}-nginx-ingress-"
       backend_protocol = "HTTP"
-      backend_port     = 80
+      backend_port     = 32080
       target_type      = "ip"
     }
    ]
