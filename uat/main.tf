@@ -222,7 +222,7 @@ module "documentdb_kms" {
    https_listeners = [
     {
       port               = 443
-      protocol           = "TLS"
+      protocol           = "HTTPS"
       certificate_arn    = module.acm_uat.acm_certificate_arn
       target_group_index = 0
     }
