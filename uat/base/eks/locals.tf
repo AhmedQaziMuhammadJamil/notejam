@@ -106,7 +106,7 @@ locals {
     ebs_optimized                        = true 
      block_device_mappings = {
         xvda = {
-          device_name = "/dev/xvda"
+          device_name = "/dev/sda1"
           ebs = {
             volume_size           = 75
             volume_type           = "gp3"
