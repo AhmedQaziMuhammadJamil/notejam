@@ -334,7 +334,7 @@ module "this" {
 
 } 
   module "documentdb-cluster" {
-  depends_on = ["module.route53_zones"]
+  depends_on = [module.route53_zones.zones]
   source  = "cloudposse/documentdb-cluster/aws"
   version = "0.15.0"
   name                            = local.documentdb.name
