@@ -89,12 +89,13 @@ locals {
    self_managed_node_group_defaults  = { 
     create_security_group                = false
     create_launch_template               = true
-    subnets                              = var.nodegroup_subnets
-    instance_types                       = ["t3a.medium"]
+    subnet_ids                              = var.nodegroup_subnets
+    instance_type                       = "t3a.medium"
+    update_launch_template_default_version = true
     platform                             = "windows"
     ami_id                               = data.aws_ami.win_ami.id
-    node_security_group_id               = [var.worker_sg]
-    name                                 = "windows"
+    vpc_security_group_ids               = [var.worker_sg]
+    name                                 = "windows-nodegroup"
     public_ip                            = false
     set_instance_types_on_lt             = true
     capacity_type                        = "ON_DEMAND"
@@ -102,11 +103,21 @@ locals {
     metadata_http_tokens                 = "required"
     metadata_http_put_response_hop_limit = 2
     key_name                             = var.key_name
-    ebs_optimized                        = true
-    disk_type                            = "gp3"
-    disk_size                            = 50
-    disk_encrypted                       = true
-    disk_kms_key_id                      = data.aws_kms_alias.ebs.target_key_arn
+    ebs_optimized                        = true 
+     block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+          ebs = {
+            volume_size           = 75
+            volume_type           = "gp3"
+            iops                  = 3000
+            throughput            = 150
+            encrypted             = true
+            kms_key_id            = data.aws_kms_alias.ebs.target_key_arn
+            delete_on_termination = true
+          }
+        }
+      }
     create_iam_role                      = true
     iam_role_additional_policies = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
     network_interfaces = [{
