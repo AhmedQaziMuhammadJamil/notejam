@@ -95,7 +95,15 @@ module "mod_sg" {
   documentdb_sg_name  = "documentdb"
 }
 
-/* module "mod_eks" {
+
+module "win_nodes_secretsmanager_keypair" {
+  source  = "rhythmictech/secretsmanager-keypair/aws"
+  version = "0.0.4"
+  name_prefix = "${var.env}-windows-key"
+  tags = local.common_tags
+}
+
+ module "mod_eks" {
   source                   = "./base/eks"
   env                      = var.env
   common_tags              = local.common_tags
@@ -104,9 +112,10 @@ module "mod_sg" {
   nodegroup_subnets        = module.mod_vpc.private_subnets
   control_plane_subnet_ids = module.mod_vpc.eks_controlplane_eni_subnets
   alb_sg                   = module.mod_sg.alb_sg
-  worker_sg               = module.mod_sg.worker_sg
+  worker_sg                = module.mod_sg.worker_sg
+  key_name                 = module.win_nodes_secretsmanager_keypair.key_name
   
-} */
+} 
 
 module "rds_kms" {
   source  = "terraform-aws-modules/kms/aws"
@@ -334,7 +343,7 @@ module "this" {
 
 } 
   module "documentdb-cluster" {
-  depends_on = [module.route53_zones.zones]
+  depends_on = [module.route53_zones]
   source  = "cloudposse/documentdb-cluster/aws"
   version = "0.15.0"
   name                            = local.documentdb.name
@@ -344,7 +353,6 @@ module "this" {
   instance_class                  = local.documentdb.instance_class
   vpc_id                          = module.mod_vpc.vpc_id
   subnet_ids                      = module.mod_vpc.db_subnets
-  //zone_id                         = module.route53_zones.route53_zone_zone_id["internal.easygenerator.com"]
   allowed_security_groups         = [module.mod_sg.worker_sg]   //At this time the module doesn't allow to attach custom security groups it rather allows us to whitelist our security groups/attaching the worker sg 
   preferred_backup_window         = local.documentdb.preferred_backup_window
   preferred_maintenance_window    = local.documentdb.preferred_maintenance_window
@@ -357,6 +365,8 @@ module "this" {
   reader_dns_name                 = local.documentdb.reader_dns_name
   tags                            = local.common_tags
 }  
+
+
 
 
 

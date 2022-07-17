@@ -17,6 +17,10 @@ locals {
     disk_encrypted                       = true
     disk_kms_key_id                      = data.aws_kms_alias.ebs.target_key_arn
     create_iam_role                      = true
+     autoscaling_group_tags = {
+      "k8s.io/cluster-autoscaler/enabled" : true,
+      "k8s.io/cluster-autoscaler/${var.cluster_name}" : "owned",
+    }
     network_interfaces = [{
       delete_on_termination       = true
       associate_public_ip_address = false
@@ -80,27 +84,54 @@ locals {
         }
       ]
     })
-    windows = merge(local.eks_managed_node_group_defaults, {
-      name                   = "windows-${var.env}"
-      ami_type               = "AL2_ARM_64"
-      node_security_group_id = [var.worker_sg]
-      subnets                = var.nodegroup_subnets
+  }
+
+   self_managed_node_group_defaults  = { 
+    create_security_group                = false
+    create_launch_template               = true
+    subnets                              = var.nodegroup_subnets
+    instance_types                       = ["t3a.medium"]
+    platform                             = "windows"
+    ami_id                               = data.aws_ami.win_ami.id
+    node_security_group_id               = [var.worker_sg]
+    name                                 = "windows"
+    public_ip                            = false
+    set_instance_types_on_lt             = true
+    capacity_type                        = "ON_DEMAND"
+    metadata_http_endpoint               = "enabled"
+    metadata_http_tokens                 = "required"
+    metadata_http_put_response_hop_limit = 2
+    key_name                             = var.key_name
+    ebs_optimized                        = true
+    disk_type                            = "gp3"
+    disk_size                            = 50
+    disk_encrypted                       = true
+    disk_kms_key_id                      = data.aws_kms_alias.ebs.target_key_arn
+    create_iam_role                      = true
+    iam_role_additional_policies = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
+    network_interfaces = [{
+      delete_on_termination       = true
+      associate_public_ip_address = false
+    }]
+     autoscaling_group_tags = {
+      "k8s.io/cluster-autoscaler/enabled" : true,
+      "k8s.io/cluster-autoscaler/${var.cluster_name}" : "owned",
+    }
+    
+    }
+  
+
+
+
+self_managed_node_groups = {
+windows = merge(local.self_managed_node_group_defaults,{
       max_size               = 6
       min_size               = 3
       desired_size           = 3
 
-      k8s_labels = {
-        scope = "windows"
-      }
-      taints = [
-        {
-          key    = "CriticalAddonsOnly"
-          value  = "true"
-          effect = "NO_SCHEDULE"
-        }
-      ]
     })
 
+}
 
 
 
@@ -115,7 +146,6 @@ locals {
 
 
 
-  }
 
   cluster_version = "1.22"
   name            = "ex-iam-eks-role"

@@ -1,7 +1,4 @@
 
-data "aws_kms_alias" "ebs" {
-  name = "alias/aws/ebs"
-}
 
 
 module "base" {
@@ -10,27 +7,20 @@ module "base" {
   cluster_name                    = var.cluster_name
   eks_managed_node_groups         = local.eks_managed_node_groups
   eks_managed_node_group_defaults = local.eks_managed_node_group_defaults
+  self_managed_node_group_defaults = local.self_managed_node_group_defaults
+  self_managed_node_groups         = local.self_managed_node_groups    
   cluster_version                 = local.cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
   subnet_ids                      = var.nodegroup_subnets
   control_plane_subnet_ids        = var.control_plane_subnet_ids
   vpc_id                          = var.vpc_id
-
-
-
   create_kms_key = true
   cluster_encryption_config = [{
     resources = ["secrets"]
   }]
   kms_key_deletion_window_in_days = 7
   enable_kms_key_rotation         = true
-
-
-
-
-
-
   cluster_enabled_log_types = [
     "api",
     "audit",

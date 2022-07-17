@@ -46,3 +46,8 @@ variable "worker_sg" {
   type        = string
   description = "(optional) describe your variable"
 }
+
+variable "key_name" {
+  type = string
+  description = "(optional) describe your variable"
+}
