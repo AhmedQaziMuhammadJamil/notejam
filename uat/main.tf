@@ -19,7 +19,7 @@ module "route53_zones" {
 ###Regional-Resources
 
 
- module "acm_internal" {
+/*  module "acm_internal" {
   source  = "terraform-aws-modules/acm/aws"
   version = "4.0.1"
   domain_name  = "${local.route53.domain_internal}"
@@ -35,14 +35,15 @@ module "route53_zones" {
   tags = local.common_tags
 }
 
-
+ */
 
 module "acm_uat" {
   source  = "terraform-aws-modules/acm/aws"
   version = "4.0.1"
   domain_name  = local.route53.domain_uat
-  zone_id      = module.route53_zones.route53_zone_zone_id["uat.internal.easygenerator.com"]
-  create_route53_records = true
+  zone_id      =  data.cloudflare_zone.this.id
+  validation_record_fqdns = cloudflare_record.validation.*.hostname
+  create_route53_records = false
 
   subject_alternative_names = [
     "*.${local.route53.domain_uat}",
@@ -53,7 +54,31 @@ module "acm_uat" {
 
   tags = local.common_tags
 }
+
+
  
+resource "cloudflare_record" "validation" {
+  count = length(module.acm_uat.distinct_domain_names)
+
+  zone_id =  data.cloudflare_zone.this.id
+  name    = element(module.acm_uat.validation_domains, count.index)["resource_record_name"]
+  type    = element(module.acm_uat.validation_domains, count.index)["resource_record_type"]
+  value   = replace(element(module.acm_uat.validation_domains, count.index)["resource_record_value"], "/.$/", "")
+  ttl     = 60
+  proxied = false
+
+  allow_overwrite = false
+}
+
+data "cloudflare_zone" "this" {
+  name = local.domain_name
+}
+
+
+
+
+
+
 
 module "mod_vpc" {
   source       = "./base/vpc"

@@ -34,7 +34,8 @@ locals {
   ]
  
   } 
-
+   domain = "easygenerator.com"
+   domain_name = trimsuffix(local.domain, ".")
 
   route53 = {
     domain_internal = "internal.easygenerator.com"
