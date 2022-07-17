@@ -15,7 +15,6 @@ module "route53_zones" {
 }
 }
 
-
 ###Regional-Resources
 
 
@@ -56,7 +55,6 @@ module "acm_uat" {
 }
 
 
- 
 resource "cloudflare_record" "validation" {
   count = length(module.acm_uat.distinct_domain_names)
 
@@ -73,12 +71,6 @@ resource "cloudflare_record" "validation" {
 data "cloudflare_zone" "this" {
   name = local.domain_name
 }
-
-
-
-
-
-
 
 module "mod_vpc" {
   source       = "./base/vpc"
@@ -327,11 +319,6 @@ module "this" {
   name      = "redis"
 }
 
-
-
-
-
-
  module "efs" {
   source  = "cloudposse/efs/aws"
   name = "ezgen-${var.env}"
@@ -346,17 +333,8 @@ module "this" {
   create_security_group =false
 
 } 
-
-
-
-
-
-
-
-
-
-
   module "documentdb-cluster" {
+  depends_on = ["module.route53_zones"]
   source  = "cloudposse/documentdb-cluster/aws"
   version = "0.15.0"
   name                            = local.documentdb.name
@@ -403,7 +381,13 @@ module "this" {
 
 
 
-#Waf
+
+
+
+
+
+
+
 
 
 
