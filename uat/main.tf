@@ -198,6 +198,36 @@ module "documentdb_kms" {
     "elbv2.k8s.aws/cluster"    = var.cluster_name
   }
   )
+
+   target_groups = [
+    {
+      name_prefix      = "pref-"
+      backend_protocol = "HTTP"
+      backend_port     = 80
+      target_type      = "ip"
+    }
+   ]
+ http_tcp_listeners = [
+    {
+      port        = 80
+      protocol    = "HTTP"
+      action_type = "redirect"
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
+  ]
+   https_listeners = [
+    {
+      port               = 443
+      protocol           = "TLS"
+      certificate_arn    = module.acm_uat.acm_certificate_arn
+      target_group_index = 0
+    }
+  ]
+
 }
  
 
@@ -206,6 +236,7 @@ module "documentdb_kms" {
   version         = "7.0.0"
   name            = "ezgen-internal-${var.env}"
   subnets         = module.mod_vpc.public_subnets
+  internal        = true
   vpc_id          = module.mod_vpc.vpc_id
   security_groups = [module.mod_sg.alb_sg]
   tags = merge( 
