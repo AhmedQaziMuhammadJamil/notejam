@@ -17,7 +17,7 @@ locals {
     disk_encrypted                       = true
     disk_kms_key_id                      = data.aws_kms_alias.ebs.target_key_arn
     create_iam_role                      = true
-     autoscaling_group_tags = {
+    autoscaling_group_tags = {
       "k8s.io/cluster-autoscaler/enabled" : true,
       "k8s.io/cluster-autoscaler/${var.cluster_name}" : "owned",
     }
@@ -86,63 +86,63 @@ locals {
     })
   }
 
-   self_managed_node_group_defaults  = { 
-    create_security_group                = false
-    create_launch_template               = true
-    subnet_ids                              = var.nodegroup_subnets
-    instance_type                       = "t3a.medium"
+  self_managed_node_group_defaults = {
+    create_security_group                  = false
+    create_launch_template                 = true
+    subnet_ids                             = var.nodegroup_subnets
+    instance_type                          = "t3a.medium"
     update_launch_template_default_version = true
-    platform                             = "windows"
-    ami_id                               = data.aws_ami.win_ami.id
-    vpc_security_group_ids               = [var.worker_sg]
-    name                                 = "windows-nodegroup"
-    public_ip                            = false
-    set_instance_types_on_lt             = true
-    capacity_type                        = "ON_DEMAND"
-    metadata_http_endpoint               = "enabled"
-    metadata_http_tokens                 = "required"
-    metadata_http_put_response_hop_limit = 2
-    key_name                             = var.key_name
-    ebs_optimized                        = true 
-     block_device_mappings = {
-        xvda = {
-          device_name = "/dev/sda1"
-          ebs = {
-            volume_size           = 75
-            volume_type           = "gp3"
-            iops                  = 3000
-            throughput            = 150
-            encrypted             = true
-            kms_key_id            = data.aws_kms_alias.ebs.target_key_arn
-            delete_on_termination = true
-          }
+    platform                               = "windows"
+    ami_id                                 = data.aws_ami.win_ami.id
+    vpc_security_group_ids                 = [var.worker_sg]
+    name                                   = "windows-nodegroup"
+    public_ip                              = false
+    set_instance_types_on_lt               = true
+    capacity_type                          = "ON_DEMAND"
+    metadata_http_endpoint                 = "enabled"
+    metadata_http_tokens                   = "required"
+    metadata_http_put_response_hop_limit   = 2
+    key_name                               = var.key_name
+    ebs_optimized                          = true
+    block_device_mappings = {
+      xvda = {
+        device_name = "/dev/sda1"
+        ebs = {
+          volume_size           = 75
+          volume_type           = "gp3"
+          iops                  = 3000
+          throughput            = 150
+          encrypted             = true
+          kms_key_id            = data.aws_kms_alias.ebs.target_key_arn
+          delete_on_termination = true
         }
       }
-    create_iam_role                      = true
+    }
+    create_iam_role              = true
     iam_role_additional_policies = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
     network_interfaces = [{
       delete_on_termination       = true
       associate_public_ip_address = false
     }]
-     autoscaling_group_tags = {
+    autoscaling_group_tags = {
       "k8s.io/cluster-autoscaler/enabled" : true,
       "k8s.io/cluster-autoscaler/${var.cluster_name}" : "owned",
     }
-    
-    }
-  
+
+  }
 
 
 
-self_managed_node_groups = {
-windows = merge(local.self_managed_node_group_defaults,{
-      max_size               = 6
-      min_size               = 3
-      desired_size           = 3
+
+  self_managed_node_groups = {
+    windows = merge(local.self_managed_node_group_defaults, {
+      max_size     = 6
+      min_size     = 3
+      desired_size = 3
 
     })
 
-}
+  }
 
 
 

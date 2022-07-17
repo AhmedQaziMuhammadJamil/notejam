@@ -33,11 +33,11 @@ variable "rabbitmq_sg_name" {
 }
 
 variable "efs_sg_name" {
-  type = string
+  type        = string
   description = "(optional) describe your variable"
 }
 
 variable "documentdb_sg_name" {
-  type = string
+  type        = string
   description = "(optional) describe your variable"
 }

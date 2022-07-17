@@ -2,20 +2,23 @@
 
 
 module "base" {
-  source                          = "terraform-aws-modules/eks/aws"
-  version                         = "~> 18.26.3"
-  cluster_name                    = var.cluster_name
-  eks_managed_node_groups         = local.eks_managed_node_groups
-  eks_managed_node_group_defaults = local.eks_managed_node_group_defaults
+  source                           = "terraform-aws-modules/eks/aws"
+  version                          = "~> 18.26.3"
+  cluster_name                     = var.cluster_name
+  eks_managed_node_groups          = local.eks_managed_node_groups
+  eks_managed_node_group_defaults  = local.eks_managed_node_group_defaults
   self_managed_node_group_defaults = local.self_managed_node_group_defaults
-  self_managed_node_groups         = local.self_managed_node_groups    
-  cluster_version                 = local.cluster_version
-  cluster_endpoint_private_access = true
-  cluster_endpoint_public_access  = true
-  subnet_ids                      = var.nodegroup_subnets
-  control_plane_subnet_ids        = var.control_plane_subnet_ids
-  vpc_id                          = var.vpc_id
-  create_kms_key = true
+  self_managed_node_groups         = local.self_managed_node_groups
+  cluster_version                  = local.cluster_version
+  cluster_endpoint_private_access  = true
+  cluster_endpoint_public_access   = true
+  subnet_ids                       = var.nodegroup_subnets
+  control_plane_subnet_ids         = var.control_plane_subnet_ids
+  vpc_id                           = var.vpc_id
+  create_kms_key                   = true
+  create_aws_auth_configmap = true
+  manage_aws_auth_configmap = true
+
   cluster_encryption_config = [{
     resources = ["secrets"]
   }]

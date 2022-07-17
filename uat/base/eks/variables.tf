@@ -48,6 +48,6 @@ variable "worker_sg" {
 }
 
 variable "key_name" {
-  type = string
+  type        = string
   description = "(optional) describe your variable"
 }
