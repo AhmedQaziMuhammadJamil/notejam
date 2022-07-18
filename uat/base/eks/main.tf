@@ -16,8 +16,8 @@ module "base" {
   control_plane_subnet_ids         = var.control_plane_subnet_ids
   vpc_id                           = var.vpc_id
   create_kms_key                   = true
-  create_aws_auth_configmap = true
-  //manage_aws_auth_configmap = true
+  //create_aws_auth_configmap = true
+  manage_aws_auth_configmap = true
 
   cluster_encryption_config = [{
     resources = ["secrets"]

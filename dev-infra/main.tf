@@ -117,10 +117,10 @@ module "alb" {
   tags = merge(
     local.custom_tags,
     {
-    "ingress.k8s.aws/stack"    = "public"
-    "ingress.k8s.aws/resource" = "LoadBalancer"
-    "elbv2.k8s.aws/cluster"    = "notejam-dev"
-  }
+      "ingress.k8s.aws/stack"    = "public"
+      "ingress.k8s.aws/resource" = "LoadBalancer"
+      "elbv2.k8s.aws/cluster"    = "notejam-dev"
+    }
   )
 }
 
