@@ -17,7 +17,7 @@ module "base" {
   vpc_id                           = var.vpc_id
   create_kms_key                   = true
   create_aws_auth_configmap = true
-  manage_aws_auth_configmap = true
+  //manage_aws_auth_configmap = true
 
   cluster_encryption_config = [{
     resources = ["secrets"]
