@@ -32,8 +32,8 @@ locals {
       name = "apps-${var.env}"
       //subnets                = var.nodegroup_subnets
       max_size               = 6
-      min_size               = 3
-      desired_size           = 3
+      min_size               = 1
+      desired_size           = 1
       node_security_group_id = [var.worker_sg]
       k8s_labels = {
         scope = "application" //TODO: ask about labels
@@ -51,8 +51,8 @@ locals {
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
       max_size               = 6
-      min_size               = 3
-      desired_size           = 3
+      min_size               = 1
+      desired_size           = 1
 
       k8s_labels = {
         scope = "monitoring"
@@ -70,8 +70,8 @@ locals {
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
       max_size               = 6
-      min_size               = 3
-      desired_size           = 3
+      min_size               = 1
+      desired_size           = 1
 
       k8s_labels = {
         scope = "operations"
@@ -137,8 +137,8 @@ locals {
   self_managed_node_groups = {
     windows = merge(local.self_managed_node_group_defaults, {
       max_size     = 6
-      min_size     = 3
-      desired_size = 3
+      min_size     = 1
+      desired_size = 1
 
     })
 
