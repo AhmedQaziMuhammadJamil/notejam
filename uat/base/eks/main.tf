@@ -106,7 +106,7 @@ resource "aws_autoscaling_policy" "eks_autoscaling_policy" {
 }
 
 
-/* data "aws_eks_cluster" "default"  {
+ data "aws_eks_cluster" "default"  {
   name = module.base.cluster_id
    depends_on = [module.base.cluster]
 }
@@ -128,4 +128,4 @@ provider "helm" {
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
     token                  = data.aws_eks_cluster_auth.cluster.token
   }
-} */
+} 
