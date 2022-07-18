@@ -1,5 +1,5 @@
 ##Global Resources
-/* module "route53_zones" {
+ module "route53_zones" {
   source  = "terraform-aws-modules/route53/aws//modules/zones"
   version = "2.9.0"
   zones = {
@@ -13,12 +13,12 @@
       tags = local.common_tags
     }
 }
-} */
+} 
 
 ###Regional-Resources
 
 
-/*  module "acm_internal" {
+ module "acm_internal" {
   source  = "terraform-aws-modules/acm/aws"
   version = "4.0.1"
   domain_name  = "${local.route53.domain_internal}"
@@ -34,8 +34,8 @@
   tags = local.common_tags
 }
 
- */
-/* 
+
+
 module "acm_uat" {
   source  = "terraform-aws-modules/acm/aws"
   version = "4.0.1"
@@ -52,10 +52,10 @@ module "acm_uat" {
   wait_for_validation = true
 
   tags = local.common_tags
-} */
+}
 
 
-/* resource "cloudflare_record" "validation" {
+ resource "cloudflare_record" "validation" {
   count = length(module.acm_uat.distinct_domain_names)
 
   zone_id =  data.cloudflare_zone.this.id
@@ -70,7 +70,7 @@ module "acm_uat" {
 
 data "cloudflare_zone" "this" {
   name = local.domain_name
-} */
+}
 
 module "mod_vpc" {
   source       = "./base/vpc"
@@ -117,7 +117,7 @@ module "mod_eks" {
 
 }
 
-/* module "rds_kms" {
+ module "rds_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
 
@@ -134,9 +134,9 @@ module "mod_eks" {
   aliases = ["${var.env}-rds"]
 
   tags = local.common_tags
-} */
+} 
 
-/* module "efs_kms" {
+ module "efs_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
 
@@ -153,8 +153,9 @@ module "mod_eks" {
   aliases = ["${var.env}-efs"]
 
   tags = local.common_tags
-} */
-/* module "documentdb_kms" {
+} 
+
+ module "documentdb_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
 
@@ -172,19 +173,19 @@ module "mod_eks" {
   tags = local.common_tags
 }
 
- */
 
 
-/* module "mod_rds" {
+
+ module "mod_rds" {
   source         = "./base/rds"
   security_group = module.mod_sg.rds_sg
   kms_key        = module.rds_kms.key_arn
   db_subnets     = module.mod_vpc.db_subnets
   env            = var.env
   pg_password    = var.pg_password
-} */
+} 
 
-/*  module "alb_public" {
+  module "alb_public" {
   source          = "terraform-aws-modules/alb/aws"
   version         = "7.0.0"
   name            = "ezgen-public-${var.env}"
@@ -248,9 +249,9 @@ module "mod_eks" {
     "elbv2.k8s.aws/cluster"    = var.cluster_name
   }
   )
-} */
+} 
 
-/* module "mq_broker" {
+ module "mq_broker" {
   source = "cloudposse/mq-broker/aws"
   # Cloud Posse recommends pinning every module to a specific version
   version     = "2.0.0"
@@ -273,9 +274,9 @@ module "mod_eks" {
   associated_security_group_ids = [module.mod_sg.rabbitmq_sg]
   create_security_group         = false
 
-} */
+} 
 
-/* module "elasticache-redis" {
+  module "elasticache-redis" {
   source                        = "cloudposse/elasticache-redis/aws"
   version                       = "0.44.0"
   availability_zones            = data.aws_availability_zones.available.names
@@ -328,7 +329,7 @@ module "this" {
   name      = "redis"
 } */
 
-/*  module "efs" {
+  module "efs" {
   source  = "cloudposse/efs/aws"
   name = "ezgen-${var.env}"
   namespace = "ezgen"
@@ -341,8 +342,8 @@ module "this" {
   associated_security_group_ids = [module.mod_sg.efs_sg]
   create_security_group =false
 
-}  */
-/*   module "documentdb-cluster" {
+}  
+   module "documentdb-cluster" {
   depends_on = [module.route53_zones]
   source  = "cloudposse/documentdb-cluster/aws"
   version = "0.15.0"
@@ -365,7 +366,7 @@ module "this" {
   reader_dns_name                 = local.documentdb.reader_dns_name
   tags                            = local.common_tags
 }  
- */
+ 
 
 
 
