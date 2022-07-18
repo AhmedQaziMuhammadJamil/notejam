@@ -327,7 +327,7 @@ module "this" {
   namespace = "ezgen"
   stage     = "uat"
   name      = "redis"
-} */
+} 
 
   module "efs" {
   source  = "cloudposse/efs/aws"
