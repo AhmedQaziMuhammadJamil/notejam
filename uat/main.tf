@@ -18,7 +18,7 @@
 ###Regional-Resources
 
 
- module "acm_internal" {
+/*  module "acm_internal" {
   source  = "terraform-aws-modules/acm/aws"
   version = "4.0.1"
   domain_name  = "${local.route53.domain_internal}"
@@ -32,7 +32,7 @@
   wait_for_validation = true
 
   tags = local.common_tags
-}
+} */
 
 
 
