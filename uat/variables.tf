@@ -67,3 +67,8 @@ variable "engine_version" {
   description = "(optional) describe your variable"
 }
 
+
+variable "documentdb_master_password" {
+  type = string
+  description = "(optional) describe your variable"
+}

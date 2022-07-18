@@ -350,7 +350,7 @@ module "this" {
   name                            = local.documentdb.name
   cluster_size                    = local.documentdb.cluster_size
   master_username                 = local.documentdb.master_username
-  master_password                 = local.documentdb.master_password
+  master_password                 = var.documentdb_master_password
   instance_class                  = local.documentdb.instance_class
   vpc_id                          = module.mod_vpc.vpc_id
   subnet_ids                      = module.mod_vpc.db_subnets

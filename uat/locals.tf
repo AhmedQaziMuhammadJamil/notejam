@@ -19,7 +19,7 @@ locals {
     cluster_dns_name                = "ezgen-${var.env}-documentdb"
     reader_dns_name                 = "ezgen-${var.env}-document-db-reader"
     preferred_maintenance_window    = "Mon:22:00-Mon:22:30"
-    master_password                 = "oZuqMLfLuLPHvjJkHyWzyub2n"
+
 
 
 
