@@ -139,6 +139,7 @@ locals {
       max_size     = 6
       min_size     = 1
       desired_size = 1
+      kubelet_extra_args            = "--register-with-taints=\"os=windows:NoSchedule\""
 
     })
 

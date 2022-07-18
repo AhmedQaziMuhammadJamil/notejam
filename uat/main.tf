@@ -213,6 +213,7 @@ module "mod_eks" {
     {
       port        = 80
       protocol    = "HTTP"
+  cluster_name = var.cluster_name
       action_type = "redirect"
       redirect = {
         port        = "443"
