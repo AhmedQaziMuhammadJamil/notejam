@@ -104,3 +104,18 @@ resource "aws_autoscaling_policy" "eks_autoscaling_policy" {
     target_value = local.autoscaling_average_cpu
   }
 }
+
+
+data "aws_eks_cluster" "default"  {
+  name = module.base.cluster_id
+}
+
+data "aws_eks_cluster_auth" "default" {
+  name = module.base.cluster_id
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.default.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.default.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.default.token
+}
