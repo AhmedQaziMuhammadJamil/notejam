@@ -117,7 +117,7 @@ module "mod_eks" {
 
 }
 
- module "rds_kms" {
+/*  module "rds_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
 
@@ -135,8 +135,8 @@ module "mod_eks" {
 
   tags = local.common_tags
 } 
-
- module "efs_kms" {
+ */
+/*  module "efs_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
 
@@ -153,9 +153,9 @@ module "mod_eks" {
   aliases = ["${var.env}-efs"]
 
   tags = local.common_tags
-} 
+}  */
 
- module "documentdb_kms" {
+/*  module "documentdb_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
 
@@ -171,11 +171,11 @@ module "mod_eks" {
   aliases = ["${var.env}-documentdb"]
 
   tags = local.common_tags
-}
+} */
 
 
 
-
+/* 
  module "mod_rds" {
   source         = "./base/rds"
   security_group = module.mod_sg.rds_sg
@@ -184,7 +184,7 @@ module "mod_eks" {
   env            = var.env
   pg_password    = var.pg_password
 } 
-
+ */
   module "alb_public" {
   source          = "terraform-aws-modules/alb/aws"
   version         = "7.0.0"
@@ -252,7 +252,7 @@ module "mod_eks" {
   )
 } 
 
- module "mq_broker" {
+/*  module "mq_broker" {
   source = "cloudposse/mq-broker/aws"
   # Cloud Posse recommends pinning every module to a specific version
   version     = "2.0.0"
@@ -276,8 +276,8 @@ module "mod_eks" {
   create_security_group         = false
 
 } 
-
-  module "elasticache-redis" {
+ */
+/*   module "elasticache-redis" {
   source                        = "cloudposse/elasticache-redis/aws"
   version                       = "0.44.0"
   availability_zones            = data.aws_availability_zones.available.names
@@ -328,9 +328,9 @@ module "this" {
   namespace = "ezgen"
   stage     = "uat"
   name      = "redis"
-} 
+}  */
 
-  module "efs" {
+/*   module "efs" {
   source  = "cloudposse/efs/aws"
   name = "ezgen-${var.env}"
   namespace = "ezgen"
@@ -343,8 +343,8 @@ module "this" {
   associated_security_group_ids = [module.mod_sg.efs_sg]
   create_security_group =false
 
-}  
-   module "documentdb-cluster" {
+}   */
+/*    module "documentdb-cluster" {
   depends_on = [module.route53_zones]
   source  = "cloudposse/documentdb-cluster/aws"
   version = "0.15.0"
@@ -367,7 +367,7 @@ module "this" {
   reader_dns_name                 = local.documentdb.reader_dns_name
   tags                            = local.common_tags
 }  
- 
+  */
 
 
 
