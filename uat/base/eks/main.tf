@@ -66,6 +66,14 @@ module "base" {
       to_port                       = 9443
       source_cluster_security_group = true
     }
+
+    ingress_allow_port = {
+      type                          = "ingress"
+      protocol                      = "tcp"
+      from_port                     = 8443
+      to_port                       = 8443
+      source_cluster_security_group = true
+    }
     # allow connections from ALB security group
     ingress_allow_access_from_alb_sg = {
       type                     = "ingress"
