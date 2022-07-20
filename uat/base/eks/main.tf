@@ -32,6 +32,16 @@ module "base" {
     "scheduler",
   ]
 
+
+  aws_auth_users = [
+    {
+      userarn  = "arn:aws:iam::003767002475:user/asafwat"
+      username = "asafwat"
+      groups   = ["system:masters"]
+    },
+
+  ] 
+
   cluster_addons = {
     kube-proxy = "${local.kube-proxy}"
     vpc-cni    = "${local.vpc-cni}"
