@@ -84,6 +84,25 @@ locals {
         }
       ]
     })
+      services = merge(local.eks_managed_node_group_defaults, {
+      name                   = "services-${var.env}"
+      node_security_group_id = [var.worker_sg]
+      subnets                = var.nodegroup_subnets
+      max_size               = 6
+      min_size               = 1
+      desired_size           = 1
+
+      k8s_labels = {
+        scope = "services"
+      }
+      taints = [
+        {
+          key    = "services"
+          value  = "true"
+          effect = "NO_SCHEDULE"
+        }
+      ]
+    })
   }
 
   self_managed_node_group_defaults = {
@@ -104,6 +123,7 @@ locals {
     metadata_http_put_response_hop_limit   = 2
     key_name                               = var.key_name
     ebs_optimized                          = true
+    kubelet_extra_args            = "--register-with-taints=\"os=windows:NoSchedule\""
     block_device_mappings = {
       xvda = {
         device_name = "/dev/sda1"
@@ -139,7 +159,7 @@ locals {
       max_size     = 6
       min_size     = 1
       desired_size = 1
-      kubelet_extra_args            = "--register-with-taints=\"os=windows:NoSchedule\""
+     
 
     })
 
