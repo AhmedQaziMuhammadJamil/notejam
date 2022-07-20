@@ -92,7 +92,7 @@ locals {
       min_size               = 1
       desired_size           = 1
 
-      k8s_labels = {
+      labels = {
         scope = "services"
       }
       taints = [
@@ -124,6 +124,7 @@ locals {
     key_name                               = var.key_name
     ebs_optimized                          = true
     kubelet_extra_args            = "--register-with-taints=\"os=windows:NoSchedule\""
+      bootstrap_extra_args = "--kubelet-extra-args '--register-with-taints=\"os=windows:NoSchedule\"'"
     block_device_mappings = {
       xvda = {
         device_name = "/dev/sda1"
