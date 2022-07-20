@@ -38,13 +38,13 @@ locals {
       labels = {
         scope = "application" //TODO: ask about labels
       }
-      taints = [
+/*       taints = [
         {
           key    = "scope"
           value  = "application"
           effect = "NO_SCHEDULE"
         }
-      ]
+      ] */
     })
     monitoring = merge(local.eks_managed_node_group_defaults, {
       name                   = "monitoring-${var.env}"
@@ -57,13 +57,13 @@ locals {
       labels = {
         scope = "monitoring"
       }
-      taints = [
+/*       taints = [
         {
           key    = "scope"
           value  = "monitoring"
           effect = "NO_SCHEDULE"
         }
-      ]
+      ] */
     })
     operations = merge(local.eks_managed_node_group_defaults, {
       name                   = "operations-${var.env}"
@@ -76,13 +76,13 @@ locals {
       labels = {
         scope = "operations"
       }
-      taints = [
+/*       taints = [
         {
           key    = "CriticalAddonsOnly"
           value  = "true"
           effect = "NO_SCHEDULE"
         }
-      ]
+      ] */
     })
       services = merge(local.eks_managed_node_group_defaults, {
       name                   = "services-${var.env}"
@@ -95,13 +95,13 @@ locals {
       labels = {
         scope = "services"
       }
-      taints = [
+/*       taints = [
         {
           key    = "services"
           value  = "true"
           effect = "NO_SCHEDULE"
         }
-      ]
+      ] */
     })
   }
 
