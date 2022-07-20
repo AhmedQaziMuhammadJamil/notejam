@@ -35,7 +35,7 @@ locals {
       min_size               = 1
       desired_size           = 1
       node_security_group_id = [var.worker_sg]
-      k8s_labels = {
+      labels = {
         scope = "application" //TODO: ask about labels
       }
       taints = [
@@ -54,7 +54,7 @@ locals {
       min_size               = 1
       desired_size           = 1
 
-      k8s_labels = {
+      labels = {
         scope = "monitoring"
       }
       taints = [
@@ -73,7 +73,7 @@ locals {
       min_size               = 1
       desired_size           = 1
 
-      k8s_labels = {
+      labels = {
         scope = "operations"
       }
       taints = [
