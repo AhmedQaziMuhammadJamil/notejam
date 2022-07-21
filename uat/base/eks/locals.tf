@@ -4,6 +4,7 @@ locals {
   eks_managed_node_group_defaults = {
     create_launch_template               = true
     subnets                              = var.nodegroup_subnets
+    create_node_security_group = false
     vpc_security_group_ids     = [var.worker_sg]
     instance_types                       = ["c7g.medium"]
     ami_type                             = "AL2_ARM_64"
