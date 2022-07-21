@@ -114,6 +114,7 @@ module "mod_eks" {
   alb_sg                   = module.mod_sg.alb_sg
   worker_sg                = module.mod_sg.worker_sg
   key_name                 = module.win_nodes_secretsmanager_keypair.key_name
+  public_target_group_arns = module.alb_public.target_group_arns[0]  // taken from alb module to register service target groups
 
 }
 
@@ -232,6 +233,8 @@ module "mod_eks" {
   ]
 
 }
+
+
  
 
  module "alb_internal" {

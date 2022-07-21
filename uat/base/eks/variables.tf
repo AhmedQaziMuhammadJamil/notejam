@@ -51,3 +51,7 @@ variable "key_name" {
   type        = string
   description = "(optional) describe your variable"
 }
+
+variable "public_target_group_arns" {
+  
+}
