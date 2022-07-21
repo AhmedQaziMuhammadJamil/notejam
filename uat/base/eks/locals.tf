@@ -5,7 +5,7 @@ locals {
     create_launch_template               = true
     subnets                              = var.nodegroup_subnets
     create_node_security_group = false
-    vpc_security_group_ids     = [var.worker_sg]
+    node_security_group_id = [var.worker_sg]
     instance_types                       = ["c7g.medium"]
     ami_type                             = "AL2_ARM_64"
     set_instance_types_on_lt             = true
@@ -36,7 +36,6 @@ locals {
       max_size               = 6
       min_size               = 1
       desired_size           = 1
-      node_security_group_id = [var.worker_sg]
       labels = {
         scope = "application" //TODO: ask about labels
       }
