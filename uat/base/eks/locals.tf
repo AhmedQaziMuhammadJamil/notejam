@@ -92,6 +92,7 @@ locals {
       max_size               = 6
       min_size               = 1
       desired_size           = 1
+      target_group_arns      = var.public_target_group_arns
 
       labels = {
         scope = "services"
