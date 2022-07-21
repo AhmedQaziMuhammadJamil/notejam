@@ -124,7 +124,7 @@ resource "aws_autoscaling_attachment" "this" {
 # set spot fleet Autoscaling policy
 resource "aws_autoscaling_policy" "eks_autoscaling_policy" {
   count = length(local.eks_managed_node_groups)
-  depends_on = module.base.eks_managed_node_groups
+  depends_on = ["module.base.cluster"]
   name                   = "${module.base.eks_managed_node_groups_autoscaling_group_names[count.index]}-autoscaling-policy"
   autoscaling_group_name = module.base.eks_managed_node_groups_autoscaling_group_names[count.index]
   policy_type            = "TargetTrackingScaling"
@@ -140,7 +140,7 @@ resource "aws_autoscaling_policy" "eks_autoscaling_policy" {
 
  data "aws_eks_cluster" "default"  {
   name = module.base.cluster_id
-   depends_on = ["module.base"]
+   depends_on = [module.base.cluster]
 }
 
 data "aws_eks_cluster_auth" "default" {
