@@ -114,12 +114,16 @@ module "base" {
 
 
 ## Attach aws managed nodegroups to autoscaling group
-/* resource "aws_autoscaling_attachment" "this" {
+/*  resource "aws_autoscaling_attachment" "this" {
   for_each               = toset(module.base.eks_managed_node_groups["services"].node_group_autoscaling_group_names)
   autoscaling_group_name = each.value
   lb_target_group_arn   =  var.public_target_group_arns
-}
- */
+} */
+ 
+ resource "aws_autoscaling_attachment" "autoscaling_attachment" {
+  autoscaling_group_name = lookup(lookup(lookup(aws_eks_node_group.node_group, "resources")[0], "autoscaling_groups")[0], "name")
+  alb_target_group_arn   = var.public_target_group_arns
+ }
 
 # set spot fleet Autoscaling policy
 resource "aws_autoscaling_policy" "eks_autoscaling_policy" {
