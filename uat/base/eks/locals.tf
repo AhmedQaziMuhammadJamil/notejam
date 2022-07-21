@@ -4,6 +4,7 @@ locals {
   eks_managed_node_group_defaults = {
     create_launch_template               = true
     subnets                              = var.nodegroup_subnets
+
     instance_types                       = ["c7g.medium"]
     ami_type                             = "AL2_ARM_64"
     set_instance_types_on_lt             = true

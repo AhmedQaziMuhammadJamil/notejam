@@ -11,6 +11,8 @@ module "base" {
   self_managed_node_groups         = local.self_managed_node_groups
   cluster_version                  = local.cluster_version
   cluster_endpoint_private_access  = true
+
+    create_node_security_group           = false //remove it
   cluster_endpoint_public_access   = true
   subnet_ids                       = var.nodegroup_subnets
   control_plane_subnet_ids         = var.control_plane_subnet_ids
