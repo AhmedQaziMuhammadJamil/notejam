@@ -33,6 +33,7 @@ locals {
     apps = merge(local.eks_managed_node_group_defaults, {
       name = "apps-${var.env}"
       //subnets                = var.nodegroup_subnets
+       create_node_security_group = false
       max_size               = 6
       min_size               = 1
       desired_size           = 1
@@ -49,6 +50,7 @@ locals {
       ] 
     })
     monitoring = merge(local.eks_managed_node_group_defaults, {
+       create_node_security_group = false
       name                   = "monitoring-${var.env}"
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
@@ -68,6 +70,7 @@ locals {
       ] 
     })
     operations = merge(local.eks_managed_node_group_defaults, {
+       create_node_security_group = false
       name                   = "operations-${var.env}"
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
@@ -87,6 +90,7 @@ locals {
       ] 
     })
       services = merge(local.eks_managed_node_group_defaults, {
+         create_node_security_group = false
       name                   = "services-${var.env}"
       node_security_group_id = [var.worker_sg]
       subnets                = var.nodegroup_subnets
