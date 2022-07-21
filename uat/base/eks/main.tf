@@ -116,7 +116,7 @@ module "base" {
 ## Attach aws managed nodegroups to autoscaling group
  resource "aws_autoscaling_attachment" "this" {
    depends_on = ["module.base.cluster"]
-  autoscaling_group_name = module.base.eks_managed_node_groups["services"].node_group_autoscaling_group_names
+  autoscaling_group_name = "${module.base.eks_managed_node_groups["services"].node_group_autoscaling_group_names}"
   lb_target_group_arn   =  var.public_target_group_arns
 } 
  
