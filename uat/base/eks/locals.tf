@@ -123,7 +123,7 @@ locals {
     metadata_http_put_response_hop_limit   = 2
     key_name                               = var.key_name
     ebs_optimized                          = true
-    bootstrap_extra_args =          "--kubelet-extra-args '--register-with-taints=\"os=windows:NoSchedule\"'"
+    bootstrap_extra_args = "--kubelet-extra-args '--node-labels=scope=windows  --register-with-taints=os=windows:NoSchedule'"
     block_device_mappings = {
       xvda = {
         device_name = "/dev/sda1"
