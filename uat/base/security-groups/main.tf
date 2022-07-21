@@ -6,6 +6,7 @@ module "alb_sg" {
   vpc_id              = var.vpc_id
   ingress_cidr_blocks = ["0.0.0.0/0"]
   ingress_rules       = ["https-443-tcp", "http-80-tcp"]
+  egress_rules      = [ "all-all" ]
   tags                = var.common_tags
 }
 
@@ -21,6 +22,7 @@ module "worker_nodes_sg" {
       source_security_group_id = module.alb_sg.security_group_id
     },
   ]
+   egress_rules      = [ "all-all" ]
   tags = var.common_tags
 }
 
@@ -35,6 +37,9 @@ module "rds_sg" {
       source_security_group_id = module.worker_nodes_sg.security_group_id
     },
   ]
+
+   egress_rules      = [ "all-all" ]
+  
   tags = var.common_tags
 }
 
@@ -49,6 +54,8 @@ module "redis_sg" {
       source_security_group_id = module.worker_nodes_sg.security_group_id
     },
   ]
+
+   egress_rules      = [ "all-all" ]
   tags = var.common_tags
 }
 
@@ -63,6 +70,7 @@ module "rabbitmq_sg" {
       source_security_group_id = module.worker_nodes_sg.security_group_id
     },
   ]
+   egress_rules      = [ "all-all" ]
   tags = var.common_tags
 }
 
@@ -77,6 +85,8 @@ module "efs_sg" {
       source_security_group_id = module.worker_nodes_sg.security_group_id
     },
   ]
+
+   egress_rules      = [ "all-all" ]
   tags = var.common_tags
 }
 
@@ -91,5 +101,6 @@ module "documentdb_sg" {
       source_security_group_id = module.worker_nodes_sg.security_group_id
     },
   ]
+   egress_rules      = [ "all-all" ]
   tags = var.common_tags
 }
