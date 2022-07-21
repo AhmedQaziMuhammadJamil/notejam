@@ -140,7 +140,7 @@ resource "aws_autoscaling_policy" "eks_autoscaling_policy" {
 
  data "aws_eks_cluster" "default"  {
   name = module.base.cluster_id
-   depends_on = [module.base.cluster]
+   depends_on = ["module.base"]
 }
 
 data "aws_eks_cluster_auth" "default" {
