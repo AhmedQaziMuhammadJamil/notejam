@@ -4,8 +4,8 @@ locals {
   eks_managed_node_group_defaults = {
     create_launch_template               = true
     subnets                              = var.nodegroup_subnets
-    create_node_security_group = false
-    vpc_security_group_ids = [var.worker_sg]
+    create_security_group                 = false
+    node_security_group_id = [var.worker_sg]
     instance_types                       = ["c7g.medium"]
     ami_type                             = "AL2_ARM_64"
     set_instance_types_on_lt             = true
@@ -32,7 +32,7 @@ locals {
   eks_managed_node_groups = {
     apps = merge(local.eks_managed_node_group_defaults, {
       name = "apps-${var.env}"
-      vpc_security_group_ids = false
+      create_security_group = false
       node_security_group_id = [var.worker_sg]
       //subnets                = var.nodegroup_subnets
       max_size               = 6
@@ -51,7 +51,7 @@ locals {
     })
     monitoring = merge(local.eks_managed_node_group_defaults, {
        create_node_security_group = false
-    vpc_security_group_ids = [var.worker_sg]
+    node_security_group_id = [var.worker_sg]
       name                   = "monitoring-${var.env}"
       subnets                = var.nodegroup_subnets
       max_size               = 6
@@ -71,7 +71,7 @@ locals {
     })
     operations = merge(local.eks_managed_node_group_defaults, {
        create_node_security_group = false
-    vpc_security_group_ids = [var.worker_sg]
+       
       name                   = "operations-${var.env}"
       subnets                = var.nodegroup_subnets
       max_size               = 6
@@ -91,7 +91,6 @@ locals {
     })
       services = merge(local.eks_managed_node_group_defaults, {
       create_node_security_group = false
-    vpc_security_group_ids = [var.worker_sg]
       name                   = "services-${var.env}"
       subnets                = var.nodegroup_subnets
       max_size               = 6

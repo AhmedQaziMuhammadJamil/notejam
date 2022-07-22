@@ -53,5 +53,5 @@ variable "key_name" {
 }
 
 variable "public_target_group_arns" {
-  
+
 }

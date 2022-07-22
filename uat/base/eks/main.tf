@@ -12,12 +12,12 @@ module "base" {
   cluster_version                  = local.cluster_version
   cluster_endpoint_private_access  = true
 
-    #create_node_security_group           = false //remove it
-  cluster_endpoint_public_access   = true
-  subnet_ids                       = var.nodegroup_subnets
-  control_plane_subnet_ids         = var.control_plane_subnet_ids
-  vpc_id                           = var.vpc_id
-  create_kms_key                   = true
+  #create_node_security_group           = false //remove it
+  cluster_endpoint_public_access = true
+  subnet_ids                     = var.nodegroup_subnets
+  control_plane_subnet_ids       = var.control_plane_subnet_ids
+  vpc_id                         = var.vpc_id
+  create_kms_key                 = true
   //create_aws_auth_configmap = true
   manage_aws_auth_configmap = true
 
@@ -42,7 +42,7 @@ module "base" {
       groups   = ["system:masters"]
     },
 
-  ] 
+  ]
 
   cluster_addons = {
     kube-proxy = "${local.kube-proxy}"
@@ -114,21 +114,17 @@ module "base" {
 
 
 ## Attach aws managed nodegroups to autoscaling group
- resource "aws_autoscaling_attachment" "this" {
-   depends_on = ["module.base.cluster"]
-  autoscaling_group_name = "${module.base.eks_managed_node_groups["services"].node_group_autoscaling_group_names[0]}"
-  lb_target_group_arn   =  var.public_target_group_arns
-} 
- 
-/*  resource "aws_autoscaling_attachment" "autoscaling_attachment" {
-  autoscaling_group_name = lookup(lookup(lookup(aws_eks_node_group.node_group, "resources")[0], "autoscaling_groups")[0], "name")
-  alb_target_group_arn   = var.public_target_group_arns
- } */
+resource "aws_autoscaling_attachment" "this" {
+  depends_on             = ["module.base.cluster"]
+  autoscaling_group_name = module.base.eks_managed_node_groups["services"].node_group_autoscaling_group_names[0]
+  lb_target_group_arn    = var.public_target_group_arns
+}
+
 
 # set spot fleet Autoscaling policy
 resource "aws_autoscaling_policy" "eks_autoscaling_policy" {
-  count = length(local.eks_managed_node_groups)
-  depends_on = ["module.base.cluster"]
+  count                  = length(local.eks_managed_node_groups)
+  depends_on             = ["module.base.cluster"]
   name                   = "${module.base.eks_managed_node_groups_autoscaling_group_names[count.index]}-autoscaling-policy"
   autoscaling_group_name = module.base.eks_managed_node_groups_autoscaling_group_names[count.index]
   policy_type            = "TargetTrackingScaling"
@@ -142,14 +138,14 @@ resource "aws_autoscaling_policy" "eks_autoscaling_policy" {
 }
 
 
- data "aws_eks_cluster" "default"  {
-  name = module.base.cluster_id
-   depends_on = [module.base.cluster]
+data "aws_eks_cluster" "default" {
+  name       = module.base.cluster_id
+  depends_on = [module.base.cluster]
 }
 
 data "aws_eks_cluster_auth" "default" {
-  name = module.base.cluster_id
-    depends_on = [module.base.cluster]
+  name       = module.base.cluster_id
+  depends_on = [module.base.cluster]
 
 }
 

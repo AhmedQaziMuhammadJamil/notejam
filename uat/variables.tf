@@ -69,6 +69,6 @@ variable "engine_version" {
 
 
 variable "documentdb_master_password" {
-  type = string
+  type        = string
   description = "(optional) describe your variable"
 }

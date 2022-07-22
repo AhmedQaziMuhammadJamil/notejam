@@ -1,19 +1,19 @@
 ##Global Resources
- module "route53_zones" {
+module "route53_zones" {
   source  = "terraform-aws-modules/route53/aws//modules/zones"
   version = "2.9.0"
   zones = {
-    "${local.route53.domain_internal}"= {
+    "${local.route53.domain_internal}" = {
       comment = "internal easygenertor zone R53 UAT"
-      tags = local.common_tags
+      tags    = local.common_tags
     }
 
     "${local.route53.domain_uat}" = {
-      comment           = "uat route53 zone"
-      tags = local.common_tags
+      comment = "uat route53 zone"
+      tags    = local.common_tags
     }
+  }
 }
-} 
 
 ###Regional-Resources
 
@@ -37,16 +37,16 @@
 
 
 module "acm_uat" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "4.0.1"
-  domain_name  = local.route53.domain_uat
-  zone_id      =  data.cloudflare_zone.this.id
+  source                  = "terraform-aws-modules/acm/aws"
+  version                 = "4.0.1"
+  domain_name             = local.route53.domain_uat
+  zone_id                 = data.cloudflare_zone.this.id
   validation_record_fqdns = cloudflare_record.validation.*.hostname
-  create_route53_records = false
+  create_route53_records  = false
 
   subject_alternative_names = [
     "*.${local.route53.domain_uat}",
-    
+
   ]
 
   wait_for_validation = true
@@ -55,10 +55,10 @@ module "acm_uat" {
 }
 
 
- resource "cloudflare_record" "validation" {
+resource "cloudflare_record" "validation" {
   count = length(module.acm_uat.distinct_domain_names)
 
-  zone_id =  data.cloudflare_zone.this.id
+  zone_id = data.cloudflare_zone.this.id
   name    = element(module.acm_uat.validation_domains, count.index)["resource_record_name"]
   type    = element(module.acm_uat.validation_domains, count.index)["resource_record_type"]
   value   = replace(element(module.acm_uat.validation_domains, count.index)["resource_record_value"], "/.$/", "")
@@ -114,7 +114,7 @@ module "mod_eks" {
   alb_sg                   = module.mod_sg.alb_sg
   worker_sg                = module.mod_sg.worker_sg
   key_name                 = module.win_nodes_secretsmanager_keypair.key_name
-  public_target_group_arns = module.alb_public.target_group_arns[0]  // taken from alb module to register service target groups
+  public_target_group_arns = module.alb_public.target_group_arns[0] // taken from alb module to register service target groups
 
 }
 
@@ -186,36 +186,36 @@ module "mod_eks" {
   pg_password    = var.pg_password
 } 
  */
-  module "alb_public" {
+module "alb_public" {
   source          = "terraform-aws-modules/alb/aws"
   version         = "7.0.0"
   name            = "ezgen-public-${var.env}"
   subnets         = module.mod_vpc.public_subnets
   vpc_id          = module.mod_vpc.vpc_id
   security_groups = [module.mod_sg.alb_sg]
-  tags = merge( 
+  tags = merge(
     local.common_tags,
     {
-    "ingress.k8s.aws/stack"    = "public"
-    "ingress.k8s.aws/resource" = "LoadBalancer"
-    "elbv2.k8s.aws/cluster"    = var.cluster_name
-  }
+      "ingress.k8s.aws/stack"    = "public"
+      "ingress.k8s.aws/resource" = "LoadBalancer"
+      "elbv2.k8s.aws/cluster"    = var.cluster_name
+    }
   )
 
-   target_groups = [
+  target_groups = [
     {
-      name      = "nginx-ingress-${var.env}"
+      name             = "nginx-ingress-${var.env}"
       backend_protocol = "HTTP"
       backend_port     = 32080
       target_type      = "instance"
     }
-   ]
- http_tcp_listeners = [
+  ]
+  http_tcp_listeners = [
     {
-      port        = 80
-      protocol    = "HTTP"
-  cluster_name = var.cluster_name
-      action_type = "redirect"
+      port         = 80
+      protocol     = "HTTP"
+      cluster_name = var.cluster_name
+      action_type  = "redirect"
       redirect = {
         port        = "443"
         protocol    = "HTTPS"
@@ -223,7 +223,7 @@ module "mod_eks" {
       }
     }
   ]
-   https_listeners = [
+  https_listeners = [
     {
       port               = 443
       protocol           = "HTTPS"
@@ -235,9 +235,9 @@ module "mod_eks" {
 }
 
 
- 
 
- module "alb_internal" {
+
+module "alb_internal" {
   source          = "terraform-aws-modules/alb/aws"
   version         = "7.0.0"
   name            = "ezgen-internal-${var.env}"
@@ -245,15 +245,15 @@ module "mod_eks" {
   internal        = true
   vpc_id          = module.mod_vpc.vpc_id
   security_groups = [module.mod_sg.alb_sg]
-  tags = merge( 
+  tags = merge(
     local.common_tags,
     {
-    "ingress.k8s.aws/stack"    = "internal"
-    "ingress.k8s.aws/resource" = "LoadBalancer"
-    "elbv2.k8s.aws/cluster"    = var.cluster_name
-  }
+      "ingress.k8s.aws/stack"    = "internal"
+      "ingress.k8s.aws/resource" = "LoadBalancer"
+      "elbv2.k8s.aws/cluster"    = var.cluster_name
+    }
   )
-} 
+}
 
 /*  module "mq_broker" {
   source = "cloudposse/mq-broker/aws"
