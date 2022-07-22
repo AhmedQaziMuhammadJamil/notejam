@@ -245,27 +245,14 @@ module "alb_public" {
 
 }
 
- module "waf_public_alb" {
-  source  = "umotif-public/waf-webaclv2/aws"
-  version = "3.8.1"
-  name_prefix = "${var.env}-alb-public"
+module "mod_waf_public_alb" {
+  source = "./base/waf"
+  env=   var.env
+  common_tags              = local.common_tags
   alb_arn     = module.alb_public.lb_arn
-
-  allow_default_action = true
-
-  create_alb_association = true
-
-  visibility_config = {
-    cloudwatch_metrics_enabled = false
-    metric_name                = "test-waf-setup-waf-main-metrics"
-    sampled_requests_enabled   = false
-  }
-
-
-
-
-
-} 
+  cloudflare_ipv4 = data.cloudflare_ip_ranges.cloudflare_ips.ipv4_cidr_blocks
+  cloudflare_ipv6 = data.cloudflare_ip_ranges.cloudflare_ips.ipv6_cidr_blocks
+}
 
 
 
