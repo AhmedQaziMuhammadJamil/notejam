@@ -245,6 +245,27 @@ module "alb_public" {
 
 }
 
+ module "waf_public_alb" {
+  source  = "umotif-public/waf-webaclv2/aws"
+  version = "3.8.1"
+  name_prefix = "${var.env}-alb-public"
+  alb_arn     = module.alb_public.lb_arn
+
+  allow_default_action = true
+
+  create_alb_association = true
+
+  visibility_config = {
+    cloudwatch_metrics_enabled = false
+    metric_name                = "test-waf-setup-waf-main-metrics"
+    sampled_requests_enabled   = false
+  }
+
+
+
+
+
+} 
 
 
 
@@ -386,11 +407,6 @@ module "this" {
 
 
 
-/* module "waf-webaclv2" {
-  source  = "umotif-public/waf-webaclv2/aws"
-  version = "3.8.1"
-  # insert the 2 required variables here
-} */
 
 
 /* module "opensearch" {
