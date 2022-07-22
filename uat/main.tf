@@ -18,7 +18,7 @@ module "route53_zones" {
 ###Regional-Resources
 
 
-/*  module "acm_internal" {
+  module "acm_internal" {
   source  = "terraform-aws-modules/acm/aws"
   version = "4.0.1"
   domain_name  = "${local.route53.domain_internal}"
@@ -32,8 +32,19 @@ module "route53_zones" {
   wait_for_validation = true
 
   tags = local.common_tags
-} */
+} 
+resource "cloudflare_record" "validation_internal" {
+  count = length(module.acm_internal.distinct_domain_names)
 
+  zone_id = data.cloudflare_zone.this.id
+  name    = element(module.acm_internal.validation_domains, count.index)["resource_record_name"]
+  type    = element(module.acm_internal.validation_domains, count.index)["resource_record_type"]
+  value   = replace(element(module.acm_interal.validation_domains, count.index)["resource_record_value"], "/.$/", "")
+  ttl     = 60
+  proxied = false
+
+  allow_overwrite = false
+}
 
 
 module "acm_uat" {

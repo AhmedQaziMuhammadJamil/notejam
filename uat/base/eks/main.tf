@@ -12,6 +12,7 @@ module "base" {
   cluster_version                  = local.cluster_version
   cluster_endpoint_private_access  = true
 
+node_security_group_id            = [var.worker_sg]
   #create_node_security_group           = false //remove it
   cluster_endpoint_public_access = true
   subnet_ids                     = var.nodegroup_subnets
