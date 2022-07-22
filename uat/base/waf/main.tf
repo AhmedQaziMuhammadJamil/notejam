@@ -5,7 +5,7 @@ resource "aws_wafv2_ip_set" "cloudflare_ipv4" {
 
   name               = "${var.env}-cloudflare-ipv4"
   description        = "${var.env}-cloudflare-ipv4"
-  scope              = "CLOUDFRONT"
+  scope              = "REGIONAL" //change
   ip_address_version = "IPV4"
   addresses          = var.cloudflare_ipv4
 
@@ -18,7 +18,7 @@ resource "aws_wafv2_ip_set" "cloudflare_ipv6" {
 
   name               = "${var.env}-cloudflare-ipv6"
   description        = "${var.env}-cloudflare-ipv6"
-  scope              = "CLOUDFRONT"
+  scope              = "REGIONAL" //change
   ip_address_version = "IPV6"
   addresses          = var.cloudflare_ipv6
 
