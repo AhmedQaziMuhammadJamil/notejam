@@ -73,7 +73,7 @@ locals {
     })
     operations = merge(local.eks_managed_node_group_defaults, {
        create_security_group = false
-       
+        node_security_group_id = [var.worker_sg]
       name                   = "operations-${var.env}"
       subnets                = var.nodegroup_subnets
       max_size               = 6
@@ -93,6 +93,7 @@ locals {
     })
       services = merge(local.eks_managed_node_group_defaults, {
       create_security_group = false
+       node_security_group_id = [var.worker_sg]
       name                   = "services-${var.env}"
       subnets                = var.nodegroup_subnets
       max_size               = 6
