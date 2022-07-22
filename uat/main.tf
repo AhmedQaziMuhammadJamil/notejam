@@ -39,7 +39,7 @@ resource "cloudflare_record" "validation_internal" {
   zone_id = data.cloudflare_zone.this.id
   name    = element(module.acm_internal.validation_domains, count.index)["resource_record_name"]
   type    = element(module.acm_internal.validation_domains, count.index)["resource_record_type"]
-  value   = replace(element(module.acm_interal.validation_domains, count.index)["resource_record_value"], "/.$/", "")
+  value   = replace(element(module.acm_internal.validation_domains, count.index)["resource_record_value"], "/.$/", "")
   ttl     = 60
   proxied = false
 
