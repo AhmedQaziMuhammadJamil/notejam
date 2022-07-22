@@ -22,7 +22,7 @@ module "route53_zones" {
   source  = "terraform-aws-modules/acm/aws"
   version = "4.0.1"
   domain_name  = "${local.route53.domain_internal}"
-  zone_id      = module.route53_zones.route53_zone_zone_id["internal.easygenerator.com"]
+  zone_id      = module.route53_zones.route53_zone_zone_id["uat.internal.easygenerator.com"]
   create_route53_records = true
   subject_alternative_names = [
     "*.${local.route53.domain_internal}",
