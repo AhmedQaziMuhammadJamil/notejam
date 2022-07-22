@@ -3,9 +3,11 @@ locals {
   autoscaling_average_cpu = 70
   eks_managed_node_group_defaults = {
     create_launch_template               = true
+    create_security_group = false
+    vpc_security_group_ids               = [var.worker_sg]
     subnets                              = var.nodegroup_subnets
     create_security_group                = false
-    node_security_group_id               = [var.worker_sg]
+   // node_security_group_id               = [var.worker_sg]
     instance_types                       = ["c7g.medium"]
     ami_type                             = "AL2_ARM_64"
     set_instance_types_on_lt             = true
