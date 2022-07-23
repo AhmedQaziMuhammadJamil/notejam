@@ -12,7 +12,7 @@ locals {
         # Required by Karpenter
         "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
       ]
-    instance_types                       = ["t3a.medium"]
+    instance_types                       = ["t3.large"]
     ami_type                             = "AL2_ARM_64"
     set_instance_types_on_lt             = true
     capacity_type                        = "ON_DEMAND"
