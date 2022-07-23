@@ -28,7 +28,7 @@ data "flux_install" "main" {
   target_path      = var.target_path
   components_extra = var.components_extra
   network_policy   = false
-  toleration_keys = ["scope/services"]
+  toleration_keys = ["scope"]
 
 }
 ###Deleting resouces in k8s as provider doesn't provide any idempotentancy
