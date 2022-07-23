@@ -28,12 +28,12 @@ data "flux_install" "main" {
   target_path      = var.target_path
   components_extra = var.components_extra
   network_policy   = false
-  toleration_keys  = {
+  toleration_keys  = [{
       key: "scope"
       operator: "Equal"
       value: "services"
       effect: "NoSchedule"
-  }
+  }]
 
 }
 
