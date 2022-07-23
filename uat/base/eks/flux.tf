@@ -30,7 +30,7 @@ data "flux_install" "main" {
   network_policy   = false
   toleration_keys = ["scope/services"]
 
-
+}
 ###Deleting resouces in k8s as provider doesn't provide any idempotentancy
 
 # Kubernetes
