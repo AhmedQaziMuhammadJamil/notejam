@@ -137,7 +137,7 @@ resource "github_repository" "main" {
 }
 
 resource "github_branch_default" "main" {
-  repository = github_repository.main.nameurl
+  repository = github_repository.main.name
   branch     = var.flux_branch
 }
 
