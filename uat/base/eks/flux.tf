@@ -1,6 +1,6 @@
 ####Flux
 locals {
-  repo_name = "${var.flux_repository_name}-${var.env}"
+  repo_name = lower("${var.flux_repository_name}-${var.env}")
 
 }
 provider "kubectl" {
