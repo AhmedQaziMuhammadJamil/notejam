@@ -72,3 +72,13 @@ variable "documentdb_master_password" {
   type        = string
   description = "(optional) describe your variable"
 }
+
+variable "flux_github_owner" {
+  type = string
+  description = "(optional) describe your variable"
+}
+
+variable "flux_github_token" {
+  type = string
+  description = "(optional) describe your variable"
+}

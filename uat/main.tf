@@ -126,6 +126,9 @@ module "mod_eks" {
   worker_sg                = module.mod_sg.worker_sg
   key_name                 = module.win_nodes_secretsmanager_keypair.key_name
   public_target_group_arns = module.alb_public.target_group_arns[0] // taken from alb module to register service target groups
+  flux_github_owner           = var.flux_github_owner
+  flux_github_token           = var.flux_github_token
+
 
 }
 
@@ -397,13 +400,11 @@ module "this" {
 
 
 /* module "opensearch" {
-  source  = "idealo/opensearch/aws"
+  source  = "trussworks/opensearch/aws"
   version = "1.0.0"
-  # insert the 5 required variables here
+   domain_name = "my-domain-name"
+  admin_email = "my-admin-email"
 } */
-
-
-
 
 
 ###Cloudfront

@@ -30,11 +30,13 @@ terraform {
     }
     github = {
       source = "integrations/github"
+      version = "4.27.1"
     }
 
     tfe = {
       source = "hashicorp/tfe"
     }
+
   }
 }
 
