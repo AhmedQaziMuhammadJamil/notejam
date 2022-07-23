@@ -29,11 +29,11 @@ data "flux_install" "main" {
   components_extra = var.components_extra
   network_policy   = false
   toleration_keys  = [{
-      key: "scope"
-      operator: "Equal"
-      value: "services"
-      effect: "NoSchedule"
-  }]
+      "key": "scope"
+      "operator": "Equal"
+      "value": "services"
+      "effect": "NoSchedule"
+}]
 
 }
 
