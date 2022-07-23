@@ -1,6 +1,12 @@
 data "aws_kms_alias" "ebs" {
   name = "alias/aws/ebs"
 }
+
+
+data "aws_partition" "current" {}
+
+
+
 data "aws_ami" "win_ami" {
   most_recent = true
   owners      = ["amazon"]
