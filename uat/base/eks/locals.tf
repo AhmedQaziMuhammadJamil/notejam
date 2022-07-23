@@ -13,7 +13,7 @@ locals {
         "arn:${local.partition}:iam::aws:policy/AmazonSSMManagedInstanceCore"
       ]
     instance_types                       = ["t3.large"]
-    ami_type                             = "AL2_ARM_64"
+    ami_type                             = "AL2_x86_64"
     set_instance_types_on_lt             = true
     capacity_type                        = "ON_DEMAND"
     metadata_http_endpoint               = "enabled"
