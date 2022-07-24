@@ -118,6 +118,7 @@ module "uat_vpc" {
     Name                                        = "Private-SN-${var.env}"
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
     "kubernetes.io/role/internal-elb"           = "1"
+    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
   }
 
 
