@@ -119,6 +119,7 @@ module "uat_vpc" {
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
     "kubernetes.io/role/internal-elb"           = "1"
     "kubernetes.io/cluster/${var.cluster_name}" = "owned"
+     "karpenter.sh/discovery:" = "${var.cluster_name}"
   }
 
 
