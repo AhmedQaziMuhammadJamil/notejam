@@ -40,7 +40,7 @@ module "karpenter_irsa" {
   role_name                          = "karpenter-controller-${var.cluster_name}"
   attach_karpenter_controller_policy = true
 
-  karpenter_tag_key               = "karpenter.sh/discovery/${var.cluster_name}"
+  karpenter_tag_key               = "karpenter.sh/discovery"
   karpenter_controller_cluster_id = module.base.cluster_id
   karpenter_controller_node_iam_role_arns = [
     module.base.eks_managed_node_groups["operations"].iam_role_arn,module.base.eks_managed_node_groups["apps"].iam_role_arn,
