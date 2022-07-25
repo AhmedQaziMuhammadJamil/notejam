@@ -151,7 +151,7 @@ module "mod_eks" {
   tags = local.common_tags
 } 
 
- module "rds_kms" {
+ module "vault_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
 
