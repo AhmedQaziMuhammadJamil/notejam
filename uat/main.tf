@@ -132,7 +132,7 @@ module "mod_eks" {
 
 }
 
-/*  module "rds_kms" {
+ module "rds_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
 
@@ -150,7 +150,7 @@ module "mod_eks" {
 
   tags = local.common_tags
 } 
- */
+
 /*  module "efs_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
@@ -190,7 +190,7 @@ module "mod_eks" {
 
 
 
-/* 
+
  module "mod_rds" {
   source         = "./base/rds"
   security_group = module.mod_sg.rds_sg
@@ -199,7 +199,7 @@ module "mod_eks" {
   env            = var.env
   pg_password    = var.pg_password
 } 
- */
+ 
 module "alb_public" {
   source          = "terraform-aws-modules/alb/aws"
   version         = "7.0.0"
