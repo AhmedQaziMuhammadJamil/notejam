@@ -1,3 +1,12 @@
+locals {
+  k8s_cluster_autoscaler_sa_namespace = "kube-system"
+  k8s_cluster_autoscaler_sa_name      = "autoscaler-aws-cluster-autoscaler-chart"
+  k8s_vault_kms_unseal_sa_namespace   = "vault"
+  k8s_vault_kms_unseal_sa_name        = "vault"
+}
+
+
+
 /* module "cluster_autoscaler_irsa_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
@@ -61,98 +70,40 @@ resource "aws_iam_instance_profile" "karpenter" {
   role = module.base.eks_managed_node_groups["operations"].iam_role_name
 }
 
+module "vault_kms_unseal_oidc" {
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version                       = "3.6.0"
+  create_role                   = true
+  role_name                     = "easygenerator-${var.env}-vault-kms-unseal"
+  provider_url                  = module.base.cluster_oidc_issuer_url
+  role_policy_arns              = [aws_iam_policy.vault_kms_unseal.arn]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:${local.k8s_vault_kms_unseal_sa_namespace}:${local.k8s_vault_kms_unseal_sa_name}"]
 
+  tags = merge(
+    local.common_tags,
+    {
+      "Name" = "easygenerator-${var.environment}-vault-kms-unseal"
+  })
+}
 
-/* 
-resource "helm_release" "karpenter" {
-  depends_on = ["module.base"]
-  namespace        = "karpenter"
-  create_namespace = true
+resource "aws_iam_policy" "vault_kms_unseal" {
+  name_prefix = "easygenerator-${var.env}-vault-kms-unseal"
+  description = "easygenerator-${var.env}-vault-kms-unseal"
+  policy      = data.aws_iam_policy_document.vault_kms_unseal.json
+}
 
-  name       = "karpenter"
-  repository = "https://charts.karpenter.sh"
-  chart      = "karpenter"
-  version    = "0.8.2"
+data "aws_iam_policy_document" "vault_kms_unseal" {
+  statement {
+    sid       = "VaultKMSUnseal"
+    effect    = "Allow"
+    resources = ["*"]
 
-  set {
-    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.karpenter_irsa.iam_role_arn
-  }
-
-  set {
-    name  = "clusterName"
-    value = module.base.cluster_id
-  }
-
-  set {
-    name  = "clusterEndpoint"
-    value = module.base.cluster_endpoint
-  }
-
-  set {
-    name  = "aws.defaultInstanceProfile"
-    value = aws_iam_instance_profile.karpenter.name
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:DescribeKey",
+    ]
   }
 }
 
-resource "kubectl_manifest" "karpenter_provisioner" {
-  yaml_body = <<-YAML
-  apiVersion: karpenter.sh/v1alpha5
-  kind: Provisioner
-  metadata:
-    name: default
-  spec:
-    requirements:
-      - key: karpenter.sh/capacity-type
-        operator: In
-        values: ["spot"]
-    limits:
-      resources:
-        cpu: 1000
-    provider:
-      subnetSelector:
-        karpenter.sh/discovery: ${var.cluster_name}
-      securityGroupSelector:
-        karpenter.sh/discovery: ${var.cluster_name}
-      tags:
-        karpenter.sh/discovery: ${var.cluster_name}
-    ttlSecondsAfterEmpty: 30
-  YAML
 
-  depends_on = [
-    helm_release.karpenter
-  ]
-}
-
-# Example deployment using the [pause image](https://www.ianlewis.org/en/almighty-pause-container)
-# and starts with zero replicas
-resource "kubectl_manifest" "karpenter_example_deployment" {
-  yaml_body = <<-YAML
-  apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    name: inflate
-  spec:
-    replicas: 0
-    selector:
-      matchLabels:
-        app: inflate
-    template:
-      metadata:
-        labels:
-          app: inflate
-      spec:
-        terminationGracePeriodSeconds: 0
-        containers:
-          - name: inflate
-            image: public.ecr.aws/eks-distro/kubernetes/pause:3.2
-            resources:
-              requests:
-                cpu: 1
-  YAML
-
-  depends_on = [
-    helm_release.karpenter
-  ]
-}
-  */

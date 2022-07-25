@@ -151,6 +151,24 @@ module "mod_eks" {
   tags = local.common_tags
 } 
 
+ module "rds_kms" {
+  source  = "terraform-aws-modules/kms/aws"
+  version = "1.0.1"
+
+  description        = "vault-unseal"
+  key_usage          = "ENCRYPT_DECRYPT"
+  is_enabled         = true
+  multi_region       = false
+  key_owners         = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+  key_administrators = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
+  key_users          = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/aqazi"]
+  key_service_users  = [module.mod_eks.iam_role_vault_kms_unseal_arn]
+
+  # Aliases
+  aliases = ["${var.env}-vault-unseal"]
+
+  tags = local.common_tags
+} 
 /*  module "efs_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"

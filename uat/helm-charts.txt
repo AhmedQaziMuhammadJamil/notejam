@@ -1,0 +1,62 @@
+
+## Done
+helm upgrade metrics-server bitnami/metrics-server \
+  --install \
+  --namespace kube-system \
+  --version 6.0.8 \
+  -f values.yaml \
+  --wait
+
+
+
+helm repo add twingate https://twingate.github.io/helm-charts
+helm repo update
+helm upgrade twingate-k8s-0 twingate/connector \
+  --install \
+  --namespace twingate \
+  -f ./values-0.yaml \
+  --version 0.1.12
+helm upgrade twingate-k8s-1 twingate/connector \
+  --install \
+  --namespace twingate \
+  -f ./values-1.yaml \
+  --version 0.1.12
+
+
+
+
+
+
+
+
+
+
+
+
+
+##pedning
+  Promethsus-kubestack  
+  kubectl create ns monitoring
+  helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm repo update
+helm upgrade kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+  --install \
+  --namespace monitoring \
+  --version 18.0.0 \
+  -f ./values.yaml
+
+
+
+kubectl create namespace vault
+
+helm repo add hashicorp https://helm.releases.hashicorp.com
+helm repo update
+helm upgrade vault hashicorp/vault \
+  --install \
+  --namespace vault \
+  -f ./values.yaml \
+  --version 0.20.0
+
+
+  
