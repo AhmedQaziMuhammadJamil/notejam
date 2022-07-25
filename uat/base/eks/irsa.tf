@@ -80,9 +80,9 @@ module "vault_kms_unseal_oidc" {
   oidc_fully_qualified_subjects = ["system:serviceaccount:${local.k8s_vault_kms_unseal_sa_namespace}:${local.k8s_vault_kms_unseal_sa_name}"]
 
   tags = merge(
-    local.common_tags,
+    var.common_tags,
     {
-      "Name" = "easygenerator-${var.environment}-vault-kms-unseal"
+      "Name" = "easygenerator-${var.env}-vault-kms-unseal"
   })
 }
 
