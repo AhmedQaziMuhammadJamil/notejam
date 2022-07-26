@@ -56,6 +56,9 @@ variable "public_target_group_arns" {
 
 }
 
+variable "private_target_groups_arns"{
+  
+}
 
 ### flux variables
 variable "flux_github_owner" {

@@ -116,12 +116,18 @@ module "base" {
 
 
 ## Attach aws managed nodegroups to autoscaling group
+resource "aws_autoscaling_attachment" "internal_alb" {
+  depends_on             = ["module.base.cluster"]
+  autoscaling_group_name = module.base.eks_managed_node_groups["services"].node_group_autoscaling_group_names[0]
+  lb_target_group_arn    = var.private_target_groups_arns
+}
+
+
 resource "aws_autoscaling_attachment" "this" {
   depends_on             = ["module.base.cluster"]
   autoscaling_group_name = module.base.eks_managed_node_groups["services"].node_group_autoscaling_group_names[0]
   lb_target_group_arn    = var.public_target_group_arns
 }
-
 
 # set spot fleet Autoscaling policy
 resource "aws_autoscaling_policy" "eks_autoscaling_policy" {
@@ -138,6 +144,7 @@ resource "aws_autoscaling_policy" "eks_autoscaling_policy" {
     target_value = local.autoscaling_average_cpu
   }
 }
+
 
 
 data "aws_eks_cluster" "default" {

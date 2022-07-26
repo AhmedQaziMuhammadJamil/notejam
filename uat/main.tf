@@ -125,7 +125,9 @@ module "mod_eks" {
   alb_sg                   = module.mod_sg.alb_sg
   worker_sg                = module.mod_sg.worker_sg
   key_name                 = module.win_nodes_secretsmanager_keypair.key_name
-  public_target_group_arns = module.alb_public.target_group_arns[0] // taken from alb module to register service target groups
+  public_target_group_arns = module.alb_public.target_group_arns[0] 
+  private_target_groups_arns = module.alb_internal.target_group_arns[0] 
+  // taken from alb module to register service target groups
   flux_github_owner           = var.flux_github_owner
   flux_github_token           = var.flux_github_token
 
@@ -266,17 +268,6 @@ module "alb_public" {
 
 }
 
-module "mod_waf_public_alb" {
-  source = "./base/waf"
-  env=   var.env
-  common_tags              = local.common_tags
-  alb_arn     = module.alb_public.lb_arn
-  cloudflare_ipv4 = data.cloudflare_ip_ranges.cloudflare_ips.ipv4_cidr_blocks
-  cloudflare_ipv6 = data.cloudflare_ip_ranges.cloudflare_ips.ipv6_cidr_blocks
-}
-
-
-
 module "alb_internal" {
   source          = "terraform-aws-modules/alb/aws"
   version         = "7.0.0"
@@ -293,7 +284,51 @@ module "alb_internal" {
       "elbv2.k8s.aws/cluster"    = var.cluster_name
     }
   )
+target_groups = [
+    {
+      name             = "nginx-internal-ingress-${var.env}"
+      backend_protocol = "HTTP"
+      backend_port     = 32081
+      target_type      = "instance"
+    }
+  ]
+  http_tcp_listeners = [
+    {
+      port         = 80
+      protocol     = "HTTP"
+      cluster_name = var.cluster_name
+      action_type  = "redirect"
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
+  ]
+  https_listeners = [
+    {
+      port               = 443
+      protocol           = "HTTPS"
+      certificate_arn    = module.acm_internal.acm_certificate_arn
+      target_group_index = 0
+    }
+  ]
+
 }
+
+
+module "mod_waf_public_alb" {
+  source = "./base/waf"
+  env=   var.env
+  common_tags              = local.common_tags
+  alb_arn     = module.alb_public.lb_arn
+  cloudflare_ipv4 = data.cloudflare_ip_ranges.cloudflare_ips.ipv4_cidr_blocks
+  cloudflare_ipv6 = data.cloudflare_ip_ranges.cloudflare_ips.ipv6_cidr_blocks
+}
+
+
+
+
 
 /*  module "mq_broker" {
   source = "cloudposse/mq-broker/aws"

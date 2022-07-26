@@ -24,13 +24,37 @@ helm upgrade twingate-k8s-1 twingate/connector \
 
 
 
+kubectl create namespace vault
+
+helm repo add hashicorp https://helm.releases.hashicorp.com
+helm repo update
+helm upgrade vault hashicorp/vault \
+  --install \
+  --namespace vault \
+  -f ./values.yaml \
+  --version 0.20.1
 
 
 
 
 
 
+#### ingress nginx
 
+kubectl create ns ingress-nginx
+kubectl create ns ingress-nginx-internal  
+
+
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+
+helm upgrade ingress-nginx-internal ingress-nginx/ingress-nginx \
+  --install \
+  --namespace ingress-nginx-internal \
+  --set controller.ingressClassResource.name=ingress-nginx-internal \
+  --version 4.2.0 \
+  -f values-internal.yaml \
+  --wait
 
 
 
@@ -47,16 +71,6 @@ helm upgrade kube-prometheus-stack prometheus-community/kube-prometheus-stack \
   -f ./values.yaml
 
 
-
-kubectl create namespace vault
-
-helm repo add hashicorp https://helm.releases.hashicorp.com
-helm repo update
-helm upgrade vault hashicorp/vault \
-  --install \
-  --namespace vault \
-  -f ./values.yaml \
-  --version 0.20.0
 
 
   
