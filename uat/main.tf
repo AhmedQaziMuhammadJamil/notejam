@@ -6,11 +6,14 @@ module "route53_zones" {
     "${local.route53.domain_internal}" = {
       comment = "internal easygenertor zone R53 UAT"
       tags    = local.common_tags
+          vpc = [{vpc_id = module.mod_vpc.vpc_id}]
     }
+  
 
     "${local.route53.domain_uat}" = {
       comment = "uat route53 zone"
       tags    = local.common_tags
+      vpc= [{vpc_id = module.mod_vpc.vpc_id}]
     }
   }
 }

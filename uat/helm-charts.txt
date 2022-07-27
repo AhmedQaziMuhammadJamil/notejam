@@ -35,7 +35,10 @@ helm upgrade vault hashicorp/vault \
   --version 0.20.1
 
 
+ELBSecurityPolicy-TLS-1-2-2017-01
 
+*.production.internal.easygenerator.com
+*.easygenerator.com
 
 
 
@@ -57,6 +60,14 @@ helm upgrade ingress-nginx-internal ingress-nginx/ingress-nginx \
   --wait
 
 
+helm upgrade ingress-nginx ingress-nginx/ingress-nginx \
+  --install \
+  --namespace ingress-nginx \
+  --set controller.ingressClassResource.name=ingress-nginx \
+  --version 4.2.0 \
+  -f values.yaml \
+  --wait
+
 
 ##pedning
   Promethsus-kubestack  
@@ -74,3 +85,63 @@ helm upgrade kube-prometheus-stack prometheus-community/kube-prometheus-stack \
 
 
   
+
+
+  27-07-2022
+
+
+  ###EKS component
+
+### Metrics-server
+  helm upgrade metrics-server bitnami/metrics-server \
+  --install \
+  --namespace kube-system \
+  --version 6.0.8 \
+  -f values.yaml \
+  --wait
+
+
+
+### Twingate
+kubectl create ns twingate
+
+
+helm repo add twingate https://twingate.github.io/helm-charts
+helm repo update
+helm upgrade twingate-k8s-0 twingate/connector \
+  --install \
+  --namespace twingate \
+  -f ./values-0.yaml \
+  --version 0.1.12
+helm upgrade twingate-k8s-1 twingate/connector \
+  --install \
+  --namespace twingate \
+  -f ./values-1.yaml \
+  --version 0.1.12
+
+###########################################
+
+kubectl create ns ingress-nginx
+kubectl create ns ingress-nginx-internal  
+
+
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+
+helm upgrade ingress-nginx-internal ingress-nginx/ingress-nginx \
+  --install \
+  --namespace ingress-nginx-internal \
+  --set controller.ingressClassResource.name=ingress-nginx-internal \
+  -set controller.ingressClassResource.controllerValue="k8s.io/ingress-nginx-internal" \
+  --version 4.2.0 \
+  -f values-internal.yaml \
+  --wait
+
+
+helm upgrade ingress-nginx ingress-nginx/ingress-nginx \
+  --install \
+  --namespace ingress-nginx \
+  --set controller.ingressClassResource.name=ingress-nginx \
+  --version 4.2.0 \
+  -f values.yaml \
+  --wait
