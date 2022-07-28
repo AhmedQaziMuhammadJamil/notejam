@@ -30,7 +30,7 @@ terraform {
     }
     github = {
       source = "integrations/github"
-      version = "4.27.1"
+      version = "~> 4.28"
     }
 
     tfe = {
