@@ -98,6 +98,6 @@ module "efs_csi_irsa_role" {
   tags = merge(
     var.common_tags,
     {
-      "Name" = "easygenerator-${var.env}-vault-kms-unseal"
+      "Name" = "easygenerator-${var.env}-efs-csi"
   })
 }
