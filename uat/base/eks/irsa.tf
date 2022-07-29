@@ -42,33 +42,6 @@ module "eks_external_dns_iam" {
 }
 
 
-module "karpenter_irsa" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "5.0.0"
-
-  role_name                          = "karpenter-controller-${var.cluster_name}"
-  attach_karpenter_controller_policy = true
-
-  karpenter_tag_key               = "karpenter.sh/discovery"
-  karpenter_controller_cluster_id = module.base.cluster_id
-  karpenter_controller_node_iam_role_arns = [
-    module.base.eks_managed_node_groups["operations"].iam_role_arn,module.base.eks_managed_node_groups["apps"].iam_role_arn,
-    module.base.eks_managed_node_groups["monitoring"].iam_role_arn,module.base.eks_managed_node_groups["services"].iam_role_arn
-  ]
-
-  oidc_providers = {
-    ex = {
-      provider_arn               = module.base.oidc_provider_arn
-      namespace_service_accounts = ["karpenter:karpenter"]
-    }
-  }
-}
-
-
-resource "aws_iam_instance_profile" "karpenter" {
-  name = "KarpenterNodeInstanceProfile-${var.cluster_name}"
-  role = module.base.eks_managed_node_groups["operations"].iam_role_name
-}
 
 module "vault_kms_unseal_oidc" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
@@ -107,3 +80,24 @@ data "aws_iam_policy_document" "vault_kms_unseal" {
 }
 
 
+module "efs_csi_irsa_role" {
+   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+   version = "~> 4.22.0"
+
+  role_name             = "efs-csi"
+  attach_efs_csi_policy = true
+
+  oidc_providers = {
+    ex = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["efs-csi:efs-csi-controller-sa"]
+    }
+  }
+
+
+  tags = merge(
+    var.common_tags,
+    {
+      "Name" = "easygenerator-${var.env}-vault-kms-unseal"
+  })
+}
