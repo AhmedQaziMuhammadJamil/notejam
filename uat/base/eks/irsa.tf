@@ -89,7 +89,7 @@ module "efs_csi_irsa_role" {
 
   oidc_providers = {
     ex = {
-      provider_arn               = module.eks.oidc_provider_arn
+      provider_arn               = module.base.oidc_provider_arn
       namespace_service_accounts = ["efs-csi:efs-csi-controller-sa"]
     }
   }
