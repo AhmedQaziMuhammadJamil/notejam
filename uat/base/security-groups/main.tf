@@ -81,7 +81,7 @@ module "efs_sg" {
   vpc_id  = var.vpc_id
   ingress_with_source_security_group_id = [
     {
-      rule                     = "nfs-tcp"
+      rule                     = "rabbitmq-5671-tcp"
       source_security_group_id = module.worker_nodes_sg.security_group_id
     },
   ]
