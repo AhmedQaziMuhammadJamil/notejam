@@ -174,7 +174,7 @@ module "mod_eks" {
 
   tags = local.common_tags
 } 
-/*  module "efs_kms" {
+  module "efs_kms" {
   source  = "terraform-aws-modules/kms/aws"
   version = "1.0.1"
 
@@ -191,7 +191,7 @@ module "mod_eks" {
   aliases = ["${var.env}-efs"]
 
   tags = local.common_tags
-}  */
+}  
 
 /*  module "documentdb_kms" {
   source  = "terraform-aws-modules/kms/aws"
@@ -333,6 +333,22 @@ module "mod_waf_public_alb" {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*  module "mq_broker" {
   source = "cloudposse/mq-broker/aws"
   # Cloud Posse recommends pinning every module to a specific version
@@ -411,7 +427,7 @@ module "this" {
   name      = "redis"
 }  */
 
-/*   module "efs" {
+  module "efs" {
   source  = "cloudposse/efs/aws"
   name = "ezgen-${var.env}"
   namespace = "ezgen"
@@ -424,7 +440,10 @@ module "this" {
   associated_security_group_ids = [module.mod_sg.efs_sg]
   create_security_group =false
 
-}   */
+}   
+
+
+
 /*    module "documentdb-cluster" {
   depends_on = [module.route53_zones]
   source  = "cloudposse/documentdb-cluster/aws"
@@ -449,6 +468,23 @@ module "this" {
   tags                            = local.common_tags
 }  
   */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
