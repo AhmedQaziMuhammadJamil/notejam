@@ -117,7 +117,7 @@ module "cluster_autoscaler_irsa_role" {
     }
   }
 
-ags = merge(
+tags = merge(
     var.common_tags,
     {
       "Name" = "easygenerator-${var.env}-cluster-autoscaler"
