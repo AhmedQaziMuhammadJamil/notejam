@@ -157,8 +157,7 @@ kubectl create namespace efs-csi
 
 helm repo add aws-efs-csi-driver https://kubernetes-sigs.github.io/aws-efs-csi-driver
 helm repo update
-helm upgrade  aws-efs-csi-driver  aws-efs-csi-driver/aws-efs-csi-driver  --install  --namespace efs-csi  --set image.repository=602401143452.dkr.ecr.us-west-2.amazonaws.com/eks/aws-efs-csi-driver   --set controller.serviceAccount.create=true   --set controller.serviceAccount.name=efs-csi-controller-sa
--f values.yaml
+helm upgrade  aws-efs-csi-driver  aws-efs-csi-driver/aws-efs-csi-driver  --install  --namespace efs-csi  --set image.repository=602401143452.dkr.ecr.us-west-2.amazonaws.com/eks/aws-efs-csi-driver   --set controller.serviceAccount.create=true   --set controller.serviceAccount.name=efs-csi-controller-sa -f values.yaml
 
 
 
@@ -183,3 +182,20 @@ helm upgrade kube-prometheus-stack prometheus-community/kube-prometheus-stack \
   --namespace monitoring \
   --version 38.0.3 \
   -f ./values.yaml
+
+
+
+
+export VAULT_TOKEN="s.yelVUtHmwY3lZGOb3zKZ47xj"
+
+vault write auth/kubernetes/config issuer="https://oidc.eks.eu-west-1.amazonaws.com/id/E0EDCC9BFE3F46BD87E3839FEBB5FA04" token_reviewer_jwt="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" kubernetes_host="https://172.20.0.1:443" kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt disable_iss_validation="true"
+
+/ $
+
+
+
+ADD in vault terraform
+
+https://E0EDCC9BFE3F46BD87E3839FEBB5FA04.gr7.eu-west-1.eks.amazonaws.com
+
+oidc=https://oidc.eks.eu-west-1.amazonaws.com/id/E0EDCC9BFE3F46BD87E3839FEBB5FA04
